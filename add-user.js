@@ -11,7 +11,7 @@ form.addEventListener('submit', async (event) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name, email })
+      body: JSON.stringify({ name })
     });
     
     if (!response.ok) {
