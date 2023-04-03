@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const listUsersButton = document.querySelector("#list-users-btn");
   
     listUsersButton.addEventListener("click", function () {
-      fetch("/list-users")
+      fetch("http://10.1.0.4:3000/list-users")
         .then((response) => response.json())
         .then((data) => {
           const table = document.querySelector("#users-table");

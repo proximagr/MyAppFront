@@ -6,7 +6,7 @@ form.addEventListener('submit', async (event) => {
   const name = document.getElementById('name').value;
 
   try {
-    const response = await fetch('/add-user', {
+    const response = await fetch('http://10.1.0.4:3000/add-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
