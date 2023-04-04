@@ -1,37 +1,26 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const addUserForm = document.querySelector("#add-user-form");
+const form = document.getElementById('user-form');
 
-  addUserForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  
+  const name = document.getElementById('name').value;
 
-    const nameInput = document.querySelector("#name-input");
-
-    const newUser = {
-      name: nameInput.value,
-    };
-
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-user", {
-      method: "POST",
+  try {
+    const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/add-user', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newUser),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        alert("User added successfully!");
-        nameInput.value = "";
-        emailInput.value = "";
-      })
-      .catch((error) => {
-        console.error("Error adding user:", error);
-        alert("Error adding user. Please try again later.");
-      });
-  });
+      body: JSON.stringify({ name })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to add user: ${response.status} ${response.statusText}`);
+    }
+
+    alert('User added successfully!');
+  } catch (error) {
+    console.error(error);
+    alert('Failed to add user. See console for details.');
+  }
 });
