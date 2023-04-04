@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       name: nameInput.value,
     };
 
-    fetch("http://localhost:3000/add-user", {
+    fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
