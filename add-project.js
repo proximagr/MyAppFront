@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const formData = new FormData(addProjectForm);
     const project = formData.get("project");
     const price = formData.get("price");
-    const customerId = formData.get("customer");
+    const customer_id = formData.get("customer");
 
     fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-project", {
       method: "POST",
-      body: JSON.stringify({ project, price, customerId }),
+      body: JSON.stringify({ project, price, customer_id }),
       headers: {
         "Content-Type": "application/json",
       },
