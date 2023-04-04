@@ -1,33 +1,42 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const customerSelect = document.querySelector("#customer-select");
     const addProjectForm = document.querySelector("#add-project-form");
   
+    // Populate customer select options
+    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach((user) => {
+          const option = document.createElement("option");
+          option.value = user.id;
+          option.text = user.name;
+          customerSelect.add(option);
+        });
+      })
+      .catch((error) => console.error(error));
+  
+    // Handle form submit
     addProjectForm.addEventListener("submit", function (event) {
       event.preventDefault();
   
-      const customer_id = document.querySelector("#customer-select").value;
-      const project = document.querySelector("#project-name").value;
-      const price = document.querySelector("#project-price").value;
-  
-      const data = {
-        customer_id: customer_id,
-        project: project,
-        price: price
-      };
+      const formData = new FormData(addProjectForm);
+      const project = formData.get("project");
+      const price = formData.get("price");
+      const customer_id = formData.get("customer");
   
       fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-project", {
         method: "POST",
+        body: JSON.stringify({ project, price, customer_id }),
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
       })
-      .then(response => response.json())
-      .then(data => {
-        alert("Project added successfully!");
-      })
-        .catch(error => {
-          console.error(error);
-          alert("Failed to add project. See console for details.");
-        });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Project added:", data);
+          addProjectForm.reset();
+        })
+        .catch((error) => console.error(error));
     });
-    });
+  });
+  
