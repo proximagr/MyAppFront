@@ -14,7 +14,34 @@
   <button id="list-users-btn">List Users</button>
   <table id="users-table"></table>
 
+  <h1>Add Project</h1>
+    <form id="add-project-form">
+      <label for="customer-select">Select customer:</label>
+      <select id="customer-select" name="customer_id">
+        <!-- options will be populated dynamically -->
+      </select>
+      <br>
+      <label for="project-input">Project name:</label>
+      <input type="text" id="project-input" name="project">
+      <br>
+      <label for="price-input">Price:</label>
+      <input type="number" id="price-input" name="price">
+      <br>
+      <input type="submit" value="Add Project">
+    </form>
+    <table id="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- users will be populated dynamically -->
+      </tbody>
+    </table>
+
   <script src="add-user.js"></script>
   <script src="list-users.js"></script>
+  <script src="add-project.js"></script>
 </body>
 </html>
