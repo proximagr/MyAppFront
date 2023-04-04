@@ -1,26 +1,30 @@
-const form = document.getElementById('user-form');
+document.addEventListener("DOMContentLoaded", function () {
+  const addUserForm = document.querySelector("#add-user-form");
+  const addUserButton = document.querySelector("#add-user-btn");
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  
-  const name = document.getElementById('name').value;
+  addUserForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the form from submitting normally
 
-  try {
-    const response = await fetch('http://10.1.0.4:3000/add-user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to add user: ${response.status} ${response.statusText}`);
-    }
+    const name = document.querySelector("#name").value;
 
-    alert('User added successfully!');
-  } catch (error) {
-    console.error(error);
-    alert('Failed to add user. See console for details.');
-  }
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:3000/add-user");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        alert("User added successfully!");
+        addUserForm.reset(); // Clear the form inputs
+      } else {
+        alert("Failed to add user.");
+      }
+    };
+
+    xhr.onerror = function () {
+      alert("Network error.");
+    };
+
+    const data = JSON.stringify({ name: name });
+    xhr.send(data);
+  });
 });
