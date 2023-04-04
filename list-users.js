@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         data.forEach((user) => {
           const row = usersTableBody.insertRow();
           const nameCell = row.insertCell(0);
-          nameCell.innerHTML = user.name;
+          nameCell.innerHTML = customers.name;
         });
       })
       .catch((error) => console.error(error));
