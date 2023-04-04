@@ -1,30 +1,37 @@
 document.addEventListener("DOMContentLoaded", function () {
   const addUserForm = document.querySelector("#add-user-form");
-  const addUserButton = document.querySelector("#add-user-btn");
 
   addUserForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the form from submitting normally
+    event.preventDefault();
 
-    const name = document.querySelector("#name").value;
+    const nameInput = document.querySelector("#name-input");
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/add-user");
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    const newUser = {
+      name: nameInput.value,
+    };
 
-    xhr.onload = function () {
-      if (xhr.status === 200) {
+    fetch("http://localhost:3000/add-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
         alert("User added successfully!");
-        addUserForm.reset(); // Clear the form inputs
-      } else {
-        alert("Failed to add user.");
-      }
-    };
-
-    xhr.onerror = function () {
-      alert("Network error.");
-    };
-
-    const data = JSON.stringify({ name: name });
-    xhr.send(data);
+        nameInput.value = "";
+        emailInput.value = "";
+      })
+      .catch((error) => {
+        console.error("Error adding user:", error);
+        alert("Error adding user. Please try again later.");
+      });
   });
 });
