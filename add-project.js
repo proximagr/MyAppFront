@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.json())
       .then((data) => {
         data.forEach((user) => {
-          const option = document.createElement("option");
+          const option = document.createElement("customer-select");
           option.value = user.id;
           option.text = user.name;
-          customerSelect.add(option);
+          customerSelect.add(customer-select);
         });
       })
       .catch((error) => console.error(error));
