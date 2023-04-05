@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         data.forEach((user) => {
           const row = table.insertRow();
           const nameCell = row.insertCell(0);
+          nameCell.innerHTML = user.id;
           nameCell.innerHTML = user.name;
         });
       })
