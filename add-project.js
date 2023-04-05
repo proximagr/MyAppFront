@@ -18,6 +18,7 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
   .catch((error) => console.error(error)); //logs the error to the console
 
 // Handle form submission
+/*
 addProjectForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const projectData = {
@@ -46,3 +47,4 @@ addProjectForm.addEventListener("submit", (event) => {
       alert("Error adding project!");
     });
 });
+*/
