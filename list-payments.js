@@ -1,44 +1,61 @@
-const listProjectsBtn = document.getElementById('list-payments-btn');
-const listProjectsTable = document.getElementById('list-payments-table');
+function listPayments() {
+    const xhr = new XMLHttpRequest();
 
-listProjectsBtn.addEventListener('click', () => {
-    const xhr1 = new XMLHttpRequest();
-    xhr1.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
-    xhr1.onload = function() {
+    xhr.onload = function() {
         if (this.status === 200) {
             const projects = JSON.parse(this.responseText);
+            const tbody = document.querySelector('#payments-list tbody');
+            tbody.innerHTML = '';
 
-            const xhr2 = new XMLHttpRequest();
-            xhr2.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
-            xhr2.onload = function() {
-                if (this.status === 200) {
-                    const users = JSON.parse(this.responseText);
+            projects.forEach(project => {
+                // Create a new row for each project
+                const row = document.createElement('tr');
+                tbody.appendChild(row);
 
-                    const xhr3 = new XMLHttpRequest();
-                    xhr3.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-payments', true);
-                    xhr3.onload = function() {
-                        if (this.status === 200) {
-                            const payments = JSON.parse(this.responseText);
+                // Add the project name and price to the row
+                const nameCell = document.createElement('td');
+                nameCell.textContent = project.project;
+                row.appendChild(nameCell);
 
-                            let tableHTML = '<table><thead><tr><th>Project</th><th>Price</th><th>Customer</th><th>Payments</th></tr></thead><tbody>';
+                const priceCell = document.createElement('td');
+                priceCell.textContent = project.price;
+                row.appendChild(priceCell);
 
-                            projects.forEach(project => {
-                                const customer = users.find(user => user.id === project.customer_id);
-                                const projectPayments = payments.filter(payment => payment.project_id === project.id);
-                                const paymentSum = projectPayments.reduce((total, payment) => total + payment.amount, 0);
+                // Fetch the customer name for the project
+                const customerXHR = new XMLHttpRequest();
+                customerXHR.open('GET', `http://arch.francecentral.cloudapp.azure.com:43704/list-users/${project.customer_id}`, true);
+                customerXHR.onload = function() {
+                    if (this.status === 200) {
+                        const customer = JSON.parse(this.responseText);
+                        // Add the customer name to the row
+                        const customerCell = document.createElement('td');
+                        customerCell.textContent = customer.name;
+                        row.appendChild(customerCell);
+                    }
+                };
+                customerXHR.send();
 
-                                tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${paymentSum}</td></tr>`;
-                            });
-
-                            tableHTML += '</tbody></table>';
-                            listProjectsTable.innerHTML = tableHTML;
-                        }
-                    };
-                    xhr3.send();
-                }
-            };
-            xhr2.send();
+                // Fetch the payments for the project
+                const paymentXHR = new XMLHttpRequest();
+                paymentXHR.open('GET', `http://arch.francecentral.cloudapp.azure.com:43704/list-payments/${project.id}`, true);
+                paymentXHR.onload = function() {
+                    if (this.status === 200) {
+                        const payments = JSON.parse(this.responseText);
+                        let paymentSum = 0;
+                        payments.forEach(payment => {
+                            paymentSum += payment.amount;
+                        });
+                        // Add the payment sum to the row
+                        const paymentCell = document.createElement('td');
+                        paymentCell.textContent = paymentSum;
+                        row.appendChild(paymentCell);
+                    }
+                };
+                paymentXHR.send();
+            });
         }
     };
-    xhr1.send();
-});
+
+    xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
+    xhr.send();
+}

@@ -37,8 +37,19 @@
   </script>
 
 <h1>List Projects with Payments</h1>
-<button id="list-payments-btn">List payments</button>
-<div id="list-payments-table"></div>
+<button onclick="listPayments()">List Payments</button>
+	<table id="payments-list">
+		<thead>
+			<tr>
+				<th>Project</th>
+				<th>Price</th>
+				<th>Customer</th>
+				<th>Payments</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 
   <script src="add-user.js"></script>
   <script src="list-users.js"></script>
