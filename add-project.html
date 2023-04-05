@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-  <h1>Add Project Form</h1>
-  <form id="add-project-form">
-    <label for="customer">Customer:</label>
-    <select name="customer" id="customer-select"></select>
-    <br /><br />
-    <label for="project">Project:</label>
-    <input type="text" name="project" id="project" required />
-    <br /><br />
-    <label for="price">Price:</label>
-    <input type="number" name="price" id="price" required />
-    <br /><br />
-    <button type="submit">Add Project</button>
-  </form>
-  
-  <script src="add-project.js"></script>
+	<title>Add Project</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<h1>Add Project</h1>
+	<form action="http://arch.francecentral.cloudapp.azure.com:43704/add-project" method="post">
+		<label for="project">Project:</label>
+		<input type="text" name="project" required><br><br>
+
+		<label for="price">Price:</label>
+		<input type="number" name="price" required><br><br>
+
+		<label for="customer_id">Customer:</label>
+		<select name="customer_id" required>
+			<option value="">Select customer</option>
+			<!-- Fetching customers from server using AJAX -->
+		</select><br><br>
+
+		<button type="submit">Add Project</button>
+	</form>
+
+	<script>
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', '/list-users', true);
+		xhr.onload = function() {
+			if (this.status === 200) {
+				const customers = JSON.parse(this.responseText);
+				const select = document.querySelector('select[name="customer_id"]');
+				customers.forEach(customer => {
+					const option = document.createElement('option');
+					option.value = customer.id;
+					option.text = customer.name;
+					select.add(option);
+				});
+			}
+		};
+		xhr.send();
+	</script>
 </body>
 </html>
