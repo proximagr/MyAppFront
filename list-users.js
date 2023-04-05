@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
         table.innerHTML = "";
         data.forEach((user) => {
           const row = table.insertRow();
+          const idCell = row.insertCell(0);
           const nameCell = row.insertCell(0);
-          nameCell.innerHTML = user.id;
+          idCell.innerHTML = user.id;
           nameCell.innerHTML = user.name;
         });
       })
