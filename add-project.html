@@ -24,7 +24,7 @@
 
 	<script>
 		const xhr = new XMLHttpRequest();
-		xhr.open('GET', '/list-users', true);
+		xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
 		xhr.onload = function() {
 			if (this.status === 200) {
 				const customers = JSON.parse(this.responseText);
