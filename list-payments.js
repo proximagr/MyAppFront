@@ -30,10 +30,11 @@ listProjectsBtn.addEventListener('click', () => {
                                 const customer = users.find(user => user.id === project.customer_id);
                                 const projectPayments = payments.filter(payment => payment.project_id === project.id);
                                 const paymentSum = projectPayments.reduce((total, payment) => total + payment.amount, 0);
-                                tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${payments.payment}</td></tr>`;
+                                tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${paymentSum}</td></tr>`;
                             });
-
+							console.log('paymentSum after join:', paymentSum);
 							console.log('payments after join:', payments);
+							console.log('ayments.payment after join:', payments.payment);
 
                             tableHTML += '</tbody></table>';
                             listProjectsTable.innerHTML = tableHTML;
