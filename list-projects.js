@@ -1,22 +1,27 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const listprojectsButton = document.querySelector("#list-projects-btn");
-
-  listprojectsButton.addEventListener("click", function () {
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-projects")
-      .then((response) => response.json())
-      .then((data) => {
-        const table = document.querySelector("#projects-table");
-        table.innerHTML = "";
-        data.forEach((project) => {
-          const row = table.insertRow();
-          const idCell = row.insertCell(0);
-          const projectCell = row.insertCell(0);
-          const priceCell = row.insertCell(0);
-          idCell.innerHTML = project.id;
-          projectCell.innerHTML = project.project;
-          priceCell.innerHTML = project.project;
-        });
-      })
-      .catch((error) => console.error(error));
-  });
+document.getElementById('list-projects-btn').addEventListener('click', function() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
+  xhr.onload = function() {
+    if (this.status === 200) {
+      const projects = JSON.parse(this.responseText);
+      const xhr2 = new XMLHttpRequest();
+      xhr2.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
+      xhr2.onload = function() {
+        if (this.status === 200) {
+          const customers = JSON.parse(this.responseText);
+          const data = projects.map(project => {
+            const customer = customers.find(customer => customer.id === project.customer_id);
+            return {
+              project: project.project,
+              price: project.price,
+              customer_name: customer.name
+            };
+          });
+          console.log(data); // Or do something else with the data
+        }
+      };
+      xhr2.send();
+    }
+  };
+  xhr.send();
 });
