@@ -13,6 +13,8 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
       customerSelect.add(option);
     });
   })
+  .then((response) => response.json())
+  .then((data) => console.log(data))
   .catch((error) => console.error(error));
 
 // Handle form submission
