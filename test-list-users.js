@@ -12,6 +12,7 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", {
     return response.json();
   })
   .then(data => {
+    console.log(data); // log the response to the console
     // process the data here
   })
   .catch(error => {
