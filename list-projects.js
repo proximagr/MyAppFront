@@ -1,3 +1,4 @@
+const tableBody = document.querySelector('#projects-table tbody');
 document.getElementById('list-projects-btn').addEventListener('click', function() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
@@ -17,7 +18,16 @@ document.getElementById('list-projects-btn').addEventListener('click', function(
               customer_name: customer.name
             };
           });
-          console.log(data); // Or do something else with the data
+          tableBody.innerHTML = ''; // Clear the table body
+          data.forEach(item => {
+            const row = tableBody.insertRow();
+            const projectCell = row.insertCell();
+            const priceCell = row.insertCell();
+            const customerCell = row.insertCell();
+            projectCell.textContent = item.project;
+            priceCell.textContent = item.price;
+            customerCell.textContent = item.customer_name;
+          });
         }
       };
       xhr2.send();
