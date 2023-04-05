@@ -13,9 +13,9 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
       customerSelect.add(option);
     });
   })
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error(error));
+  .then((response) => response.json()) //logs the response to the console
+  .then((data) => console.log(data)) //add logs to see what's going on
+  .catch((error) => console.error(error)); //logs the error to the console
 
 // Handle form submission
 addProjectForm.addEventListener("submit", (event) => {
