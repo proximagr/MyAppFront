@@ -3,8 +3,9 @@ const addProjectForm = document.getElementById("add-project-form");
 
 // Populate customers dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
-  .then((response) => response.json())
+  .then((response) => response.text())
   .then((data) => {
+    console.log(data); // log the response to the console
     data.forEach((user) => {
       const option = document.createElement("option");
       option.value = user.id;
