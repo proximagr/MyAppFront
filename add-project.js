@@ -39,6 +39,8 @@ addProjectForm.addEventListener("submit", (event) => {
       console.log("Success:", data);
       alert("Project added successfully!");
     })
+    .then((response) => response.json()) //logs the response to the console
+    .then((data) => console.log(data)) //add logs to see what's going on
     .catch((error) => {
       console.error("Error:", error);
       alert("Error adding project!");
