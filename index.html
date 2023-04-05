@@ -14,22 +14,14 @@
   <button id="list-users-btn">List Users</button>
   <table id="users-table"></table>
 
-  <h1>Add Project Form</h1>
-  <form id="add-project-form">
-    <label for="customer">Customer:</label>
-    <select name="customer" id="customer-select"></select>
-    <br /><br />
-    <label for="project">Project:</label>
-    <input type="text" name="project" id="project" required />
-    <br /><br />
-    <label for="price">Price:</label>
-    <input type="number" name="price" id="price" required />
-    <br /><br />
-    <button type="submit">Add Project</button>
-  </form>
+  <button onclick="navigateToAddProject()">Add Project</button>
+  <script>
+  function navigateToAddProject() {
+    window.location.href = 'add-project.html';
+  }
+  </script>
   
   <script src="add-user.js"></script>
   <script src="list-users.js"></script>
-  <script src="add-project.js"></script>
 </body>
 </html>
