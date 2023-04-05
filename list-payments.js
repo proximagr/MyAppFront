@@ -22,12 +22,18 @@ listProjectsBtn.addEventListener('click', () => {
 
                             let tableHTML = '<table><thead><tr><th>Project</th><th>Price</th><th>Customer</th><th>Payments</th></tr></thead><tbody>';
 
+							console.log('projects length:', projects.length);
+							console.log('payments length:', payments.length);
+							console.log('payments before join:', payments);
+
                             projects.forEach(project => {
                                 const customer = users.find(user => user.id === project.customer_id);
                                 const projectPayments = payments.filter(payment => payment.project_id === project.id);
                                 const paymentSum = projectPayments.reduce((total, payment) => total + payment.amount, 0);
                                 tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${paymentSum}</td></tr>`;
                             });
+							
+							console.log('payments after join:', payments);
 
                             tableHTML += '</tbody></table>';
                             listProjectsTable.innerHTML = tableHTML;
