@@ -32,7 +32,7 @@ listProjectsBtn.addEventListener('click', () => {
                                 const paymentSum = projectPayments.reduce((total, payment) => total + payment.amount, 0);
                                 tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${paymentSum}</td></tr>`;
                             });
-							console.log('paymentSum after join:', paymentSum);
+							
 							console.log('payments after join:', payments);
 							console.log('ayments.payment after join:', payments.payment);
 
