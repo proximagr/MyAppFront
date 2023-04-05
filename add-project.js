@@ -5,7 +5,7 @@ const addProjectForm = document.getElementById("add-project-form");
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
   .then((response) => response.json())
   .then((data) => {
-    //console.log(data); // log the response to the console
+    console.log(data); // log the response to the console
     data.forEach((user) => {
       const option = document.createElement("option");
       option.value = user.id;
