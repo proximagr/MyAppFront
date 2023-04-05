@@ -26,7 +26,7 @@ listProjectsBtn.addEventListener('click', () => {
                                 const customer = users.find(user => user.id === project.customer_id);
                                 const payment = payments.find(payment => payment.project_id === project.id);
 
-                                tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${payment.name}</td></tr>`;
+                                tableHTML += `<tr><td>${project.project}</td><td>${project.price}</td><td>${customer.name}</td><td>${payment.payment}</td></tr>`;
                             });
 
                             tableHTML += '</tbody></table>';
