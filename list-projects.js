@@ -1,61 +1,55 @@
-function listProjects() {
-  const xhr = new XMLHttpRequest();
+const listProjectsBtn = document.querySelector('#list-projects-btn');
+const projectsTable = document.querySelector('#projects-table tbody');
 
-  xhr.onload = function() {
-      if (this.status === 200) {
-          const projects = JSON.parse(this.responseText);
-          const tbody = document.querySelector('#project-list tbody');
-          tbody.innerHTML = '';
+listProjectsBtn.addEventListener('click', async () => {
+	try {
+		// Fetch the list of projects from the server
+		const projectsResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
+		const projects = await projectsResponse.json();
 
-          projects.forEach(project => {
-              // Create a new row for each project
-              const row = document.createElement('tr');
-              tbody.appendChild(row);
+		// Fetch the list of customers from the server
+		const customersResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users');
+		const customers = await customersResponse.json();
 
-              // Add the project name and price to the row
-              const nameCell = document.createElement('td');
-              nameCell.textContent = project.project;
-              row.appendChild(nameCell);
+		// Fetch the list of payments from the server
+		const paymentsResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments');
+		const payments = await paymentsResponse.json();
 
-              const priceCell = document.createElement('td');
-              priceCell.textContent = project.price;
-              row.appendChild(priceCell);
+		// Join the project data with the customer data
+		const data = projects.map(project => {
+			const customer = customers.find(c => c.id === project.customer_id);
+			return {
+				project: project.project,
+				price: project.price,
+				customer: customer ? customer.name : 'N/A',
+				payments: []
+			};
+		});
 
-              // Fetch the customer name for the project
-              const customerXHR = new XMLHttpRequest();
-              customerXHR.open('GET', `http://arch.francecentral.cloudapp.azure.com:43704/list-users/${project.customer_id}`, true);
-              customerXHR.onload = function() {
-                  if (this.status === 200) {
-                      const customer = JSON.parse(this.responseText);
-                      // Add the customer name to the row
-                      const customerCell = document.createElement('td');
-                      customerCell.textContent = customer.name;
-                      row.appendChild(customerCell);
-                  }
-              };
-              customerXHR.send();
+		// Join the payment data with the project data
+		payments.forEach(payment => {
+			const project = data.find(p => p.project === payment.project);
+			if (project) {
+				project.payments.push(payment.amount);
+			}
+		});
 
-              // Fetch the payments for the project
-              const paymentXHR = new XMLHttpRequest();
-              paymentXHR.open('GET', `http://arch.francecentral.cloudapp.azure.com:43704/list-payments/${project.id}`, true);
-              paymentXHR.onload = function() {
-                  if (this.status === 200) {
-                      const payments = JSON.parse(this.responseText);
-                      let paymentSum = 0;
-                      payments.forEach(payment => {
-                          paymentSum += payment.amount;
-                      });
-                      // Add the payment sum to the row
-                      const paymentCell = document.createElement('td');
-                      paymentCell.textContent = paymentSum;
-                      row.appendChild(paymentCell);
-                  }
-              };
-              paymentXHR.send();
-          });
-      }
-  };
+		// Render the table rows
+		const tableRows = data.map(row => {
+			const paymentSum = row.payments.reduce((acc, payment) => acc + payment, 0);
+			return `
+				<tr>
+					<td>${row.project}</td>
+					<td>${row.price}</td>
+					<td>${row.customer}</td>
+					<td>${paymentSum}</td>
+				</tr>
+			`;
+		}).join('');
 
-  xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
-  xhr.send();
-}
+		// Populate the table with the rows
+		projectsTable.innerHTML = tableRows;
+	} catch (error) {
+		console.error(error);
+	}
+});
