@@ -1,37 +1,50 @@
-const tableBody = document.querySelector('#projects-table tbody');
-document.getElementById('list-projects-btn').addEventListener('click', function() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
-  xhr.onload = function() {
-    if (this.status === 200) {
-      const projects = JSON.parse(this.responseText);
-      const xhr2 = new XMLHttpRequest();
-      xhr2.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
-      xhr2.onload = function() {
-        if (this.status === 200) {
-          const customers = JSON.parse(this.responseText);
-          const data = projects.map(project => {
-            const customer = customers.find(customer => customer.id === project.customer_id);
-            return {
-              project: project.project,
-              price: project.price,
-              customer_name: customer.name
-            };
-          });
-          tableBody.innerHTML = ''; // Clear the table body
-          data.forEach(item => {
-            const row = tableBody.insertRow();
-            const projectCell = row.insertCell();
-            const priceCell = row.insertCell();
-            const customerCell = row.insertCell();
-            projectCell.textContent = item.project;
-            priceCell.textContent = item.price;
-            customerCell.textContent = item.customer_name;
-          });
-        }
-      };
-      xhr2.send();
-    }
-  };
-  xhr.send();
-});
+const xhrProjects = new XMLHttpRequest();
+xhrProjects.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
+xhrProjects.onload = function () {
+  if (this.status === 200) {
+    const projects = JSON.parse(this.responseText);
+    const xhrCustomers = new XMLHttpRequest();
+    xhrCustomers.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
+    xhrCustomers.onload = function () {
+      if (this.status === 200) {
+        const customers = JSON.parse(this.responseText);
+        const xhrPayments = new XMLHttpRequest();
+        xhrPayments.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-payments', true);
+        xhrPayments.onload = function () {
+          if (this.status === 200) {
+            const payments = JSON.parse(this.responseText);
+            const projectsTable = document.getElementById('projectsTable');
+            projectsTable.innerHTML = `
+              <thead>
+                <tr>
+                  <th>Project</th>
+                  <th>Price</th>
+                  <th>Customer</th>
+                  <th>Payments</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${projects.map(project => {
+                  const customer = customers.find(c => c.id === project.customer_id);
+                  const projectPayments = payments.filter(p => p.project_id === project.id);
+                  const paymentSum = projectPayments.reduce((acc, curr) => acc + curr.amount, 0);
+                  return `
+                    <tr>
+                      <td>${project.project}</td>
+                      <td>${project.price}</td>
+                      <td>${customer ? customer.name : ''}</td>
+                      <td>${paymentSum}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            `;
+          }
+        };
+        xhrPayments.send();
+      }
+    };
+    xhrCustomers.send();
+  }
+};
+xhrProjects.send();
