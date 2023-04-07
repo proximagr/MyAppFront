@@ -1,111 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Customers and Projects</title>
+    <title>Customer Projects and Payments</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <h1>Customers and Projects</h1>
-  
-  <label for="customer-select">Select a customer:</label>
-  <select id="customer-select"></select>
-  <br><br>
+    <h1>Customer Projects and Payments</h1>
+    
+    <label for="customer-dropdown">Select a customer:</label>
+    <select id="customer-dropdown"></select>
+    <br><br>
+    
+    <div id="project-table"></div>
+    <br>
+    
+    <div id="payment-table"></div>
 
-  <div id="projects-table"></div>
-  <br>
-
-  <div id="payments-table"></div>
-
-  <script>
-    // Function to populate the customer dropdown
-    function populateCustomers() {
-      fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
-        .then(response => response.json())
-        .then(data => {
-          const customerSelect = document.getElementById('customer-select');
-          data.forEach(customer => {
-            const option = document.createElement('option');
-            option.value = customer.id;
-            option.text = customer.name;
-            customerSelect.appendChild(option);
-          });
-        })
-        .catch(error => console.error(error));
-    }
-
-    // Function to populate the projects table
-    function populateProjects(customerId) {
-      const projectsTable = document.getElementById('projects-table');
-
-      // Clear previous contents
-      projectsTable.innerHTML = '';
-
-      // Add header row
-      const headerRow = projectsTable.insertRow();
-      const projectCell = headerRow.insertCell();
-      projectCell.innerText = 'Project';
-      const priceCell = headerRow.insertCell();
-      priceCell.innerText = 'Price';
-
-      // Fetch projects for the selected customer
-      fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-        .then(response => response.json())
-        .then(data => {
-          // Add rows for each project
-          data.forEach(project => {
-            const row = projectsTable.insertRow();
-            const projectCell = row.insertCell();
-            projectCell.innerText = project.project;
-            const priceCell = row.insertCell();
-            priceCell.innerText = project.price;
-            row.onclick = function() {
-              populatePayments(project.id);
-            };
-            row.style.cursor = 'pointer';
-          });
-        })
-        .catch(error => console.error(error));
-    }
-
-    // Function to populate the payments table
-    function populatePayments(projectId) {
-      const paymentsTable = document.getElementById('payments-table');
-
-      // Clear previous contents
-      paymentsTable.innerHTML = '';
-
-      // Add header row
-      const headerRow = paymentsTable.insertRow();
-      const paymentCell = headerRow.insertCell();
-      paymentCell.innerText = 'Payment';
-      const dateCell = headerRow.insertCell();
-      dateCell.innerText = 'Date';
-
-      // Fetch payments for the selected project
-      fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-payments?project_id=${projectId}`)
-        .then(response => response.json())
-        .then(data => {
-          // Add rows for each payment
-          data.forEach(payment => {
-            const row = paymentsTable.insertRow();
-            const paymentCell = row.insertCell();
-            paymentCell.innerText = payment.payment;
-            const dateCell = row.insertCell();
-            dateCell.innerText = payment.date;
-          });
-        })
-        .catch(error => console.error(error));
-    }
-
-    // Add event listener to the customer dropdown
-    const customerSelect = document.getElementById('customer-select');
-    customerSelect.addEventListener('change', function() {
-      const customerId = customerSelect.value;
-      populateProjects(customerId);
-    });
-
-    // Populate the customer dropdown on page load
-    populateCustomers();
-  </script>
+    <script src="projectspayments.js"></script>
 </body>
 </html>
