@@ -6,7 +6,7 @@ const paymentTable = document.getElementById("payment-table");
 // Define function to populate the customer dropdown
 function populateCustomerDropdown() {
   // Make a request to the /list-users endpoint to get a list of customers
-  fetch("http://arch.francecentral.cloudapp.azure.com:43704//list-users")
+  fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
     .then((response) => response.json())
     .then((data) => {
       // Loop through the list of customers and add each one to the dropdown
@@ -23,7 +23,7 @@ function populateCustomerDropdown() {
 // Define function to populate the project table for a given customer
 function populateProjectTable(customerId) {
   // Make a request to the /list-customerprojects endpoint to get a list of projects for the selected customer
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704//list-customerprojects?customer_id=${customerId}`)
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
     .then((response) => response.json())
     .then((data) => {
       // Clear the existing project table
@@ -45,7 +45,7 @@ function populateProjectTable(customerId) {
 // Define function to populate the payment table for a given project
 function populatePaymentTable(projectId) {
   // Make a request to the /list-payments endpoint to get a list of payments for the selected project
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704//list-payments?project_id=${projectId}`)
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-payments?project_id=${projectId}`)
     .then((response) => response.json())
     .then((data) => {
       // Clear the existing payment table
