@@ -44,7 +44,7 @@ projectSelect.addEventListener("change", event => {
 			.then(response => response.json())
 			.then(payments => {
 				for (let payment of payments) {
-          const row = paymentTable.insertRow();
+					const row = paymentTable.insertRow();
 					const dateCell = row.insertCell();
 					const amountCell = row.insertCell();
 					dateCell.textContent = payment.date;
