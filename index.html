@@ -36,9 +36,18 @@
   }
   </script>
 
-    <h1>Select a customer:</h1>
-    <select id="customer-select"></select>
-    <table id="projects-table"></table>
+<h1>Customer Projects</h1>
+<label for="customer-select">Select a customer:</label>
+<select name="customer" id="customer-select"></select>
+<table>
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody id="project-table">
+  </tbody
 
   <script src="customersprojects.js"></script>
   <script src="add-user.js"></script>
