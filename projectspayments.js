@@ -1,65 +1,85 @@
-// Fetch customers and populate dropdown menu
+const customersSelect = document.getElementById('customers');
+const projectsContainer = document.getElementById('projects-container');
+const paymentsContainer = document.getElementById('payments-container');
+
+// Populate customers dropdown
 fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
-	.then(response => response.json())
-	.then(data => {
-		const customerSelect = document.getElementById('customer-select');
-		data.forEach(customer => {
-			const option = document.createElement('option');
-			option.text = customer.name;
-			option.value = customer.id;
-			customerSelect.add(option);
-		});
-	});
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(customer => {
+      const option = document.createElement('option');
+      option.text = customer.name;
+      option.value = customer.id;
+      customersSelect.add(option);
+    });
+  })
+  .catch(error => console.error(error));
 
-// Clear projects and payments tables
-function clearTables() {
-	const projectsTableBody = document.querySelector('#projects-table tbody');
-	projectsTableBody.innerHTML = '';
-	const paymentsTableBody = document.querySelector('#payments-table tbody');
-	paymentsTableBody.innerHTML = '';
+// Get projects for selected customer
+function getProjects() {
+  // Clear projects and payments containers
+  projectsContainer.innerHTML = '';
+  paymentsContainer.innerHTML = '';
+
+  const customerId = customersSelect.value;
+  if (!customerId) {
+    return;
+  }
+
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length === 0) {
+        projectsContainer.innerHTML = 'No projects found.';
+      } else {
+        const table = document.createElement('table');
+        const header = table.createTHead();
+        const row = header.insertRow();
+        const nameCell = row.insertCell();
+        nameCell.innerHTML = '<b>Project Name</b>';
+
+        data.forEach(project => {
+          const row = table.insertRow();
+          const nameCell = row.insertCell();
+          nameCell.innerHTML = project.project;
+          nameCell.addEventListener('click', () => getPayments(project.id));
+          nameCell.style.cursor = 'pointer';
+        });
+
+        projectsContainer.appendChild(table);
+      }
+    })
+    .catch(error => console.error(error));
 }
 
-// Populate projects table with projects for selected customer
-function populateProjectsTable(customerId) {
-	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-		.then(response => response.json())
-		.then(data => {
-			const projectsTableBody = document.querySelector('#projects-table tbody');
-			projectsTableBody.innerHTML = '';
-			data.forEach(project => {
-				const row = projectsTableBody.insertRow();
-				const cell = row.insertCell();
-				cell.innerHTML = project.project;
-				row.addEventListener('click', () => populatePaymentsTable(project.id));
-			});
-		});
-}
+// Get payments for selected project
+function getPayments(projectId) {
+  paymentsContainer.innerHTML = '';
 
-// Populate payments table with payments for selected project
-function populatePaymentsTable(projectId) {
-	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-		.then(response => response.json())
-		.then(data => {
-			const paymentsTableBody = document.querySelector('#payments-table tbody');
-			paymentsTableBody.innerHTML = '';
-			data.forEach(payment => {
-				const row = paymentsTableBody.insertRow();
-				const dateCell = row.insertCell();
-				dateCell.innerHTML = payment.date;
-				const amountCell = row.insertCell();
-				amountCell.innerHTML = payment.payment;
-				const descriptionCell = row.insertCell();
-				descriptionCell.innerHTML = payment.description;
-			});
-		});
-}
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length === 0) {
+        paymentsContainer.innerHTML = 'No payments found.';
+      } else {
+        const table = document.createElement('table');
+        const header = table.createTHead();
+        const row = header.insertRow();
+        const amountCell = row.insertCell();
+        amountCell.innerHTML = '<b>Payment Amount</b>';
+        const dateCell = row.insertCell();
+        dateCell.innerHTML = '<b>Date</b>';
 
-// Event listener for customer dropdown menu
-const customerSelect = document.getElementById('customer-select');
-customerSelect.addEventListener('change', () => {
-	clearTables();
-	const customerId = customerSelect.value;
-	if (customerId) {
-		populateProjectsTable(customerId);
-	}
-});
+        data.forEach(payment => {
+          const row = table.insertRow();
+          const amountCell = row.insertCell();
+          amountCell.innerHTML = payment.payment;
+          const dateCell = row.insertCell();
+          dateCell.innerHTML = payment.date;
+        });
+
+        paymentsContainer.appendChild(table);
+      }
+    })
+    .catch(error => console.error(error));
+}
