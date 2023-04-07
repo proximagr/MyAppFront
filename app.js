@@ -16,7 +16,7 @@ async function listProjects() {
   projects.forEach(project => {
     const customer = customers.find(customer => customer.id === project.customer_id);
     const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
-    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.amount, 0);
+    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
     summary[project.id] = totalPayments;
 
     const row = projectTable.insertRow(-1);
