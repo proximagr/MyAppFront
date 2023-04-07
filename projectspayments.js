@@ -9,7 +9,7 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
     customers.forEach(customer => {
       const option = document.createElement("option");
       option.value = customer.customer_id;
-      option.text = customer.customer_name;
+      option.text = customer.name;
       customersSelect.add(option);
     });
   })
