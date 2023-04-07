@@ -7,7 +7,7 @@ function retrieveProjects(customerId) {
   projectsTable.innerHTML = "";
 
   // make a request to retrieve projects for the selected customer
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects?customerId=${customerId}`)
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customerId=${customerId}`)
     .then((response) => response.json())
     .then((data) => {
       // create a header row for the table
