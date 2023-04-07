@@ -37,7 +37,7 @@ function populateProjectsTable(customerId) {
 
 // Populate payments table with payments for selected project
 function populatePaymentsTable(projectId) {
-	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-paymentsprojects?project_id=${projectId}`)
+	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
 		.then(response => response.json())
 		.then(data => {
 			const paymentsTableBody = document.querySelector('#payments-table tbody');
