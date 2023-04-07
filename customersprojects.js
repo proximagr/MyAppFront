@@ -23,7 +23,14 @@ function fetchUsers() {
             row.appendChild(cell);
         });
         table.appendChild(row);
-        });
+
+        // add option to select element for each customer
+        const customerSelect = document.getElementById('customer-select');
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = user.name;
+        customerSelect.appendChild(option);
+      });
 
         // append the table to the user-list element
         const userList = document.getElementById('user-list');
