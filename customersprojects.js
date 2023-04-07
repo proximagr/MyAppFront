@@ -15,41 +15,34 @@ async function init() {
   customerSelect.addEventListener('change', () => {
     const customerId = customerSelect.value;
 
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects?customer_id=${customerId}`)
-      .then(response => response.json())
-      .then(projects => {
-        const paymentsResponse = fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments')
-          .then(response => response.json());
+    Promise.all([
+      fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects').then(response => response.json()),
+      fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments').then(response => response.json())
+    ])
+      .then(([projects, payments]) => {
+        const summary = {};
 
-        Promise.all([paymentsResponse])
-          .then(([payments]) => {
-            const summary = {};
+        projectTable.querySelector('tbody').innerHTML = '';
 
-            projectTable.querySelector('tbody').innerHTML = '';
+        projects.filter(project => project.customer_id === customerId).forEach(project => {
+          const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
+          const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
+          summary[project.id] = totalPayments;
 
-            projects.forEach(project => {
-              const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
-              const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
-              summary[project.id] = totalPayments;
+          const row = projectTable.insertRow(-1);
+          const projectCell = row.insertCell(0);
+          const priceCell = row.insertCell(1);
+          const paymentsCell = row.insertCell(2);
 
-              const row = projectTable.insertRow(-1);
-              const projectCell = row.insertCell(0);
-              const priceCell = row.insertCell(1);
-              const paymentsCell = row.insertCell(2);
+          projectCell.textContent = project.project;
+          priceCell.textContent = project.price;
+          paymentsCell.textContent = totalPayments;
+        });
 
-              projectCell.textContent = project.project;
-              priceCell.textContent = project.price;
-              paymentsCell.textContent = totalPayments;
-            });
-
-            console.log(summary);
-          })
-          .catch(error => {
-            console.error('Failed to fetch payments:', error);
-          });
+        console.log(summary);
       })
       .catch(error => {
-        console.error('Failed to fetch projects:', error);
+        console.error('Failed to fetch projects and payments:', error);
       });
   });
 }
