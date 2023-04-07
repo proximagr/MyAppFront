@@ -30,7 +30,7 @@ customersSelect.addEventListener("change", event => {
       .then(projects => {
         projects.forEach(project => {
           const option = document.createElement("option");
-          option.value = project.project_id;
+          option.value = project.id;
           option.text = project.project;
           projectsSelect.add(option);
         });
@@ -54,7 +54,7 @@ projectsSelect.addEventListener("change", event => {
       .then(payments => {
         payments.forEach(payment => {
           const row = paymentsTable.tBodies[0].insertRow(-1);
-          row.insertCell(0).textContent = payment.payment_id;
+          row.insertCell(0).textContent = payment.id;
           row.insertCell(1).textContent = payment.payment;
           row.insertCell(2).textContent = payment.date;
         });
