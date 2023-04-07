@@ -27,7 +27,7 @@ customerSelect.addEventListener("change", event => {
 				for (let project of projects) {
 					const option = document.createElement("option");
 					option.value = project.id;
-					option.textContent = project.project;
+					option.textContent = project.project + " ($" + project.price + ")";
 					projectSelect.appendChild(option);
 				}
 			})
