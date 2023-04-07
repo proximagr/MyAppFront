@@ -1,39 +1,93 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>View Payments</title>
-	<meta charset="utf-8">
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers Projects and Payments</title>
+  </head>
+  <body>
+    <h1>Select a Customer</h1>
+    <select id="customer-select"></select>
 
-<h1>Select a Customer</h1>
-<select id="customer-select"></select>
+    <h2>Projects</h2>
+    <table id="project-table">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Project Name</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-<h1>Projects</h1>
-<table id="projects-table">
-  <thead>
-    <tr>
-      <th>Project ID</th>
-      <th>Project Name</th>
-      <th>Payments</th>
-    </tr>
-  </thead>
-  <tbody id="projects-table-body"></tbody>
-</table>
+    <h2>Payments</h2>
+    <table id="payment-table">
+      <thead>
+        <tr>
+          <th>Payment ID</th>
+          <th>Payment Amount</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-<h1>Payments</h1>
-<table id="payments-table">
-  <thead>
-    <tr>
-      <th>Payment ID</th>
-      <th>Project ID</th>
-      <th>Payment</th>
-    </tr>
-  </thead>
-  <tbody id="payments-table-body"></tbody>
-</table>
+    <script>
+      const customerSelect = document.getElementById("customer-select");
+      const projectTable = document.getElementById("project-table").querySelector("tbody");
+      const paymentTable = document.getElementById("payment-table").querySelector("tbody");
 
-<script src="projectspayments.js"></script>
+      // Function to fetch the list of customers and populate the dropdown
+      function loadCustomers() {
+        fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
+          .then((response) => response.json())
+          .then((data) => {
+            data.forEach((customer) => {
+              const option = document.createElement("option");
+              option.value = customer.id;
+              option.text = customer.name;
+              customerSelect.add(option);
+            });
+          })
+          .catch((error) => console.error(error));
+      }
 
-</body>
-</html>
+      // Function to fetch the list of projects for a customer and update the project table
+      function loadProjects(customerId) {
+        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            // Clear existing rows from table
+            projectTable.innerHTML = "";
+            // Add new rows to table with project information
+            data.forEach((project) => {
+              const row = projectTable.insertRow();
+              const projectIdCell = row.insertCell(0);
+              const projectNameCell = row.insertCell(1);
+              projectIdCell.textContent = project.id;
+              projectNameCell.textContent = project.name;
+              // Add click listener to row to load project payments when clicked
+              row.addEventListener("click", () => loadPayments(project.id));
+            });
+          })
+          .catch((error) => console.error(error));
+      }
+
+      // Function to fetch the list of payments for a project and update the payment table
+      function loadPayments(projectId) {
+        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-payments?project_id=${projectId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            // Clear existing rows from table
+            paymentTable.innerHTML = "";
+            // Add new rows to table with payment information
+            data.forEach((payment) => {
+              const row = paymentTable.insertRow();
+              const paymentIdCell = row.insertCell(0);
+              const paymentAmountCell = row.insertCell(1);
+              paymentIdCell.textContent = payment.id;
+              paymentAmountCell.textContent = payment.payment;
+            });
+            })
+            .catch((error) => console.error(error));
+        }
+        
