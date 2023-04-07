@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Customers Projects</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <h1>Customers Projects</h1>
-    <label for="customer-select">Select a customer:</label>
-    <select name="customer-select" id="customer-select"></select>
+<head>
+  <meta charset="utf-8">
+  <title>Customers and Projects</title>
+</head>
+<body>
+  <h1>Customers and Projects</h1>
+  <label for="customer-select">Select Customer:</label>
+  <select id="customer-select"></select>
+  <br /><br />
+  <table id="projects-table" style="display:none">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-    <table id="projects-table" style="display:none;">
-      <thead>
-        <tr>
-          <th>Project ID</th>
-          <th>Project Name</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody id="projects-table-body">
-      </tbody>
-    </table>
+  <script>
+    const customerSelect = document.getElementById('customer-select');
+    const projectsTable = document.getElementById('projects-table');
+    const projectsTableBody = projectsTable.querySelector('tbody');
 
-    <script src="customersprojects.js"></script>
-  </body>
+    fetch('/list-users')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(customer => {
+          const option = document.createElement('option');
+          option.value = customer.id;
+          option.textContent = customer.name;
+          customerSelect.appendChild(option);
+        });
+      });
+
+    function listProjects(customerId) {
+      projectsTableBody.innerHTML = '';
+      projectsTable.style.display = 'none';
+      fetch(`/list-projects?customerId=${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(project => {
+            const row = projectsTableBody.insertRow();
+            row.insertCell().textContent = project.name;
+            row.insertCell().textContent = project.price;
+          });
+          projectsTable.style.display = 'block';
+        })
+        .catch(error => {
+          console.error(error);
+          alert('An error occurred while fetching the projects.');
+        });
+    }
+
+    customerSelect.addEventListener('change', event => {
+      const customerId = event.target.value;
+      listProjects(customerId);
+    });
+  </script>
+</body>
 </html>
