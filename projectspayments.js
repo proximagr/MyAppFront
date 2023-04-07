@@ -53,9 +53,9 @@ projectSelect.addEventListener("change", event => {
           const total = payments.reduce((total, payment) => total + payment.payment, 0);
         const row1 = paymentTable.insertRow();
         //display the sum in a total cell
-        }
         const totalCell = row1.insertCell();
         totalCell.textContent = total;
+        }
 			})
 			.catch(error => console.error(error));
 	}
