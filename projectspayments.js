@@ -29,7 +29,7 @@ function populateProjectsTable(customerId) {
 			data.forEach(project => {
 				const row = projectsTableBody.insertRow();
 				const cell = row.insertCell();
-				cell.innerHTML = project.name;
+				cell.innerHTML = project.project;
 				row.addEventListener('click', () => populatePaymentsTable(project.id));
 			});
 		});
