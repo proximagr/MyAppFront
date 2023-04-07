@@ -47,7 +47,7 @@ function populatePaymentsTable(projectId) {
 				const dateCell = row.insertCell();
 				dateCell.innerHTML = payment.date;
 				const amountCell = row.insertCell();
-				amountCell.innerHTML = payment.amount;
+				amountCell.innerHTML = payment.payment;
 				const descriptionCell = row.insertCell();
 				descriptionCell.innerHTML = payment.description;
 			});
