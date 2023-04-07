@@ -1,6 +1,7 @@
 const customerSelect = document.getElementById("customer-select");
 const projectSelect = document.getElementById("project-select");
 const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
+const paymentTotal = document.getElementById("payment-total")
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
@@ -36,6 +37,7 @@ customerSelect.addEventListener("change", event => {
 });
 
 // Populate the payment table when a project is selected
+/*
 projectSelect.addEventListener("change", event => {
 	const projectId = event.target.value;
 	paymentTable.innerHTML = "";
@@ -49,15 +51,35 @@ projectSelect.addEventListener("change", event => {
 					const amountCell = row.insertCell();
 					dateCell.textContent = payment.date;
 					amountCell.textContent = payment.payment;
-          //sum all payment.payment amount and return the total
-          const total = payments.reduce((total, payment) => total + payment.payment, 0);
-          const row1 = paymentTable.insertRow();
-          //display the sum in a total cell
-          const totalCell = row1.insertCell();
-          totalCell.textContent = total;
         }
 			})
 			.catch(error => console.error(error));
 	}
+});
+*/
 
+projectSelect.addEventListener("change", event => {
+  const projectId = event.target.value;
+  paymentTable.innerHTML = "";
+  paymentTotal.textContent = "";
+  if (projectId) {
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
+      .then(response => response.json())
+      .then(payments => {
+        let totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
+        for (let payment of payments) {
+          const row = paymentTable.insertRow();
+          const dateCell = row.insertCell();
+          const amountCell = row.insertCell();
+          dateCell.textContent = payment.date;
+          amountCell.textContent = payment.payment;
+        }
+        const row = paymentTable.insertRow();
+        const totalCell = row.insertCell();
+        totalCell.colSpan = 2;
+        totalCell.textContent = `Total Payment: ${totalPayment}`;
+        paymentTotal.textContent = `Total Payment: ${totalPayment}`;
+      })
+      .catch(error => console.error(error));
+  }
 });
