@@ -25,7 +25,7 @@ customersSelect.addEventListener("change", event => {
   paymentsTable.style.display = "none";
   
   if (selectedCustomerId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704list-customerprojects?customer_id=${selectedCustomerId}`)
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${selectedCustomerId}`)
       .then(response => response.json())
       .then(projects => {
         projects.forEach(project => {
