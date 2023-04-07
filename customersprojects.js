@@ -24,7 +24,7 @@ fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects')
         data.forEach(project => {
             const option = document.createElement('option');
             option.value = project.id;
-            option.textContent = project.name;
+            option.textContent = project.project;
             projectSelect.appendChild(option);
             //display the option values to the console
             console.log(option.value);
