@@ -1,34 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Customer Project Payments</title>
+	<title>Customer Project Payments</title>
+	<script src="projectspayments.js"></script>
 </head>
 <body>
-  <h1>Customer Project Payments</h1>
-  
-  <label for="customers-select">Select a customer:</label>
-  <select id="customers-select">
-    <option value="">-- Select a customer --</option>
-  </select>
-  
-  <label for="projects-select">Select a project:</label>
-  <select id="projects-select" disabled>
-    <option value="">-- Select a project --</option>
-  </select>
-  
-  <table id="payments-table" style="display:none">
-    <thead>
-      <tr>
-        <th>Payment ID</th>
-        <th>Amount</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  
-  <script src="projectspayments.js"></script>
+	<h1>Customer Project Payments</h1>
+	<select id="customer-list">
+		<option value="">Select a customer</option>
+	</select>
+	<br><br>
+	<table id="project-table">
+		<tr>
+			<th>Project Name</th>
+		</tr>
+	</table>
+	<br><br>
+	<table id="payment-table">
+		<tr>
+			<th>Payment Date</th>
+			<th>Payment Amount</th>
+		</tr>
+	</table>
 </body>
 </html>
