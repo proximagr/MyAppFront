@@ -49,14 +49,13 @@ projectSelect.addEventListener("change", event => {
 					const amountCell = row.insertCell();
 					dateCell.textContent = payment.date;
 					amountCell.textContent = payment.payment;
-          const row1 = paymentTable.insertRow();
           //sum all payment.payment amount and return the total
           const total = payments.reduce((total, payment) => total + payment.payment, 0);
-          //display the sum in a total cell
-          const totalCell = row1.insertCell();
-          totalCell.textContent = total;
-
 				}
+        const row1 = paymentTable.insertRow();
+        //display the sum in a total cell
+        const totalCell = row1.insertCell();
+        totalCell.textContent = total;
 			})
 			.catch(error => console.error(error));
 	}
