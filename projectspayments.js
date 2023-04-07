@@ -44,11 +44,16 @@ projectSelect.addEventListener("change", event => {
 			.then(response => response.json())
 			.then(payments => {
 				for (let payment of payments) {
-					const row = paymentTable.insertRow();
+          const total = payments.reduce((acc, payment) => acc + payment.amount, 0);
+          const row = paymentTable.insertRow();
 					const dateCell = row.insertCell();
 					const amountCell = row.insertCell();
+          const totalCell = row.incertCell();
 					dateCell.textContent = payment.date;
 					amountCell.textContent = payment.payment;
+          totalCell.textContent = total;
+          
+
 				}
 			})
 			.catch(error => console.error(error));
