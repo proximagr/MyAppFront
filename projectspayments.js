@@ -27,7 +27,7 @@ customerSelect.addEventListener("change", event => {
 				for (let project of projects) {
 					const option = document.createElement("option");
 					option.value = project.id;
-					option.textContent = project.name;
+					option.textContent = project.project;
 					projectSelect.appendChild(option);
 				}
 			})
@@ -47,10 +47,8 @@ projectSelect.addEventListener("change", event => {
 					const row = paymentTable.insertRow();
 					const dateCell = row.insertCell();
 					const amountCell = row.insertCell();
-					const descCell = row.insertCell();
 					dateCell.textContent = payment.date;
-					amountCell.textContent = payment.amount;
-					descCell.textContent = payment.description;
+					amountCell.textContent = payment.payment;
 				}
 			})
 			.catch(error => console.error(error));
