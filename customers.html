@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Select Customer</title>
-</head>
-<body>
-  <h1>Select a Customer</h1>
-  <select id="customer-select"></select>
-  <select id="project-select"></select>
-  <script src="customersprojects.js"></script>
-</body>
+  <head>
+    <title>Customer Projects</title>
+  </head>
+  <body>
+    <h1>Customer Projects</h1>
+    <label for="customer-select">Customer:</label>
+    <select id="customer-select">
+      <option value="">Select a customer</option>
+      <!-- Customers will be populated dynamically by the customersprojects.js script -->
+    </select>
+    <table id="project-table"></table>
+    <script src="customersprojects.js"></script>
+  </body>
 </html>
