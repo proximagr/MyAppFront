@@ -1,5 +1,5 @@
-const cprojectTable = document.getElementById('customer-project-table');
-const listCProjectsBtn = document.getElementById('list-customers-projects-btn');
+const projectTable = document.getElementById('customer-project-table');
+const listProjectsBtn = document.getElementById('list-customers-projects-btn');
 
 async function listProjects() {
   const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
@@ -19,7 +19,7 @@ async function listProjects() {
     const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
     summary[project.id] = totalPayments;
 
-    const row = cprojectTable.insertRow(-1);
+    const row = projectTable.insertRow(-1);
     const projectCell = row.insertCell(0);
     const priceCell = row.insertCell(1);
     const customerCell = row.insertCell(2);
@@ -34,4 +34,4 @@ async function listProjects() {
   console.log(summary);
 }
 
-listCProjectsBtn.addEventListener('click', listProjects);
+listProjectsBtn.addEventListener('click', listProjects);
