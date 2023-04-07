@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>List Customers, Projects, and Payments</title>
-    <script src="projectspayments.js"></script>
-  </head>
-  <body>
-    <h1>List Customers, Projects, and Payments</h1>
+<head>
+    <title>Customer Projects Payments</title>
+</head>
+<body>
+    <h1>Customer Projects Payments</h1>
     <div>
-      <label for="customers">Select a customer:</label>
-      <select id="customers" onchange="getProjects()">
-        <option value="">Select a customer</option>
-      </select>
+        <label for="customers">Select a Customer:</label>
+        <select id="customers"></select>
     </div>
-    <div id="projects-container"></div>
-    <div id="payments-container"></div>
-  </body>
+    <div>
+        <label for="projects">Select a Project:</label>
+        <select id="projects"></select>
+    </div>
+    <div id="payments"></div>
+    <script src="projectspayments.js"></script>
+</body>
 </html>

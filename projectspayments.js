@@ -1,85 +1,83 @@
-const customersSelect = document.getElementById('customers');
-const projectsContainer = document.getElementById('projects-container');
-const paymentsContainer = document.getElementById('payments-container');
+const customersDropdown = document.querySelector('#customers');
+const projectsDropdown = document.querySelector('#projects');
+const paymentsTable = document.querySelector('#payments');
 
-// Populate customers dropdown
-fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
-  .then(response => response.json())
-  .then(data => {
-    data.forEach(customer => {
-      const option = document.createElement('option');
-      option.text = customer.name;
-      option.value = customer.id;
-      customersSelect.add(option);
-    });
-  })
-  .catch(error => console.error(error));
-
-// Get projects for selected customer
-function getProjects() {
-  // Clear projects and payments containers
-  projectsContainer.innerHTML = '';
-  paymentsContainer.innerHTML = '';
-
-  const customerId = customersSelect.value;
-  if (!customerId) {
-    return;
-  }
-
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.length === 0) {
-        projectsContainer.innerHTML = 'No projects found.';
-      } else {
-        const table = document.createElement('table');
-        const header = table.createTHead();
-        const row = header.insertRow();
-        const nameCell = row.insertCell();
-        nameCell.innerHTML = '<b>Project Name</b>';
-
-        data.forEach(project => {
-          const row = table.insertRow();
-          const nameCell = row.insertCell();
-          nameCell.innerHTML = project.project;
-          nameCell.addEventListener('click', () => getPayments(project.id));
-          nameCell.style.cursor = 'pointer';
-        });
-
-        projectsContainer.appendChild(table);
-      }
-    })
-    .catch(error => console.error(error));
+// Clear any existing options from the customers dropdown
+function clearCustomersDropdown() {
+    customersDropdown.innerHTML = '';
+    projectsDropdown.innerHTML = '<option value="" selected disabled>Please select a customer</option>';
+    paymentsTable.innerHTML = '';
 }
 
-// Get payments for selected project
-function getPayments(projectId) {
-  paymentsContainer.innerHTML = '';
-
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.length === 0) {
-        paymentsContainer.innerHTML = 'No payments found.';
-      } else {
-        const table = document.createElement('table');
-        const header = table.createTHead();
-        const row = header.insertRow();
-        const amountCell = row.insertCell();
-        amountCell.innerHTML = '<b>Payment Amount</b>';
-        const dateCell = row.insertCell();
-        dateCell.innerHTML = '<b>Date</b>';
-
-        data.forEach(payment => {
-          const row = table.insertRow();
-          const amountCell = row.insertCell();
-          amountCell.innerHTML = payment.payment;
-          const dateCell = row.insertCell();
-          dateCell.innerHTML = payment.date;
+// Populate the customers dropdown
+function populateCustomersDropdown() {
+    clearCustomersDropdown();
+    fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
+        .then(response => response.json())
+        .then(data => {
+            const customers = data.data;
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = customer.name;
+                customersDropdown.appendChild(option);
+            });
         });
-
-        paymentsContainer.appendChild(table);
-      }
-    })
-    .catch(error => console.error(error));
 }
+
+// Populate the projects dropdown based on the selected customer
+function populateProjectsDropdown(customerId) {
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+            const projects = data.data;
+            projectsDropdown.innerHTML = '<option value="" selected disabled>Please select a project</option>';
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.project;
+                projectsDropdown.appendChild(option);
+            });
+        });
+}
+
+// Populate the payments table based on the selected project
+function populatePaymentsTable(projectId) {
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            const payments = data.data;
+            if (payments.length > 0) {
+                let tableHtml = '<table><tr><th>Date</th><th>Amount</th></tr>';
+                payments.forEach(payment => {
+                    tableHtml += `<tr><td>${payment.date}</td><td>${payment.payment}</td></tr>`;
+                });
+                tableHtml += '</table>';
+                paymentsTable.innerHTML = tableHtml;
+            } else {
+                paymentsTable.innerHTML = '<p>No payments found for this project</p>';
+            }
+        });
+}
+
+// Event listeners
+customersDropdown.addEventListener('change', () => {
+    const customerId = customersDropdown.value;
+    if (customerId) {
+        populateProjectsDropdown(customerId);
+    } else {
+        clearCustomersDropdown();
+    }
+});
+
+projectsDropdown.addEventListener('change', () => {
+    const projectId = projectsDropdown.value;
+    if (projectId) {
+        populatePaymentsTable(projectId);
+    } else {
+        paymentsTable.innerHTML = '';
+    }
+});
+
+// Initial population of customers dropdown
+populateCustomersDropdown();
