@@ -33,3 +33,10 @@ function fetchUsers() {
         console.error(error);
     });
 }
+
+function closeTable() {
+    const userList = document.getElementById('user-list');
+    const table = document.querySelector('table');
+    userList.removeChild(table);
+  }
+  
