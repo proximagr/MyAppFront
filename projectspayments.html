@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Customers and Projects</title>
-    <script src="projectspayments.js"></script>
-  </head>
-  <body>
-    <h1>Customers and Projects</h1>
-    <label for="customer-dropdown">Select a customer:</label>
-    <select id="customer-dropdown">
-     
+<head>
+	<title>Customers, Projects, and Payments</title>
+</head>
+<body>
+	<h1>Customers, Projects, and Payments</h1>
 
-    <br><br>
-    
-    <div id="project-table"></div>
-    <br>
-    
-    <div id="payment-table"></div>
+	<!-- Customer dropdown menu -->
+	<label for="customer-select">Select a customer:</label>
+	<select id="customer-select"></select>
 
+	<!-- Projects table -->
+	<table id="projects-table">
+		<thead>
+			<tr>
+				<th>Project Name</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<!-- Payments table -->
+	<table id="payments-table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Amount</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<!-- JavaScript code -->
+	<script src="projectspayments.js"></script>
 </body>
 </html>
