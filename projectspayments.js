@@ -54,27 +54,3 @@ projectSelect.addEventListener("change", event => {
 			.catch(error => console.error(error));
 	}
 });
-
-/*
-projectSelect.addEventListener("change", event => {
-	const projectId = event.target.value;
-	paymentTable.innerHTML = "";
-	if (projectId) {
-		fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-			.then(response => response.json())
-			.then(payments => {
-				for (let payment of payments) {
-          const total = payments.reduce((acc, payment) => acc + payment.amount, 0);
-          const row = paymentTable.insertRow();
-					const dateCell = row.insertCell();
-					const amountCell = row.insertCell();
-          const totalCell = row.incertCell();
-					dateCell.textContent = payment.date;
-					amountCell.textContent = payment.payment;
-          totalCell.textContent = total;
-				}
-			})
-			.catch(error => console.error(error));
-	}
-});
-*/
