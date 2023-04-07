@@ -45,7 +45,7 @@ function populateProjectTable(customerId) {
 // Define function to populate the payment table for a given project
 function populatePaymentTable(projectId) {
   // Make a request to the /list-payments endpoint to get a list of payments for the selected project
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-payments?project_id=${projectId}`)
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
     .then((response) => response.json())
     .then((data) => {
       // Clear the existing payment table
