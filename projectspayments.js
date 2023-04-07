@@ -43,6 +43,7 @@ projectSelect.addEventListener("change", event => {
 		fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
 			.then(response => response.json())
 			.then(payments => {
+        let total = 0;
 				for (let payment of payments) {
 					const row = paymentTable.insertRow();
 					const dateCell = row.insertCell();
@@ -51,11 +52,12 @@ projectSelect.addEventListener("change", event => {
 					amountCell.textContent = payment.payment;
           //sum all payment.payment amount and return the total
           const total = payments.reduce((total, payment) => total + payment.payment, 0);
-        const row1 = paymentTable.insertRow();
-        //display the sum in a total cell
-        const totalCell = row1.insertCell();
-        totalCell.textContent = total;
+          const row1 = paymentTable.insertRow();
+          //display the sum in a total cell
+          const totalCell = row1.insertCell();
+          
         }
+        totalCell.textContent = total;
 			})
 			.catch(error => console.error(error));
 	}
