@@ -1,42 +1,37 @@
-// Retrieve the customer dropdown and project table
-const customerDropdown = document.getElementById("customer-dropdown");
-const projectTable = document.getElementById("project-table");
+const cprojectTable = document.getElementById('customer-project-table');
+const listCProjectsBtn = document.getElementById('list-customers-projects-btn');
 
-// Load the list of customers
-fetch("/list-users")
-  .then(response => response.json())
-  .then(data => {
-    // Populate the customer dropdown
-    data.forEach(customer => {
-      const option = document.createElement("option");
-      option.text = customer.name;
-      option.value = customer.id;
-      customerDropdown.add(option);
-    });
+async function listProjects() {
+  const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
+  const projects = await response.json();
+
+  const customerResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users');
+  const customers = await customerResponse.json();
+
+  const paymentsResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments');
+  const payments = await paymentsResponse.json();
+
+  const summary = {};
+
+  projects.forEach(project => {
+    const customer = customers.find(customer => customer.id === project.customer_id);
+    const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
+    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
+    summary[project.id] = totalPayments;
+
+    const row = cprojectTable.insertRow(-1);
+    const projectCell = row.insertCell(0);
+    const priceCell = row.insertCell(1);
+    const customerCell = row.insertCell(2);
+    const paymentsCell = row.insertCell(3);
+
+    projectCell.textContent = project.project;
+    priceCell.textContent = project.price;
+    customerCell.textContent = customer ? customer.name : '';
+    paymentsCell.textContent = totalPayments;
   });
+  
+  console.log(summary);
+}
 
-// When the user selects a customer, show their projects
-customerDropdown.addEventListener("change", () => {
-  const customerId = customerDropdown.value;
-
-  // Remove any existing rows in the project table
-  while (projectTable.rows.length > 1) {
-    projectTable.deleteRow(-1);
-  }
-
-  // Load the projects for the selected customer
-  fetch(`/list-projects?customerId=${customerId}`)
-    .then(response => response.json())
-    .then(data => {
-      // Populate the project table
-      data.forEach(project => {
-        if (project.customer_id === parseInt(customerId)) {
-          const row = projectTable.insertRow(-1);
-          const nameCell = row.insertCell(0);
-          const priceCell = row.insertCell(1);
-          nameCell.textContent = project.name;
-          priceCell.textContent = project.price;
-        }
-      });
-    });
-});
+listCProjectsBtn.addEventListener('click', listProjects);
