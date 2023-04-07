@@ -8,6 +8,8 @@ fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
       option.value = customer.id;
       option.textContent = customer.name;
       customerSelect.appendChild(option);
+      //display the option values to the console
+        console.log(option.value);
     });
   })
   .catch(error => {
