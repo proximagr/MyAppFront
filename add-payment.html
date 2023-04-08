@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Payment</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<h1>Add Payment</h1>
+	<form action="http://arch.francecentral.cloudapp.azure.com:43704/add-payment" method="post">
+		<label for="payment">Project:</label>
+		<input type="text" name="payment" required><br><br>
+
+		<label for="date">Price:</label>
+		<input type="date" name="date" required><br><br>
+
+		<label for="project_id">Project:</label>
+		<select name="project_id" required>
+			<option value="">Select project</option>
+			<!-- Fetching projects from server using AJAX -->
+		</select><br><br>
+
+		<button type="submit">Add Payment</button>
+	</form>
+
+	<script>
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
+		xhr.onload = function() {
+			if (this.status === 200) {
+				const projects = JSON.parse(this.responseText);
+				const select = document.querySelector('select[name="project_id"]');
+				projects.forEach(project => {
+					const option = document.createElement('option');
+					option.value = project.id;
+					option.text = project.project;
+					select.add(option);
+				});
+			}
+		};
+		xhr.send();
+	</script>
+
+<h1>Back to Index</h1>
+<button onclick="navigateToAddProject()">Back to Home</button>
+<script>
+function navigateToAddProject() {
+  window.location.href = 'http://arch.francecentral.cloudapp.azure.com';
+}
+</script>
+
+</body>
+</html>
