@@ -35,3 +35,13 @@ async function listProjects() {
 }
 
 listProjectsBtn.addEventListener('click', listProjects);
+
+// close projects-table
+document.addEventListener("DOMContentLoaded", function () {
+  const closeTableButton = document.querySelector("#close-projects-btn");
+
+  closeTableButton.addEventListener("click", function () {
+    const table = document.querySelector("#project-table");
+    table.innerHTML = "";
+  });
+});
