@@ -3,6 +3,19 @@ const token = localStorage.getItem('token');
 const headers = { 'Authorization': `Bearer ${token}` };
 //end authentication token
 
+// function to log in a user and obtain a token
+async function login(username, password) {
+  const response = await fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password })
+  });
+  const { token } = await response.json();
+  localStorage.setItem('token', token);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const listUsersButton = document.querySelector("#list-users-btn");
 
