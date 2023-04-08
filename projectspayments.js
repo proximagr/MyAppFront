@@ -36,6 +36,7 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
+// Populate the payment table when a project is selected
 projectSelect.addEventListener("change", event => {
   const projectId = event.target.value;
   paymentTable.innerHTML = "";
@@ -52,12 +53,19 @@ projectSelect.addEventListener("change", event => {
           dateCell.textContent = payment.date;
           amountCell.textContent = payment.payment;
         }
-        //const row = paymentTable.insertRow();
-        //const totalCell = row.insertCell();
-        //totalCell.colSpan = 2;
-        //totalCell.textContent = `Total Payment: ${totalPayment}`;
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
-      })
-      .catch(error => console.error(error));
-  }
+
+		
+	// Second fetch call
+	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
+	.then(response => response.json())
+	.then(project => {
+		const project = project.find(project => project.id === projectId);
+		const projectPrice = project.price;
+		projectTitle.textContent = `Project: ${projectPrice}`;
+	})
+	.catch(error => console.error(error));
+})
+.catch(error => console.error(error));
+}
 });
