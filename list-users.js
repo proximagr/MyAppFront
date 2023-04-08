@@ -1,8 +1,13 @@
+//authentication token
+const token = localStorage.getItem('token');
+const headers = { 'Authorization': `Bearer ${token}` };
+//end authentication token
+
 document.addEventListener("DOMContentLoaded", function () {
   const listUsersButton = document.querySelector("#list-users-btn");
 
   listUsersButton.addEventListener("click", function () {
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
+    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", { headers })
       .then((response) => response.json())
       .then((data) => {
         const table = document.querySelector("#users-table");
