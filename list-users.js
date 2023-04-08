@@ -1,9 +1,9 @@
 //authentication token
 const token = localStorage.getItem('token');
-const headers = { 'Authorization': `Bearer ${token}` };
+//const headers = { 'Authorization': `Bearer ${token}` };
 //end authentication token
 
-
+/*
 // function to log in a user and obtain a token
 async function login(username, password) {
   const response = await fetch('/login', {
@@ -16,7 +16,9 @@ async function login(username, password) {
   const { token } = await response.json();
   localStorage.setItem('token', token);
 }
+*/
 
+/*
 // function to make an authenticated request to the server
 async function makeAuthenticatedRequest(url, options) {
   const token = localStorage.getItem('token');
@@ -36,7 +38,6 @@ async function makeAuthenticatedRequest(url, options) {
   }
   return response.json();
 }
-
 // example usage: fetch a list of customers
 makeAuthenticatedRequest('/list-customers')
   .then(customers => {
@@ -45,21 +46,20 @@ makeAuthenticatedRequest('/list-customers')
   .catch(error => {
     console.error(error);
   });
-
-
 //end login
+*/
 
 document.addEventListener("DOMContentLoaded", function () {
   const listUsersButton = document.querySelector("#list-users-btn");
 
   listUsersButton.addEventListener("click", function () {
     //add authentication
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
+   // const token = localStorage.getItem("token");
+   // const headers = {
+   //   Authorization: `Bearer ${token}`
+    //};
     //end authentication
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", { headers })
+    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", )
       .then((response) => response.json())
       .then((data) => {
         const table = document.querySelector("#users-table");
