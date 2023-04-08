@@ -1,5 +1,5 @@
 //authentication token
-const token = localStorage.getItem('token');
+//const token = localStorage.getItem('token');
 //const headers = { 'Authorization': `Bearer ${token}` };
 //end authentication token
 
