@@ -18,3 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => console.error(error));
   });
 });
+
+// close users-table
+document.addEventListener("DOMContentLoaded", function () {
+  const closeTableButton = document.querySelector("#close-table-btn");
+
+  closeTableButton.addEventListener("click", function () {
+    const table = document.querySelector("#users-table");
+    table.innerHTML = "";
+  });
+});
