@@ -2,6 +2,8 @@ const customerSelect = document.getElementById("customer-select");
 const projectSelect = document.getElementById("project-select");
 const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
 const paymentTotal = document.getElementById("payment-total")
+const projectPrice = document.getElementById("project-price")
+
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
@@ -62,7 +64,7 @@ projectSelect.addEventListener("change", event => {
 	.then(project => {
 		const project = project.find(project => project.id === projectId);
 		const projectPrice = project.price;
-		projectTitle.textContent = `Project: ${projectPrice}`;
+		projectPrice.textContent = `Project: ${projectPrice}`;
 	})
 	.catch(error => console.error(error));
 })
