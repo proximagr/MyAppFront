@@ -68,4 +68,4 @@ projectSelect.addEventListener("change", event => {
 })
 .catch(error => console.error(error));
 }
-});
+}); 
