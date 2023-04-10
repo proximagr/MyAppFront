@@ -8,12 +8,19 @@ table {
     text-align: left;
   }
 
-  .add-project-btn {
-    font-size: 16px;
-    padding: 10px 20px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-  }
+ 
+button {
+font-size: 1.2em;
+padding: 10px 20px;
+background-color: #008CBA;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+button:hover {
+background-color: #4CAF50;
+color: white;
+}
   
