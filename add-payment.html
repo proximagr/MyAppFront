@@ -7,42 +7,39 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<h1>Add Payment</h1>
-	<form action="http://arch.francecentral.cloudapp.azure.com:43704/add-payment" method="post">
-		<label for="payment">Payment amount:</label>
-		<input type="number" name="payment" required><br><br>
+	<h1>List projects & payments</h1>
+<label for="customer-select">Select a customer:</label>
+<select id="customer-select"></select>
+<br><br>
+<label for="project-select">Select a project:</label>
+<select id="project-select"></select>
+<br><br>
+<table id="payment-table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<div id="payment-total" style="font-weight: bold;"></div>
+<div id="project-price" style="font-weight: bold;"></div>
 
-		<label for="date">Date:</label>
-		<input type="date" name="date" required><br><br>
+<!-- Add payment form -->
+<h2>Add Payment</h2>
+<form id="payment-form">
+  <label for="payment-amount">Payment Amount:</label>
+  <input type="number" id="payment-amount" name="payment-amount" required>
+  <br>
+  <label for="payment-date">Payment Date:</label>
+  <input type="date" id="payment-date" name="payment-date" required>
+  <br>
+  <button type="submit">Add Payment</button>
+</form>
 
-		<label for="project_id">Project:</label>
-		<select name="project_id" required>
-			<option value="">Select project</option>
-			<!-- Fetching projects from server using AJAX -->
-		</select><br><br>
 
-		<button type="submit">Add Payment</button>
-	</form>
-
-	<script>
-		const xhr = new XMLHttpRequest();
-		xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects', true);
-		xhr.onload = function() {
-			if (this.status === 200) {
-				const projects = JSON.parse(this.responseText);
-				const select = document.querySelector('select[name="project_id"]');
-				projects.forEach(project => {
-					const option = document.createElement('option');
-					option.value = project.id;
-					option.text = project.project;
-					select.add(option);
-				});
-			}
-		};
-		xhr.send();
-	</script>
-
-<h1>Back to Index</h1>
+<h1>Back to Home</h1>
 <button onclick="navigateToAddProject()">Back to Home</button>
 <script>
 function navigateToAddProject() {
