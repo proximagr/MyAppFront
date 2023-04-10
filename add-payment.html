@@ -19,8 +19,8 @@
 	</select>
 
 	<!-- Enter payment details -->
-	<label for="amount">Payment amount:</label>
-	<input type="number" id="amount">
+	<label for="payment">Payment amount:</label>
+	<input type="number" id="payment">
 
 	<label for="date">Payment date:</label>
 	<input type="date" id="date">
@@ -82,7 +82,7 @@
 				date
 			};
 
-			fetch('http://arch.francecentral.cloudapp.azure.com:43704/addpayment', {
+			fetch('http://arch.francecentral.cloudapp.azure.com:43704/add-payment', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
