@@ -38,39 +38,37 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
-// Add a new payment when the add-payment-button button is clicked
+// Add a new payment when the Add Payment button is clicked
 document.getElementById("add-payment-button").addEventListener("click", event => {
-    event.preventDefault();
+	event.preventDefault();
 
-    const projectId = projectSelect.value;
-    const amount = paymentAmount.value;
-    const date = paymentDate.value;
+	const projectId = projectSelect.value;
+	const amount = paymentAmount.value;
+	const date = paymentDate.value;
 
-    if (!projectId || !amount || !date) {
-        alert("Please select a project and enter payment amount and date.");
-        return;
-    }
+	if (!projectId || !amount || !date) {
+		alert("Please select a project and enter payment amount and date.");
+		return;
+	}
 
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            project_id: projectId,
-            payment: amount,
-            date: date
-        })
-    })
-        .then(response => response.json())
-        .then(payment => {
-            const row = paymentTable.insertRow();
-            row.insertCell().textContent = payment.project;
-            row.insertCell().textContent = payment.amount;
-            row.insertCell().textContent = payment.date;
-            paymentTotal.textContent = parseFloat(paymentTotal.textContent) + parseFloat(payment.amount);
-            paymentAmount.value = "";
-            paymentDate.value = "";
-        })
-        .catch(error => console.error(error));
+	fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			project_id: projectId,
+			payment: amount,
+			date: date
+		})
+	})
+	.then(response => response.json())
+	.then(result => {
+		if (result.success) {
+            alert('Project added successfully!');
+		} else {
+			alert("Failed to add payment.");
+		}
+	})
+	.catch(error => console.error(error));
 });
