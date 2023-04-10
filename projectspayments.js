@@ -4,15 +4,6 @@ const paymentTable = document.getElementById("payment-table").getElementsByTagNa
 const paymentTotal = document.getElementById("payment-total")
 const projectPriceEl = document.getElementById("project-price")
 
-const headers = ["Project ID", "Payment", "Date"];
-
-// Add headers row
-const headersRow = paymentTable.insertRow();
-headers.forEach(header => {
-  const cell = headersRow.insertCell();
-  cell.innerHTML = header;
-});
-
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
 	.then(response => response.json())
