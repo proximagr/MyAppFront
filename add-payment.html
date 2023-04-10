@@ -28,7 +28,7 @@
 					success: function(data){
 						$('#project_select').empty();
 						for(var i=0; i<data.length; i++){
-							$('#project_select').append('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+							$('#project_select').append('<option value="'+data[i].id+'">'+data[i].project+'</option>');
 						}
 					}
 				});
