@@ -39,27 +39,52 @@ customerSelect.addEventListener("change", event => {
 });
 
 // when the add-payment-button button is clicked post to the payments table the project_id, payment and date fields.
-const addPaymentButton = document.getElementById("add-payment-button");
-addPaymentButton.addEventListener("click", event => {
-    const projectId = projectSelect.value;
-    const payment = paymentAmount.value;
-    const date = paymentDate.value;
-    if (projectId && payment && date) {
-        fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ project_id: projectId, payment, date })
-        })
-            .then(response => response.json())
-            .then(payment => {
-                const row = paymentTable.insertRow();
-                row.insertCell().textContent = payment.project_id;
-                row.insertCell().textContent = payment.payment;
-                row.insertCell().textContent = payment.date;
-                paymentTotal.textContent = parseFloat(paymentTotal.textContent) + parseFloat(payment.payment);
-            })
-            .catch(error => console.error(error));
-    }
+document.getElementById("add-payment-button").addEventListener("click", event => {
+	event.preventDefault();
+
+	const projectId = projectSelect.value;
+	const amount = paymentAmount.value;
+	const date = paymentDate.value;
+
+	if (!projectId || !amount || !date) {
+		alert("Please select a project and enter payment amount and date.");
+		return;
+	}
+
+	fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			project_id: projectId,
+			payment: amount,
+			date: date
+		})
+	})
+	.then(response => response.json())
+	.then(result => {
+		if (result.success) {
+			const row = paymentTable.insertRow();
+			const dateCell = row.insertCell();
+			const amountCell = row.insertCell();
+			dateCell.textContent = date;
+			amountCell.textContent = amount;
+
+			// Update the total payment
+			const payments = paymentTable.getElementsByTagName("tr");
+			let totalPayment = 0;
+			for (let i = 0; i < payments.length; i++) {
+				totalPayment += parseFloat(payments[i].getElementsByTagName("td")[1].textContent);
+			}
+			paymentTotal.textContent = `Total Payment: ${totalPayment}`;
+			
+			// Clear payment fields
+			paymentAmount.value = "";
+			paymentDate.value = "";
+		} else {
+			alert("Failed to add payment.");
+		}
+	})
+	.catch(error => console.error(error));
 });
