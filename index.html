@@ -4,7 +4,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
   <body>
-    
+
+    <button id="show-form-btn">Add Customer</button>
+    <script>
+      const showFormBtn = document.getElementById('show-form-btn');
+      const userForm = document.getElementById('user-form');
+      showFormBtn.addEventListener('click', function() {
+      userForm.style.display = 'block';
+      });
+    </script>
+
   <h1>Add Customer</h1>
   <form id="user-form">
     <label for="name">Name:</label>

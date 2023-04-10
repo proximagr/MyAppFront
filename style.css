@@ -8,3 +8,7 @@ table {
     text-align: left;
   }
   
+  #user-form {
+    display: none;
+  }
+  
