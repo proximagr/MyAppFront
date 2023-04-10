@@ -1,18 +1,6 @@
 const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
-// Define the table headers
-const headers = ['Customer', 'Project', 'Price', 'Payments'];
-
-// Create the table header row
-const headerRow = projectTable.createTHead().insertRow(0);
-
-// Loop through the headers and create the header cells
-for (let i = 0; i < headers.length; i++) {
-  const cell = headerRow.insertCell(i);
-  cell.innerHTML = `<b>${headers[i]}</b>`;
-}
-
 async function listProjects() {
   const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
   const projects = await response.json();
@@ -24,6 +12,15 @@ async function listProjects() {
   const payments = await paymentsResponse.json();
 
   const summary = {};
+
+   // Create table headers dynamically
+   const headers = ['Customer', 'Project', 'Price', 'Payments'];
+   const headerRow = projectTable.insertRow(0);
+   headers.forEach(header => {
+     const th = document.createElement('th');
+     th.textContent = header;
+     headerRow.appendChild(th);
+   });
 
   projects.forEach(project => {
     const customer = customers.find(customer => customer.id === project.customer_id);
