@@ -6,12 +6,12 @@ const projectPriceEl = document.getElementById("project-price")
 
 const paymentTable = document.getElementById("payment-table");
 const paymentTableHeader = paymentTable.createTHead();
-const headerRow = paymentTableHeader.insertRow();
-const dateHeader = headerRow.insertCell(0);
-const amountHeader = headerRow.insertCell(1);
-dateHeader.textContent = "Date";
-amountHeader.textContent = "Amount";
-const paymentTableBody = paymentTable.createTBody();
+//const headerRow = paymentTableHeader.insertRow();
+//const dateHeader = headerRow.insertCell(0);
+//const amountHeader = headerRow.insertCell(1);
+//dateHeader.textContent = "Date";
+//amountHeader.textContent = "Amount";
+//const paymentTableBody = paymentTable.createTBody();
 
 
 // Populate the customer dropdown
