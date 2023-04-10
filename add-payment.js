@@ -65,23 +65,7 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 	.then(response => response.json())
 	.then(result => {
 		if (result.success) {
-			const row = paymentTable.insertRow();
-			const dateCell = row.insertCell();
-			const amountCell = row.insertCell();
-			dateCell.textContent = date;
-			amountCell.textContent = amount;
-
-			// Update the total payment
-			const payments = paymentTable.getElementsByTagName("tr");
-			let totalPayment = 0;
-			for (let i = 0; i < payments.length; i++) {
-				totalPayment += parseFloat(payments[i].getElementsByTagName("td")[1].textContent);
-			}
-			paymentTotal.textContent = `Total Payment: ${totalPayment}`;
-			
-			// Clear payment fields
-			paymentAmount.value = "";
-			paymentDate.value = "";
+            alert('Project added successfully!');
 		} else {
 			alert("Failed to add payment.");
 		}
