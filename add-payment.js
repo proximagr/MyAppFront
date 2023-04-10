@@ -58,7 +58,7 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 		},
 		body: JSON.stringify({
 			project_id: projectId,
-			amount: amount,
+			payment: amount,
 			date: date
 		})
 	})
