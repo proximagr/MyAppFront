@@ -4,6 +4,10 @@ const paymentTable = document.getElementById("payment-table").getElementsByTagNa
 const paymentTotal = document.getElementById("payment-total")
 const projectPrice = document.getElementById("project-price")
 
+//list projects payments
+const projectTable = document.getElementById('project-table');
+const listProjectsBtn = document.getElementById('list-projects-btn');
+
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
@@ -75,8 +79,7 @@ projectSelect.addEventListener("change", event => {
 
 //list projects payments
 
-const projectTable = document.getElementById('project-table');
-const listProjectsBtn = document.getElementById('list-projects-btn');
+
 
 async function listProjects() {
   const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
