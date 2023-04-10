@@ -1,18 +1,8 @@
 const customerSelect = document.getElementById("customer-select");
 const projectSelect = document.getElementById("project-select");
-//const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
+const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
 const paymentTotal = document.getElementById("payment-total")
 const projectPriceEl = document.getElementById("project-price")
-
-const paymentTable = document.getElementById("payment-table");
-const paymentTableHeader = paymentTable.createTHead();
-const headerRow = paymentTableHeader.insertRow();
-const dateHeader = headerRow.insertCell(0);
-const amountHeader = headerRow.insertCell(1);
-dateHeader.textContent = "Date";
-amountHeader.textContent = "Amount";
-const paymentTableBody = paymentTable.createTBody();
-
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
