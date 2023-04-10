@@ -65,10 +65,15 @@
         url: 'http://arch.francecentral.cloudapp.azure.com:43704/addpayment',
         data: JSON.stringify(data),
         contentType: 'application/json',
-        success: function(response) {
-          alert('Payment added!');
-          console.log(response);
-        },
+		success: function(response) {
+			alert('Payment added!');
+			console.log(response);
+			// clear dropdown lists and input fields
+			$('#customer-select').empty();
+			$('#project-select').empty();
+			$('#payment-amount').val('');
+			$('#payment-date').val('');
+			},
         error: function(xhr, status, error) {
           alert('Error adding payment: ' + error);
         }
