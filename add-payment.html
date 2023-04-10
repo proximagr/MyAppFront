@@ -43,7 +43,7 @@
       // Populate the project dropdown list for the selected customer
       async function populateProjectDropdown() {
         const customerId = document.getElementById('customer').value;
-        const response = await fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects??customer_id=${customerId}`);
+        const response = await fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`);
         const projects = await response.json();
         const projectDropdown = document.getElementById('project');
         projectDropdown.innerHTML = '';
