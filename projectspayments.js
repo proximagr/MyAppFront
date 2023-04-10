@@ -64,7 +64,7 @@ projectSelect.addEventListener("change", event => {
 	.then(project => {
 		const project = project.find(project => project.id === projectId);
 		const projectPrice = project.price;
-		projectPrice.textContent = `Project: ${projectPrice}`;
+		projectPrice = `Project: ${projectPrice}`;
 	})
 	.catch(error => console.error(error));
 })

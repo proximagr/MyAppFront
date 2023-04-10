@@ -53,12 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const listUsersButton = document.querySelector("#list-users-btn");
 
   listUsersButton.addEventListener("click", function () {
-    //add authentication
-   // const token = localStorage.getItem("token");
-   // const headers = {
-   //   Authorization: `Bearer ${token}`
-    //};
-    //end authentication
     fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", )
       .then((response) => response.json())
       .then((data) => {
