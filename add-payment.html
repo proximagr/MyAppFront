@@ -1,52 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add Payment</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="style.css">
+	<title>Payment Tracker</title>
 </head>
 <body>
-	<h1>List projects & payments</h1>
-<label for="customer-select">Select a customer:</label>
-<select id="customer-select"></select>
-<br><br>
-<label for="project-select">Select a project:</label>
-<select id="project-select"></select>
-<br><br>
-<table id="payment-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Amount</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-<div id="payment-total" style="font-weight: bold;"></div>
-<div id="project-price" style="font-weight: bold;"></div>
+	<h1>Payment Tracker</h1>
+	<label for="customer-select">Select a Customer:</label>
+	<select id="customer-select">
+		<option value="">Select a Customer</option>
+	</select>
+	<br><br>
+	<label for="project-select">Select a Project:</label>
+	<select id="project-select">
+		<option value="">Select a Project</option>
+	</select>
+	<br><br>
+	<label for="payment-amount">Payment Amount:</label>
+	<input type="number" id="payment-amount">
+	<br><br>
+	<label for="payment-date">Payment Date:</label>
+	<input type="date" id="payment-date">
+	<br><br>
+	<button id="add-payment-button">Add Payment</button>
+	<br><br>
+	<table>
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		<tbody id="payment-table">
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>Total Payment:</td>
+				<td id="payment-total"></td>
+			</tr>
+		</tfoot>
+	</table>
 
-<!-- Add payment form -->
-<h2>Add Payment</h2>
-<form id="payment-form">
-  <label for="payment-amount">Payment Amount:</label>
-  <input type="number" id="payment-amount" name="payment-amount" required>
-  <br>
-  <label for="payment-date">Payment Date:</label>
-  <input type="date" id="payment-date" name="payment-date" required>
-  <br>
-  <button type="submit">Add Payment</button>
-</form>
-
-
-<h1>Back to Home</h1>
-<button onclick="navigateToAddProject()">Back to Home</button>
-<script>
-function navigateToAddProject() {
-  window.location.href = 'http://arch.francecentral.cloudapp.azure.com';
-}
-</script>
-
-<script src="add-payment.js"></script>
+	<script src="script.js"></script>
 </body>
 </html>
