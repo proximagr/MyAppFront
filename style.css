@@ -7,3 +7,13 @@ table {
     padding: 8px;
     text-align: left;
   }
+
+  .add-project-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+  }
+  
