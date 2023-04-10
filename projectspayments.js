@@ -9,9 +9,7 @@ const paymentTableHeader = paymentTable.createTHead();
 const headerRow = paymentTableHeader.insertRow();
 const dateHeader = headerRow.insertCell(0);
 const amountHeader = headerRow.insertCell(1);
-dateHeader.textContent = "Date";
-amountHeader.textContent = "Amount";
-const paymentTableBody = paymentTable.createTBody();
+
 
 
 // Populate the customer dropdown
@@ -31,6 +29,9 @@ fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
 customerSelect.addEventListener("change", event => {
 	const customerId = event.target.value;
 	projectSelect.innerHTML = "<option value=''>Select a project</option>";
+  dateHeader.textContent = "Date";
+amountHeader.textContent = "Amount";
+const paymentTableBody = paymentTable.createTBody();
 	paymentTable.innerHTML = "";
 	if (customerId) {
 		fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
