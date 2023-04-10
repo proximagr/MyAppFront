@@ -17,9 +17,9 @@ async function listProjects() {
     summary[project.id] = totalPayments;
 
     const row = projectTable.insertRow(-1);
-    const projectCell = row.insertCell(0);
-    const priceCell = row.insertCell(1);
-    const customerCell = row.insertCell(2);
+    const projectCell = row.insertCell(1);
+    const priceCell = row.insertCell(2);
+    const customerCell = row.insertCell(0);
     const paymentsCell = row.insertCell(3);
 
     projectCell.textContent = project.project;
