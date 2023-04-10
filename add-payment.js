@@ -62,15 +62,5 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
             date: date
         })
     })
-        .then(response => response.json())
-        .then(payment => {
-            const row = paymentTable.insertRow();
-            row.insertCell().textContent = payment.project;
-            row.insertCell().textContent = payment.amount;
-            row.insertCell().textContent = payment.date;
-            paymentTotal.textContent = parseFloat(paymentTotal.textContent) + parseFloat(payment.amount);
-            paymentAmount.value = "";
-            paymentDate.value = "";
-        })
         .catch(error => console.error(error));
 });
