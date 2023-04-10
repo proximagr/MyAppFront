@@ -77,7 +77,7 @@
 			}
 
 			const data = {
-				projectId,
+				project_id,
 				payment,
 				date
 			};
@@ -91,7 +91,7 @@
 			})
 				.then(response => response.json())
 				.then(payment => {
-					alert(`Payment added successfully:\nProject: ${payment.project_name}\nPayment: ${payment.payment}\nDate: ${payment.date}`);
+					alert(`Payment added successfully:\nProject: ${payment.project_id}\nPayment: ${payment.payment}\nDate: ${payment.date}`);
 				})
 				.catch(error => {
 					console.error(error);
