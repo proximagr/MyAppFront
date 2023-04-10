@@ -49,13 +49,13 @@
 			const customerId = customersDropdown.value;
 			if (customerId) {
 				projectsDropdown.innerHTML = '<option value="">Select a project</option>';
-				fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id/${customerId}`)
+				fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
 					.then(response => response.json())
 					.then(projects => {
 						projects.forEach(project => {
 							const option = document.createElement('option');
 							option.value = project.id;
-							option.textContent = project.name;
+							option.textContent = project.project;
 							projectsDropdown.appendChild(option);
 						});
 					});
@@ -68,17 +68,17 @@
 		const addPaymentButton = document.querySelector('#addPayment');
 		addPaymentButton.addEventListener('click', () => {
 			const projectId = projectsDropdown.value;
-			const amount = document.querySelector('#amount').value;
+			const payment = document.querySelector('#payment').value;
 			const date = document.querySelector('#date').value;
 
-			if (!projectId || !amount || !date) {
+			if (!projectId || !payment || !date) {
 				alert('Please select a project and enter payment details');
 				return;
 			}
 
 			const data = {
 				projectId,
-				amount,
+				payment,
 				date
 			};
 
@@ -91,7 +91,7 @@
 			})
 				.then(response => response.json())
 				.then(payment => {
-					alert(`Payment added successfully:\nProject: ${payment.project_name}\nAmount: ${payment.amount}\nDate: ${payment.date}`);
+					alert(`Payment added successfully:\nProject: ${payment.project_name}\nPayment: ${payment.payment}\nDate: ${payment.date}`);
 				})
 				.catch(error => {
 					console.error(error);
