@@ -73,7 +73,10 @@
 			$('#project-select').empty();
 			$('#payment-amount').val('');
 			$('#payment-date').val('');
-			},
+			// Repopulate the customer and project dropdowns with the latest data
+			populateCustomerDropdown();
+			populateProjectDropdown($('#customer-dropdown').val());
+		}
         error: function(xhr, status, error) {
           alert('Error adding payment: ' + error);
         }
