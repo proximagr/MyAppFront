@@ -51,7 +51,7 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 		return;
 	}
 
-	fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
+	fetch("http://arch.francecentral.cloudapp.azure.com:43704/addpayment", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json"
