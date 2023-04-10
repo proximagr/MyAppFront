@@ -6,20 +6,24 @@
 </head>
   <body>
 
-  <h1>Projects</h1>
-  <table id="project-table">
+    <h1>Arch Projects</h1>
+    <label for="customer-select">Select a customer:</label>
+    <select id="customer-select"></select>
+    <br><br>
+    <label for="project-select">Select a project:</label>
+    <select id="project-select"></select>
+    <br><br>
+    <table id="payment-table">
       <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Project</th>
-            <th>Price</th>
-            <th>Payments</th>
-          </tr>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+        </tr>
       </thead>
       <tbody></tbody>
-  </table>
-  <button id="list-projects-btn">List Projects</button>
-  <button id="close-projects-btn">Close Projects</button>
+    </table>
+    <div id="payment-total" style="font-weight: bold;"></div>
+    <div id="project-price" style="font-weight: bold;"></div>
   
   <p></p>
   <button onclick="navigateToAddProject()">Add Project</button>
@@ -51,24 +55,20 @@
   <button id="close-table-btn">Close Users Table</button>
   <table id="users-table"></table>
 
-<h1>List projects & payments</h1>
-<label for="customer-select">Select a customer:</label>
-<select id="customer-select"></select>
-<br><br>
-<label for="project-select">Select a project:</label>
-<select id="project-select"></select>
-<br><br>
-<table id="payment-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Amount</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
+<p></p>
+<table id="project-table">
+    <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Project</th>
+          <th>Price</th>
+          <th>Payments</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
 </table>
-<div id="payment-total" style="font-weight: bold;"></div>
-<div id="project-price" style="font-weight: bold;"></div>
+<button id="list-projects-btn">List All Projects</button>
+<button id="close-projects-btn">Close Projects</button>
 
   <script src="projectspayments.js"></script>
   <script src="add-user.js"></script>
