@@ -26,6 +26,14 @@
     <div id="project-price" style="font-weight: bold;"></div>
   
   <p></p>
+  <button onclick="navigateToAddPaymentt()">Add Payment</button>
+  <script>
+  function navigateToAddPayment() {
+    window.location.href = 'add-payment.html';
+  }
+  </script>
+
+  <p></p>
   <button onclick="navigateToAddProject()">Add Project</button>
   <script>
   function navigateToAddProject() {
@@ -34,7 +42,7 @@
   </script>
 
   <p></p>
-  <button id="show-form-btn">New Customer</button>
+  <button id="show-form-btn">Add Customer</button>
   <form id="user-form" style="display:none;">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
