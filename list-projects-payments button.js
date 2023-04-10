@@ -1,6 +1,18 @@
 const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
+// Define the table headers
+const headers = ['Customer', 'Project', 'Price', 'Payments'];
+
+// Create the table header row
+const headerRow = projectTable.createTHead().insertRow(0);
+
+// Loop through the headers and create the header cells
+for (let i = 0; i < headers.length; i++) {
+  const cell = headerRow.insertCell(i);
+  cell.innerHTML = `<b>${headers[i]}</b>`;
+}
+
 async function listProjects() {
   const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
   const projects = await response.json();
@@ -20,9 +32,9 @@ async function listProjects() {
     summary[project.id] = totalPayments;
 
     const row = projectTable.insertRow(-1);
-    const projectCell = row.insertCell(0);
-    const priceCell = row.insertCell(1);
-    const customerCell = row.insertCell(2);
+    const customerCell = row.insertCell(0);
+    const projectCell = row.insertCell(1);
+    const priceCell = row.insertCell(2);
     const paymentsCell = row.insertCell(3);
 
     projectCell.textContent = project.project;
