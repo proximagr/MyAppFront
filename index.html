@@ -5,23 +5,23 @@
 </head>
   <body>
 
-   
-    <script>
-      const showFormBtn = document.getElementById('show-form-btn');
-      const userForm = document.getElementById('user-form');
-      showFormBtn.addEventListener('click', function() {
-      userForm.style.display = 'block';
-      });
-    </script>
-
   <h1>Add Customer</h1>
   <button id="show-form-btn">Add Customer</button>
-  <form id="user-form">
+  <form id="user-form" style="display:none;">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
     <br>
     <button type="submit">Add Customer</button>
   </form>
+
+  <script>
+    const showFormBtn = document.getElementById('show-form-btn');
+    const userForm = document.getElementById('user-form');
+  
+    showFormBtn.addEventListener('click', () => {
+      userForm.style.display = 'block';
+    });
+  </script>
 
   <h1>List Users</h1>
   <button id="list-users-btn">List Users</button>
