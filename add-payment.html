@@ -1,80 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add Payment Form</title>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		$(document).ready(function(){
-			// Populating the customers dropdown
-			$.ajax({
-				url: 'http://arch.francecentral.cloudapp.azure.com:43704/list-users',
-				type: 'GET',
-				dataType: 'json',
-				success: function(data){
-					for(var i=0; i<data.length; i++){
-						$('#customer_select').append('<option value="'+data[i].id+'">'+data[i].name+'</option>');
-					}
-				}
-			});
-
-			// Populating the projects dropdown on customer selection
-			$('#customer_select').on('change', function(){
-				var customer_id = $(this).val();
-				$.ajax({
-					url: 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects',
-					type: 'POST',
-					data: {customer_id: customer_id},
-					dataType: 'json',
-					success: function(data){
-						$('#project_select').empty();
-						for(var i=0; i<data.length; i++){
-							$('#project_select').append('<option value="'+data[i].id+'">'+data[i].project+'</option>');
-						}
-					}
-				});
-			});
-
-			// Adding payment on form submission
-			$('#add_payment_form').submit(function(event){
-				event.preventDefault();
-				var project_id = $('#project_select').val();
-				var payment = $('#payment_input').val();
-				var date = $('#date_input').val();
-
-				$.ajax({
-					url: 'http://arch.francecentral.cloudapp.azure.com:43704/addpayment',
-					type: 'POST',
-					data: {project_id: project_id, payment: payment, date: date},
-					dataType: 'json',
-					success: function(data){
-						alert('Payment added successfully');
-						$('#add_payment_form')[0].reset();
-					}
-				});
-			});
-		});
-	</script>
+  <meta charset="utf-8">
+  <title>Add Payment</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<h2>Payment Form</h2>
-	<form id="add_payment_form">
-		<label for="customer_select">Select a Customer:</label>
-		<select id="customer_select" name="customer_select">
-			<option value="" disabled selected>Select Customer</option>
-		</select>
-		<br><br>
-		<label for="project_select">Select a Project:</label>
-		<select id="project_select" name="project_select">
-			<option value="" disabled selected>Select Project</option>
-		</select>
-		<br><br>
-		<label for="payment_input">Payment Amount:</label>
-		<input type="text" id="payment_input" name="payment_input">
-		<br><br>
-		<label for="date_input">Payment Date:</label>
-		<input type="date" id="date_input" name="date_input">
-		<br><br>
-		<input type="submit" value="Add Payment">
-	</form>
+  <h1>Add Payment</h1>
+  <form id="payment-form">
+    <label for="customer-select">Customer:</label>
+    <select id="customer-select" name="customer">
+      <option value="">--Select customer--</option>
+    </select>
+    <br>
+    <label for="project-select">Project:</label>
+    <select id="project-select" name="project">
+      <option value="">--Select project--</option>
+    </select>
+    <br>
+    <label for="payment-amount">Payment amount:</label>
+    <input type="number" id="payment-amount" name="payment_amount">
+    <br>
+    <label for="payment-date">Payment date:</label>
+    <input type="date" id="payment-date" name="payment_date">
+    <br>
+    <button type="submit">Add Payment</button>
+  </form>
+
+  <script>
+    // Populate customer select
+    $.getJSON('http://arch.francecentral.cloudapp.azure.com:43704/list-users', function(data) {
+      $.each(data, function(i, customer) {
+        $('#customer-select').append($('<option>').text(customer.name).attr('value', customer.id));
+      });
+    });
+
+    // Populate project select based on customer selection
+    $('#customer-select').change(function() {
+      var customer_id = $('#customer-select').val();
+      if (customer_id) {
+        $.getJSON('http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=' + customer_id, function(data) {
+          var project_select = $('#project-select');
+          project_select.empty();
+          project_select.append($('<option>').text('--Select project--').attr('value', ''));
+          $.each(data, function(i, project) {
+            project_select.append($('<option>').text(project.project).attr('value', project.id));
+          });
+        });
+      } else {
+        $('#project-select').empty();
+      }
+    });
+
+    // Handle form submission
+    $('#payment-form').submit(function(e) {
+      e.preventDefault();
+      var data = {
+        project_id: $('#project-select').val(),
+        payment: $('#payment-amount').val(),
+        date: $('#payment-date').val()
+      };
+      $.ajax({
+        type: 'POST',
+        url: 'http://arch.francecentral.cloudapp.azure.com:4370/addpayment',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(response) {
+          alert('Payment added!');
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          alert('Error adding payment: ' + error);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
