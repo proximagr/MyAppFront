@@ -1,103 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add Payment</title>
-</head>
-<body>
-	<h1>Add Payment</h1>
-	
-	<!-- Select customer from the customers table -->
-	<label for="customer">Customer:</label>
-	<select id="customer">
-		<option value="">Select a customer</option>
-	</select>
-
-	<!-- Select project of the selected customer from the projects table -->
-	<label for="project">Project:</label>
-	<select id="project">
-		<option value="">Select a project</option>
-	</select>
-
-	<!-- Enter payment details -->
-	<label for="payment">Payment amount:</label>
-	<input type="number" id="payment">
-
-	<label for="date">Payment date:</label>
-	<input type="date" id="date">
-
-	<!-- Add payment button -->
-	<button id="addPayment">Add Payment</button>
-
-	<!-- JavaScript code to populate dropdowns and handle adding payment -->
+	<title>Add Payment Form</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-		// Populate customers dropdown
-		const customersDropdown = document.querySelector('#customer');
-		fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users')
-			.then(response => response.json())
-			.then(customers => {
-				customers.forEach(customer => {
-					const option = document.createElement('option');
-					option.value = customer.id;
-					option.textContent = customer.name;
-					customersDropdown.appendChild(option);
+		$(document).ready(function(){
+			// Populating the customers dropdown
+			$.ajax({
+				url: 'http://arch.francecentral.cloudapp.azure.com:43704/list-users',
+				type: 'GET',
+				dataType: 'json',
+				success: function(data){
+					for(var i=0; i<data.length; i++){
+						$('#customer_select').append('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+					}
+				}
+			});
+
+			// Populating the projects dropdown on customer selection
+			$('#customer_select').on('change', function(){
+				var customer_id = $(this).val();
+				$.ajax({
+					url: 'http://arch.francecentral.cloudapp.azure.com:43704/list-projects',
+					type: 'POST',
+					data: {customer_id: customer_id},
+					dataType: 'json',
+					success: function(data){
+						$('#project_select').empty();
+						for(var i=0; i<data.length; i++){
+							$('#project_select').append('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+						}
+					}
 				});
 			});
 
-		// Populate projects dropdown based on selected customer
-		const projectsDropdown = document.querySelector('#project');
-		customersDropdown.addEventListener('change', () => {
-			const customerId = customersDropdown.value;
-			if (customerId) {
-				projectsDropdown.innerHTML = '<option value="">Select a project</option>';
-				fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-					.then(response => response.json())
-					.then(projects => {
-						projects.forEach(project => {
-							const option = document.createElement('option');
-							option.value = project.id;
-							option.textContent = project.project;
-							projectsDropdown.appendChild(option);
-						});
-					});
-			} else {
-				projectsDropdown.innerHTML = '<option value="">Select a project</option>';
-			}
-		});
+			// Adding payment on form submission
+			$('#add_payment_form').submit(function(event){
+				event.preventDefault();
+				var project_id = $('#project_select').val();
+				var payment = $('#payment_input').val();
+				var date = $('#date_input').val();
 
-		// Add payment
-		const addPaymentButton = document.querySelector('#addPayment');
-		addPaymentButton.addEventListener('click', () => {
-			const projectId = projectsDropdown.value;
-			const payment = document.querySelector('#payment').value;
-			const date = document.querySelector('#date').value;
-
-			if (!projectId || !payment || !date) {
-				alert('Please select a project and enter payment details');
-				return;
-			}
-
-			const data = {
-				project_id,
-				payment,
-				date
-			};
-
-			fetch('http://arch.francecentral.cloudapp.azure.com:43704/addpayment', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			})
-				.then(response => response.json())
-				.then(payment => {
-					alert(`Payment added successfully:\nProject: ${payment.project_id}\nPayment: ${payment.payment}\nDate: ${payment.date}`);
-				})
-				.catch(error => {
-					console.error(error);
-					alert('Failed to add payment');
+				$.ajax({
+					url: 'http://arch.francecentral.cloudapp.azure.com:43704/addpayment',
+					type: 'POST',
+					data: {project_id: project_id, payment: payment, date: date},
+					dataType: 'json',
+					success: function(data){
+						alert('Payment added successfully');
+						$('#add_payment_form')[0].reset();
+					}
 				});
+			});
 		});
 	</script>
+</head>
+<body>
+	<h2>Payment Form</h2>
+	<form id="add_payment_form">
+		<label for="customer_select">Select a Customer:</label>
+		<select id="customer_select" name="customer_select">
+			<option value="" disabled selected>Select Customer</option>
+		</select>
+		<br><br>
+		<label for="project_select">Select a Project:</label>
+		<select id="project_select" name="project_select">
+			<option value="" disabled selected>Select Project</option>
+		</select>
+		<br><br>
+		<label for="payment_input">Payment Amount:</label>
+		<input type="text" id="payment_input" name="payment_input">
+		<br><br>
+		<label for="date_input">Payment Date:</label>
+		<input type="date" id="date_input" name="date_input">
+		<br><br>
+		<input type="submit" value="Add Payment">
+	</form>
 </body>
 </html>
