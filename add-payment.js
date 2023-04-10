@@ -38,29 +38,28 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
-// Add a new payment when the add-payment-button button is clicked
-document.getElementById("add-payment-button").addEventListener("click", event => {
-    event.preventDefault();
-
+// when the add-payment-button button is clicked post to the payments table the project_id, payment and date fields.
+const addPaymentButton = document.getElementById("add-payment-button");
+addPaymentButton.addEventListener("click", event => {
     const projectId = projectSelect.value;
-    const amount = paymentAmount.value;
+    const payment = paymentAmount.value;
     const date = paymentDate.value;
-
-    if (!projectId || !amount || !date) {
-        alert("Please select a project and enter payment amount and date.");
-        return;
-    }
-
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            project_id: projectId,
-            payment: amount,
-            date: date
+    if (projectId && payment && date) {
+        fetch("http://arch.francecentral.cloudapp.azure.com:43704/add-payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ project_id: projectId, payment, date })
         })
-    })
-        .catch(error => console.error(error));
+            .then(response => response.json())
+            .then(payment => {
+                const row = paymentTable.insertRow();
+                row.insertCell().textContent = payment.project_id;
+                row.insertCell().textContent = payment.payment;
+                row.insertCell().textContent = payment.date;
+                paymentTotal.textContent = parseFloat(paymentTotal.textContent) + parseFloat(payment.payment);
+            })
+            .catch(error => console.error(error));
+    }
 });
