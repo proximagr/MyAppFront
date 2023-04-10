@@ -43,10 +43,10 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 	event.preventDefault();
 
 	const projectId = projectSelect.value;
-	const amount = paymentAmount.value;
+	const payment = paymentAmount.value;
 	const date = paymentDate.value;
 
-	if (!projectId || !amount || !date) {
+	if (!projectId || !payment || !date) {
 		alert("Please select a project and enter payment amount and date.");
 		return;
 	}
@@ -58,7 +58,7 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 		},
 		body: JSON.stringify({
 			project_id: projectId,
-			amount: amount,
+			amount: payment,
 			date: date
 		})
 	})
@@ -69,7 +69,7 @@ document.getElementById("add-payment-button").addEventListener("click", event =>
 			const dateCell = row.insertCell();
 			const amountCell = row.insertCell();
 			dateCell.textContent = date;
-			amountCell.textContent = amount;
+			amountCell.textContent = payment;
 
 			// Update the total payment
 			const payments = paymentTable.getElementsByTagName("tr");
