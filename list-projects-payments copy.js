@@ -1,3 +1,6 @@
+const projectTable = document.getElementById('project-table');
+const listProjectsBtn = document.getElementById('list-projects-btn');
+
 async function listProjects() {
   const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
   const projects = await response.json();
@@ -31,5 +34,14 @@ async function listProjects() {
   console.log(summary);
 }
 
-const projectTable = document.getElementById('project-table');
-listProjects();
+listProjectsBtn.addEventListener('click', listProjects);
+
+// close projects-table
+document.addEventListener("DOMContentLoaded", function () {
+  const closeTableButton = document.querySelector("#close-projects-btn");
+
+  closeTableButton.addEventListener("click", function () {
+    const table = document.querySelector("#project-table");
+    table.innerHTML = "";
+  });
+});
