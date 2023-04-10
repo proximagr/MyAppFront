@@ -76,7 +76,7 @@
 			// Repopulate the customer and project dropdowns with the latest data
 			populateCustomerDropdown();
 			populateProjectDropdown($('#customer-dropdown').val());
-		}
+		},
         error: function(xhr, status, error) {
           alert('Error adding payment: ' + error);
         }
