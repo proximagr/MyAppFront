@@ -2,8 +2,7 @@ const customerSelect = document.getElementById("customer-select");
 const projectSelect = document.getElementById("project-select");
 const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
 const paymentTotal = document.getElementById("payment-total")
-const projectPrice = document.getElementById("project-price")
-
+const projectPriceEl = document.getElementById("project-price")
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
@@ -38,7 +37,7 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
-// Populate the payment table when a project is selected
+// Populate the payment table and project price when a project is selected
 projectSelect.addEventListener("change", event => {
   const projectId = event.target.value;
   paymentTable.innerHTML = "";
@@ -58,16 +57,16 @@ projectSelect.addEventListener("change", event => {
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
 
 		
-	// Second fetch call
-	fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
-	.then(response => response.json())
-	.then(project => {
-		const project = project.find(project => project.id === projectId);
-		const projectPrice = project.price;
-		projectPrice = `Project: ${projectPrice}`;
-	})
-	.catch(error => console.error(error));
-})
-.catch(error => console.error(error));
-}
-}); 
+        // Second fetch call
+        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
+          .then(response => response.json())
+          .then(projects => {
+            const project = projects.find(project => project.id === projectId);
+            const projectPrice = project.price;
+            projectPriceEl.textContent = `Project: ${projectPrice}`;
+          })
+          .catch(error => console.error(error));
+      })
+      .catch(error => console.error(error));
+  }
+});
