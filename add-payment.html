@@ -74,7 +74,8 @@
 			$('#payment-amount').val('');
 			$('#payment-date').val('');
 			// Repopulate the customer and project dropdowns with the latest data
-			populateCustomerDropdown($('#customer-select').val());
+			populateCustomerDropdown();
+			populateProjectDropdown();
 		},
         error: function(xhr, status, error) {
           alert('Error adding payment: ' + error);
