@@ -56,13 +56,27 @@ projectSelect.addEventListener("change", event => {
         const amountHeader = headerRow.insertCell();
         dateHeader.textContent = "Date";
         amountHeader.textContent = "Amount";
+        // Add edit header
+        const editHeader = headerRow.insertCell();
+        editHeader.textContent = "Edit";
         // Create table rows
         for (let payment of payments) {
           const row = paymentTable.insertRow();
           const dateCell = row.insertCell();
           const amountCell = row.insertCell();
+          const editCell = row.insertCell(); // Add edit cell
           dateCell.textContent = payment.date;
           amountCell.textContent = payment.payment;
+          // Create edit button
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.addEventListener("click", () => {
+            // Open modal form to edit payment and date fields
+            // Set the initial values of the fields to the current payment date and amount
+            // When the user submits the form, send an API request to update the payment and date fields
+            // and update the table row with the new values
+          });
+          editCell.appendChild(editButton);
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
 
