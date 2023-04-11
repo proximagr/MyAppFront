@@ -14,7 +14,7 @@ async function listProjects() {
   const summary = {};
 
    // Create table headers dynamically
-   const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit']; // EDIT cell
+   const headers = ['Customer', 'Project', 'Price', 'Payments', 'EditPrice']; // EDIT cell
    const headerRow = projectTable.insertRow(0);
    headers.forEach(header => {
      const th = document.createElement('th');
@@ -28,72 +28,72 @@ async function listProjects() {
     const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
     summary[project.id] = totalPayments;
 
-    // Create a new paymentform object for the current project
-    const paymentform = { 
+    // Create a new editPriceform object for the current project
+    const editpriceform = { 
       id: project.id,
-      date: paymentsForProject[0] ? paymentsForProject[0].date : '',
-      payment: paymentsForProject[0] ? paymentsForProject[0].payment : ''
+      project: priceForProject[0] ? priceForProject[0].project : '',
+      price: priceForProject[0] ? priceForProject[0].price : ''
     };
-    // END Create a new paymentform object for the current project
+    // END Create a new priceform object for the current project
 
     const row = projectTable.insertRow(-1);
     const customerCell = row.insertCell(0);
     const projectCell = row.insertCell(1);
     const priceCell = row.insertCell(2);
     const paymentsCell = row.insertCell(3);
-    const editCell = row.insertCell(4); // Add a new cell for the edit button
+    const editpriceCell = row.insertCell(4); // Add a new cell for the edit button
 
     projectCell.textContent = project.project;
     priceCell.textContent = project.price;
     customerCell.textContent = customer ? customer.name : '';
     paymentsCell.textContent = totalPayments;
-    const editButton = document.createElement("button"); // Create the edit button
-    editButton.textContent = "Edit"; //edit button
-    editButton.addEventListener("click", () => { // Add a click event listener to the edit button
+    const editpriceButton = document.createElement("button"); // Create the edit button
+    editpriceButton.textContent = "Edit Price"; //edit button
+    editpriceButton.addEventListener("click", () => { // Add a click event listener to the edit button
      const form = document.createElement("form"); // Create the form element
-     showEditPaymentForm(paymentform, form); // Call a function to display the edit payment form
+     showEditPriceForm(editpriceform, form); // Call a function to display the edit payment form
      document.body.appendChild(form); // Add the form to the page
     }); // for the edit listener
-  editCell.appendChild(editButton); // Add the edit button to the edit cell
+  editpriceCell.appendChild(editpriceButton); // Add the edit button to the edit cell
   });
   console.log(summary);
 }
 
-// showEditPaymentForm function
-function showEditPaymentForm(paymentform, form) {
-  const dateLabel = document.createElement("label");
-  dateLabel.textContent = "Date:";
-  const dateInput = document.createElement("input");
-  dateInput.type = "date";
-  dateInput.value = paymentform.date;
+// showEditPriceForm function
+function showEditPriceForm(editpriceform, form) {
+  const projectLabel = document.createElement("label");
+  projectLabel.textContent = "Project:";
+  const projectInput = document.createElement("input");
+  projectInput.type = "project";
+  projectInput.value = editpriceform.project;
   const amountLabel = document.createElement("label");
-  amountLabel.textContent = "Amount:";
-  const amountInput = document.createElement("input");
-  amountInput.type = "number";
-  amountInput.value = paymentform.payment;
+  priceLabel.textContent = "Price:";
+  const priceInput = document.createElement("input");
+  priceInput.type = "number";
+  priceInput.value = editpriceform.payment;
   const saveButton = document.createElement("button");
   saveButton.textContent = "Save";
   saveButton.addEventListener("click", () => {
-    const newDate = dateInput.value;
-    const newAmount = amountInput.value;
+    const newProject = projectInput.value;
+    const newPrice = priceInput.value;
     // Update the payment in the database using a fetch request
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payment?id=${paymentform.id}&date=${newDate}&payment=${newAmount}`)
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-project?id=${editpriceform.id}&project=${newProject}&proce=${newPrice}`)
       .then(response => response.json())
       .then(result => {
         // Update the payment row in the table with the new values
-        paymentform.date = newDate;
-        paymentform.payment = newAmount;
-        const row = paymentTable.rows[paymentTable.rows.length - payments.length - 1]; // Find the row that corresponds to the edited payment
-        row.cells[0].textContent = newDate; // Update the date cell
-        row.cells[1].textContent = newAmount; // Update the amount cell
+        editpriceform.project = newProject;
+        editpriceform.price = newPrice;
+        const row = editpriceTable.rows[editpriceTable.rows.length - projects.length - 1]; // Find the row that corresponds to the edited payment
+        row.cells[0].textContent = newProject; // Update the date cell
+        row.cells[1].textContent = newPrice; // Update the amount cell
         form.remove(); // Remove the form from the page
       })
       .catch(error => console.error(error));
   });
-  form.appendChild(dateLabel);
-  form.appendChild(dateInput);
-  form.appendChild(amountLabel);
-  form.appendChild(amountInput);
+  form.appendChild(projectLabel);
+  form.appendChild(projectInput);
+  form.appendChild(priceLabel);
+  form.appendChild(priceInput);
   form.appendChild(saveButton);
   document.body.appendChild(form); // Add the form to the page
 }
