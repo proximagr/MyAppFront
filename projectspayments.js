@@ -1,6 +1,5 @@
 const customerSelect = document.getElementById("customer-select");
-const projectSelect = document.getElementById("project-select");
-//const paymentTable = document.getElementById("payment-table").getElementsByTagName("tbody")[0];
+const projectSelect = document.getElementById("project-select")
 const paymentTotal = document.getElementById("payment-total")
 const projectPriceEl = document.getElementById("project-price")
 
