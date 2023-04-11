@@ -59,52 +59,9 @@ projectSelect.addEventListener("change", event => {
           const row = paymentTable.insertRow();
           const dateCell = row.insertCell();
           const amountCell = row.insertCell();
-          const editCell = row.insertCell(); // Add a new cell for the edit button
           dateCell.textContent = payment.date;
           amountCell.textContent = payment.payment;
-          editCell.innerHTML = "<button class='edit-btn'>Edit</button>"; // Add an edit button to the row
-          dateCell.classList.add("date-cell"); // Add a class name to the date cell
-          amountCell.classList.add("amount-cell"); // Add a class name to the amount cell
         }
-        
-        paymentTable.addEventListener("click", event => {
-          if (event.target.classList.contains("edit-btn")) {
-            const row = event.target.parentNode.parentNode;
-            const dateCell = row.querySelector(".date-cell");
-            const amountCell = row.querySelector(".amount-cell");
-            const editCell = row.querySelector(":nth-child(3)"); // Get the edit button cell
-            const dateValue = dateCell.textContent;
-            const amountValue = amountCell.textContent;
-            dateCell.innerHTML = `<input type='date' value='${dateValue}'>`;
-            amountCell.innerHTML = `<input type='number' step='0.01' value='${amountValue}'>`;
-            editCell.innerHTML = "<button class='save-btn'>Save</button>"; // Replace the edit button with a Save button
-          }
-        });
-
-        paymentTable.addEventListener("click", event => {
-          if (event.target.classList.contains("save-btn")) {
-            const row = event.target.parentNode.parentNode;
-            const dateInput = row.querySelector("input[type='date']");
-            const amountInput = row.querySelector("input[type='number']");
-            const paymentId = row.dataset.paymentId;
-            const newDate = dateInput.value;
-            const newAmount = amountInput.value;
-            const updatedPayment = { id: paymentId, date: newDate, payment: newAmount };
-            fetch("http://arch.francecentral.cloudapp.azure.com:43704/update-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(updatedPayment)
-            })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-                projectSelect.dispatchEvent(new Event("change")); // Reload the payment table
-              })
-              .catch(error => console.error(error));
-          }
-        });
-         
-
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
 
 		
