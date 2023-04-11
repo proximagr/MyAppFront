@@ -23,30 +23,30 @@ async function listProjects() {
    });
 
 // showEditPaymentForm function
-function showEditPaymentForm(payment) {
+function showEditPaymentForm(paymentform) {
   const form = document.createElement("form");
   const dateLabel = document.createElement("label");
   dateLabel.textContent = "Date:";
   const dateInput = document.createElement("input");
   dateInput.type = "date";
-  dateInput.value = payment.date;
+  dateInput.value = paymentform.date;
   const amountLabel = document.createElement("label");
   amountLabel.textContent = "Amount:";
   const amountInput = document.createElement("input");
   amountInput.type = "number";
-  amountInput.value = payment.payment;
+  amountInput.value = paymentform.payment;
   const saveButton = document.createElement("button");
   saveButton.textContent = "Save";
   saveButton.addEventListener("click", () => {
     const newDate = dateInput.value;
     const newAmount = amountInput.value;
     // Update the payment in the database using a fetch request
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payment?id=${payment.id}&date=${newDate}&payment=${newAmount}`)
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payment?id=${paymentform.id}&date=${newDate}&payment=${newAmount}`)
       .then(response => response.json())
       .then(result => {
         // Update the payment row in the table with the new values
-        payment.date = newDate;
-        payment.payment = newAmount;
+        paymentform.date = newDate;
+        paymentform.payment = newAmount;
         const row = paymentTable.rows[paymentTable.rows.length - payments.length - 1]; // Find the row that corresponds to the edited payment
         row.cells[0].textContent = newDate; // Update the date cell
         row.cells[1].textContent = newAmount; // Update the amount cell
@@ -84,7 +84,7 @@ function showEditPaymentForm(payment) {
     const editButton = document.createElement("button"); // Create the edit button
     editButton.textContent = "Edit"; //edit button
     editButton.addEventListener("click", () => { // Add a click event listener to the edit button
-    showEditPaymentForm(payment); // Call a function to display the edit payment form
+    showEditPaymentForm(paymentform); // Call a function to display the edit payment form
   }); // for the edit listener
   editCell.appendChild(editButton); // Add the edit button to the edit cell
   });
