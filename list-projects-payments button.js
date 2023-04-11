@@ -22,6 +22,33 @@ async function listProjects() {
      headerRow.appendChild(th);
    });
 
+  projects.forEach(project => {
+    const customer = customers.find(customer => customer.id === project.customer_id);
+    const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
+    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
+    summary[project.id] = totalPayments;
+
+    const row = projectTable.insertRow(-1);
+    const customerCell = row.insertCell(0);
+    const projectCell = row.insertCell(1);
+    const priceCell = row.insertCell(2);
+    const paymentsCell = row.insertCell(3);
+    const editCell = row.insertCell(4); // Add a new cell for the edit button
+
+    projectCell.textContent = project.project;
+    priceCell.textContent = project.price;
+    customerCell.textContent = customer ? customer.name : '';
+    paymentsCell.textContent = totalPayments;
+    const editButton = document.createElement("button"); // Create the edit button
+    editButton.textContent = "Edit"; //edit button
+    editButton.addEventListener("click", () => { // Add a click event listener to the edit button
+    showEditPaymentForm(paymentform); // Call a function to display the edit payment form
+  }); // for the edit listener
+  editCell.appendChild(editButton); // Add the edit button to the edit cell
+  });
+  console.log(summary);
+}
+
 // showEditPaymentForm function
 function showEditPaymentForm(paymentform) {
   const form = document.createElement("form");
@@ -63,33 +90,6 @@ function showEditPaymentForm(paymentform) {
 }
 
 //end of showEditPaymentForm function
-
-  projects.forEach(project => {
-    const customer = customers.find(customer => customer.id === project.customer_id);
-    const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
-    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
-    summary[project.id] = totalPayments;
-
-    const row = projectTable.insertRow(-1);
-    const customerCell = row.insertCell(0);
-    const projectCell = row.insertCell(1);
-    const priceCell = row.insertCell(2);
-    const paymentsCell = row.insertCell(3);
-    const editCell = row.insertCell(4); // Add a new cell for the edit button
-
-    projectCell.textContent = project.project;
-    priceCell.textContent = project.price;
-    customerCell.textContent = customer ? customer.name : '';
-    paymentsCell.textContent = totalPayments;
-    const editButton = document.createElement("button"); // Create the edit button
-    editButton.textContent = "Edit"; //edit button
-    editButton.addEventListener("click", () => { // Add a click event listener to the edit button
-    showEditPaymentForm(paymentform); // Call a function to display the edit payment form
-  }); // for the edit listener
-  editCell.appendChild(editButton); // Add the edit button to the edit cell
-  });
-  console.log(summary);
-}
 
 //button to list the projects
 listProjectsBtn.addEventListener('click', listProjects);
