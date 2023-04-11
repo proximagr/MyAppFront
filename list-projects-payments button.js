@@ -13,21 +13,27 @@ async function listProjects() {
 
   const summary = {};
 
+  // Remove existing table rows
+  const tbody = projectTable.querySelector('tbody');
+  if (tbody) {
+    tbody.remove();
+  }
+
    // Create table headers dynamically
    const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price']; //Edit Project, Edit Price
-   const headerRow = projectTable.insertRow(0);
+   //adding for update
+   const tbodyNew = document.createElement('tbody');
+   projectTable.appendChild(tbodyNew);
+   // end adding for update
+   // const headerRow = projectTable.insertRow(0); // removed for update
+   
    headers.forEach(header => {
      const th = document.createElement('th');
      th.textContent = header;
-     headerRow.appendChild(th);
-      // added for edit project and price
-      //const editProjectTh = document.createElement('th');
-      //editProjectTh.textContent = 'Edit Project';
-      //headerRow.appendChild(editProjectTh);
-      //const editPriceTh = document.createElement('th');
-     // editPriceTh.textContent = 'Edit Price';
-      //headerRow.appendChild(editPriceTh);
-      // end added for edit project and price
+     //adding for update
+     tbodyNew.insertRow().appendChild(th);
+     //end adding for update
+     //headerRow.appendChild(th);  // removed for update
    });
 
   projects.forEach(project => {
