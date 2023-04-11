@@ -22,18 +22,19 @@ async function listProjects() {
    // Create table headers dynamically
    const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price']; //Edit Project, Edit Price
    //adding for update
-   const thead = projectTable.createTHead();
-   const headerRow = thead.insertRow();
+   const tbodyNew = document.createElement('tbody');
+   projectTable.appendChild(tbodyNew);
+   // end adding for update
+   // const headerRow = projectTable.insertRow(0); // removed for update
    
    headers.forEach(header => {
-    const th = document.createElement('th');
-    th.textContent = header;
-    headerRow.appendChild(th);
-  });
-
-  const tbodyNew = document.createElement('tbody');
-  projectTable.appendChild(tbodyNew);
-  // end adding for update
+     const th = document.createElement('th');
+     th.textContent = header;
+     //adding for update
+     tbodyNew.insertRow().appendChild(th);
+     //end adding for update
+     //headerRow.appendChild(th);  // removed for update
+   });
 
   projects.forEach(project => {
     const customer = customers.find(customer => customer.id === project.customer_id);
@@ -41,27 +42,23 @@ async function listProjects() {
     const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
     summary[project.id] = totalPayments;
 
-    const row = tbodyNew.insertRow(-1); //modified for update
+    const row = projectTable.insertRow(-1);
     const customerCell = row.insertCell(0);
     const projectCell = row.insertCell(1);
     const priceCell = row.insertCell(2);
     const paymentsCell = row.insertCell(3);
 
-    const editProjectCell = row.insertCell(4); //added for update
-    const editPriceCell = row.insertCell(5); //added for update
-
-    customerCell.textContent = customer ? customer.name : '';
     projectCell.textContent = project.project;
     priceCell.textContent = project.price;
+    customerCell.textContent = customer ? customer.name : '';
     paymentsCell.textContent = totalPayments;
-
     // added for edit project and price
-
+    const editProjectCell = row.insertCell(4);
     const editProjectButton = document.createElement('button');
     editProjectButton.textContent = 'Edit Project';
     editProjectButton.addEventListener('click', () => editProject(project.id));
     editProjectCell.appendChild(editProjectButton);
-
+    const editPriceCell = row.insertCell(5);
     const editPriceButton = document.createElement('button');
     editPriceButton.textContent = 'Edit Price';
     editPriceButton.addEventListener('click', () => editPrice(project.id));
