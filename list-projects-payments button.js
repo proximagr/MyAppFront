@@ -28,6 +28,14 @@ async function listProjects() {
     const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
     summary[project.id] = totalPayments;
 
+    // Create a new paymentform object for the current project
+    const paymentform = { 
+      id: project.id,
+      date: paymentsForProject[0] ? paymentsForProject[0].date : '',
+      payment: paymentsForProject[0] ? paymentsForProject[0].payment : ''
+    };
+    // END Create a new paymentform object for the current project
+
     const row = projectTable.insertRow(-1);
     const customerCell = row.insertCell(0);
     const projectCell = row.insertCell(1);
