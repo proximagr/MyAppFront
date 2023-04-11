@@ -50,15 +50,17 @@ async function listProjects() {
     const editButton = document.createElement("button"); // Create the edit button
     editButton.textContent = "Edit"; //edit button
     editButton.addEventListener("click", () => { // Add a click event listener to the edit button
-    showEditPaymentForm(paymentform); // Call a function to display the edit payment form
-  }); // for the edit listener
+     const form = document.createElement("form"); // Create the form element
+     showEditPaymentForm(paymentform, form); // Call a function to display the edit payment form
+     document.body.appendChild(form); // Add the form to the page
+    }); // for the edit listener
   editCell.appendChild(editButton); // Add the edit button to the edit cell
   });
   console.log(summary);
 }
 
 // showEditPaymentForm function
-function showEditPaymentForm(paymentform) {
+function showEditPaymentForm(paymentform, form) {
   const form = document.createElement("form");
   const dateLabel = document.createElement("label");
   dateLabel.textContent = "Date:";
