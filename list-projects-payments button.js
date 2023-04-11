@@ -14,19 +14,19 @@ async function listProjects() {
   const summary = {};
 
    // Create table headers dynamically
-   const headers = ['Customer', 'Project', 'Price', 'Payments'];
+   const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price']; //Edit Project, Edit Price
    const headerRow = projectTable.insertRow(0);
    headers.forEach(header => {
      const th = document.createElement('th');
      th.textContent = header;
      headerRow.appendChild(th);
       // added for edit project and price
-      const editProjectTh = document.createElement('th');
-      editProjectTh.textContent = 'Edit Project';
-      headerRow.appendChild(editProjectTh);
-      const editPriceTh = document.createElement('th');
-      editPriceTh.textContent = 'Edit Price';
-      headerRow.appendChild(editPriceTh);
+      //const editProjectTh = document.createElement('th');
+      //editProjectTh.textContent = 'Edit Project';
+      //headerRow.appendChild(editProjectTh);
+      //const editPriceTh = document.createElement('th');
+     // editPriceTh.textContent = 'Edit Price';
+      //headerRow.appendChild(editPriceTh);
       // end added for edit project and price
    });
 
