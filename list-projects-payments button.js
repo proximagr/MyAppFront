@@ -61,7 +61,6 @@ async function listProjects() {
 
 // showEditPaymentForm function
 function showEditPaymentForm(paymentform, form) {
-  const form = document.createElement("form");
   const dateLabel = document.createElement("label");
   dateLabel.textContent = "Date:";
   const dateInput = document.createElement("input");
