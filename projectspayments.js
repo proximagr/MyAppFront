@@ -145,3 +145,60 @@ projectSelect.addEventListener("change", event => {
       .catch(error => console.error(error));
   }
 });
+
+//modal form
+function openEditModal(payment) {
+  // create modal form
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Edit Payment</h2>
+      <form>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="${payment.date}">
+        <br>
+        <label for="payment">Payment:</label>
+        <input type="number" id="payment" name="payment" value="${payment.payment}">
+        <br>
+        <button type="submit">Save</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // handle form submit
+  const form = modal.querySelector("form");
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const newDate = form.elements.date.value;
+    const newPayment = form.elements.payment.value;
+    updatePayment(payment.id, newDate, newPayment)
+      .then(() => {
+        closeModal();
+        // update table row with new data
+        const row = paymentTable.rows[1+payment.id]; // table rows start at index 1 because of header row
+        row.cells[0].textContent = newDate;
+        row.cells[1].textContent = newPayment;
+        // update total payment
+        const totalPayment = calculateTotalPayment();
+        paymentTotal.textContent = `Total Payment: ${totalPayment}`;
+      })
+      .catch(error => console.error(error));
+  });
+}
+
+function closeModal() {
+  const modal = document.querySelector(".modal");
+  modal.remove();
+}
+//end modal form
+
+async function updatePayment(paymentId, newDate, newPayment) {
+  const url = `http://arch.francecentral.cloudapp.azure.com:43704/update-payment?id=${paymentId}&date=${newDate}&payment=${newPayment}`;
+  const response = await fetch(url, { method: "PUT" });
+  if (!response.ok) {
+    throw new Error("Failed to update payment");
+  }
+}
