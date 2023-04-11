@@ -20,6 +20,14 @@ async function listProjects() {
      const th = document.createElement('th');
      th.textContent = header;
      headerRow.appendChild(th);
+      // added for edit project and price
+      const editProjectTh = document.createElement('th');
+      editProjectTh.textContent = 'Edit Project';
+      headerRow.appendChild(editProjectTh);
+      const editPriceTh = document.createElement('th');
+      editPriceTh.textContent = 'Edit Price';
+      headerRow.appendChild(editPriceTh);
+      // end added for edit project and price
    });
 
   projects.forEach(project => {
@@ -38,9 +46,70 @@ async function listProjects() {
     priceCell.textContent = project.price;
     customerCell.textContent = customer ? customer.name : '';
     paymentsCell.textContent = totalPayments;
+    // added for edit project and price
+    const editProjectCell = row.insertCell(4);
+    const editProjectButton = document.createElement('button');
+    editProjectButton.textContent = 'Edit Project';
+    editProjectButton.addEventListener('click', () => editProject(project.id));
+    editProjectCell.appendChild(editProjectButton);
+    const editPriceCell = row.insertCell(5);
+    const editPriceButton = document.createElement('button');
+    editPriceButton.textContent = 'Edit Price';
+    editPriceButton.addEventListener('click', () => editPrice(project.id));
+    editPriceCell.appendChild(editPriceButton);
+    // end added for edit project and price
   });
   console.log(summary);
 }
+
+// added for edit project and price
+function editProject(projectId) {
+  const newProjectName = prompt('Enter a new name for the project:');
+  if (newProjectName === null) {
+    return;
+  }
+  const updatedProject = { project: newProjectName };
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedProject)
+  })
+  .then(() => {
+    alert('Project updated successfully!');
+    listProjects();
+  })
+  .catch(error => {
+    console.error(error);
+    alert('Error updating project.');
+  });
+}
+
+function editPrice(projectId) {
+  const newPrice = prompt('Enter a new price for the project:');
+  if (newPrice === null) {
+    return;
+  }
+  const updatedProject = { price: newPrice };
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedProject)
+  })
+  .then(() => {
+    alert('Price updated successfully!');
+    listProjects();
+  })
+  .catch(error => {
+    console.error(error);
+    alert('Error updating price.');
+  });
+}
+
+// end added for edit project and price
 
 //button to list the projects
 listProjectsBtn.addEventListener('click', listProjects);
