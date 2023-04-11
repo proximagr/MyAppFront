@@ -14,7 +14,7 @@ async function listProjects() {
   const summary = {};
 
    // Create table headers dynamically
-   const headers = ['Customer', 'Project', 'Price', 'Payments'];
+   const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit']; // EDIT cell
    const headerRow = projectTable.insertRow(0);
    headers.forEach(header => {
      const th = document.createElement('th');
@@ -33,13 +33,19 @@ async function listProjects() {
     const projectCell = row.insertCell(1);
     const priceCell = row.insertCell(2);
     const paymentsCell = row.insertCell(3);
+    const editCell = row.insertCell(4); // Add a new cell for the edit button
 
     projectCell.textContent = project.project;
     priceCell.textContent = project.price;
     customerCell.textContent = customer ? customer.name : '';
     paymentsCell.textContent = totalPayments;
+    const editButton = document.createElement("button"); // Create the edit button
+    editButton.textContent = "Edit"; //edit button
+    editButton.addEventListener("click", () => { // Add a click event listener to the edit button
+    showEditPaymentForm(payment); // Call a function to display the edit payment form
+  }); // for the edit listener
+  editCell.appendChild(editButton); // Add the edit button to the edit cell
   });
-  
   console.log(summary);
 }
 
