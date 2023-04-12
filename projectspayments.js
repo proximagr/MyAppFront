@@ -80,7 +80,8 @@ projectSelect.addEventListener("change", event => {
           .then(response => response.json())
           .then(projects => {
             console.log(projects);
-            const project = projects.find(project => project.id === projectId);
+            //const project = projects.find(project => project.id === projectId);
+            const project = projects.find(project => parseInt(project.id) === projectId);
             console.log('project:', project); // log the project object
             const projectPrice = project.price;
             console.log('projectPrice:', projectPrice); // log the projectPrice variable
