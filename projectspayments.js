@@ -38,6 +38,52 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
+// Populate the payment table and project price when a project is selected
+projectSelect.addEventListener("change", event => {
+  const projectId = event.target.value;
+  paymentTable.innerHTML = "";
+  paymentTotal.textContent = "";
+  if (projectId) {
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
+      .then(response => response.json())
+      .then(payments => {
+        let totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
+        // Create table headers
+        const headerRow = paymentTable.insertRow();
+        const dateHeader = headerRow.insertCell();
+        const amountHeader = headerRow.insertCell();
+        const editHeader = headerRow.insertCell(); // New column for "Edit" button
+        dateHeader.textContent = "Date";
+        amountHeader.textContent = "Amount";
+        editHeader.textContent = "Edit"; // Header text for "Edit" button column
+        // Create table rows
+        for (let payment of payments) {
+          const row = paymentTable.insertRow();
+          const dateCell = row.insertCell();
+          const amountCell = row.insertCell();
+          const editCell = row.insertCell(); // New column for "Edit" button
+          dateCell.textContent = payment.date;
+          amountCell.textContent = payment.payment;
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex }));
+          editCell.appendChild(editButton);
+        }
+        paymentTotal.textContent = `Total Payment: ${totalPayment}`;
+        // Second fetch call
+        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
+          .then(response => response.json())
+          .then(projects => {
+            const project = projects.find(project => project.id === projectId);
+            const projectPrice = project.price;
+            projectPriceEl.textContent = `Project: ${projectPrice}`;
+          })
+          .catch(error => console.error(error));
+      })
+      .catch(error => console.error(error));
+  }
+});
+
 //function to display the edit form
 function showEditForm(payment) {
   // Create the form elements
@@ -87,49 +133,3 @@ function showEditForm(payment) {
   form.appendChild(submitButton);
 }
 //end function to display the edit form
-
-// Populate the payment table and project price when a project is selected
-projectSelect.addEventListener("change", event => {
-  const projectId = event.target.value;
-  paymentTable.innerHTML = "";
-  paymentTotal.textContent = "";
-  if (projectId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-      .then(response => response.json())
-      .then(payments => {
-        let totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
-        // Create table headers
-        const headerRow = paymentTable.insertRow();
-        const dateHeader = headerRow.insertCell();
-        const amountHeader = headerRow.insertCell();
-        const editHeader = headerRow.insertCell(); // New column for "Edit" button
-        dateHeader.textContent = "Date";
-        amountHeader.textContent = "Amount";
-        editHeader.textContent = "Edit"; // Header text for "Edit" button column
-        // Create table rows
-        for (let payment of payments) {
-          const row = paymentTable.insertRow();
-          const dateCell = row.insertCell();
-          const amountCell = row.insertCell();
-          const editCell = row.insertCell(); // New column for "Edit" button
-          dateCell.textContent = payment.date;
-          amountCell.textContent = payment.payment;
-          const editButton = document.createElement("button");
-          editButton.textContent = "Edit";
-          editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex }));
-          editCell.appendChild(editButton);
-        }
-        paymentTotal.textContent = `Total Payment: ${totalPayment}`;
-        // Second fetch call
-        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
-          .then(response => response.json())
-          .then(projects => {
-            const project = projects.find(project => project.id === projectId);
-            const projectPrice = project.price;
-            projectPriceEl.textContent = `Project: ${projectPrice}`;
-          })
-          .catch(error => console.error(error));
-      })
-      .catch(error => console.error(error));
-  }
-});
