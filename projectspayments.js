@@ -116,9 +116,6 @@ function showEditForm(poaymentform) {
         row.cells[1].textContent = updatedPayment.payment;
         // Hide the form
         form.remove();
-        //success message
-        await refreshTableData(); // Refresh table with new data
-        //successMessage.textContent = "Payment updated successfully.";
       })
       .catch(error => console.error(error));
   });
