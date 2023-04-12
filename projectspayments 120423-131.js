@@ -38,53 +38,6 @@ customerSelect.addEventListener("change", event => {
 	}
 });
 
-//function to display the edit form
-function showEditForm(payment) {
-  // Create the form elements
-  const form = document.createElement("form");
-  const dateInput = document.createElement("input");
-  const amountInput = document.createElement("input");
-  const submitButton = document.createElement("button");
-  // Set the form properties
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    const date = dateInput.value;
-    const payment = amountInput.value;
-    const paymentId = payment.id;
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payments/${paymentId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ date, payment })
-    })
-      .then(response => response.json())
-      .then(updatedPayment => {
-        // Update the payment in the table
-        const row = paymentTable.rows[payment.rowIndex];
-        row.cells[0].textContent = updatedPayment.date;
-        row.cells[1].textContent = updatedPayment.payment;
-        // Hide the form
-        form.remove();
-      })
-      .catch(error => console.error(error));
-  });
-  dateInput.type = "date";
-  dateInput.value = payment.date;
-  amountInput.type = "number";
-  amountInput.value = payment.payment;
-  submitButton.type = "submit";
-  submitButton.textContent = "Save";
-  // Append the form to the table row
-  const row = paymentTable.rows[payment.rowIndex];
-  const editCell = row.insertCell();
-  editCell.appendChild(form);
-  form.appendChild(dateInput);
-  form.appendChild(amountInput);
-  form.appendChild(submitButton);
-}
-//end function to display the edit form
-
 // Populate the payment table and project price when a project is selected
 projectSelect.addEventListener("change", event => {
   const projectId = event.target.value;
@@ -99,24 +52,19 @@ projectSelect.addEventListener("change", event => {
         const headerRow = paymentTable.insertRow();
         const dateHeader = headerRow.insertCell();
         const amountHeader = headerRow.insertCell();
-        const editHeader = headerRow.insertCell(); // New column for "Edit" button
         dateHeader.textContent = "Date";
         amountHeader.textContent = "Amount";
-        editHeader.textContent = "Edit"; // Header text for "Edit" button column
         // Create table rows
         for (let payment of payments) {
           const row = paymentTable.insertRow();
           const dateCell = row.insertCell();
           const amountCell = row.insertCell();
-          const editCell = row.insertCell(); // New column for "Edit" button
           dateCell.textContent = payment.date;
           amountCell.textContent = payment.payment;
-          const editButton = document.createElement("button");
-          editButton.textContent = "Edit";
-          editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex }));
-          editCell.appendChild(editButton);
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
+
+		
         // Second fetch call
         fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
           .then(response => response.json())
