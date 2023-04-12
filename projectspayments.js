@@ -80,9 +80,8 @@ projectSelect.addEventListener("change", event => {
           .then(response => response.json())
           .then(projects => {
             const project = projects.find(project => project.id === projectId);
-            const projectPrice = project.price;
+            const projectPrice = project?.price;
             projectPriceEl.textContent = `Project: ${projectPrice}`;
-                   
           })
           .catch(error => console.error(error));
       })
@@ -106,8 +105,6 @@ function deletePayment(paymentId) {
     })
     .catch(error => console.error(error));
 }
-
-
 
 //function to display the edit form
 function showEditForm(poaymentform) {
