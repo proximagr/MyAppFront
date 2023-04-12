@@ -75,12 +75,8 @@ projectSelect.addEventListener("change", event => {
           .then(response => response.json())
           .then(projects => {
             const project = projects.find(project => project.id === projectId);
-            if (project) {
-              const projectPrice = project.price;
-              projectPriceEl.textContent = `Project: ${projectPrice}`;
-            } else {
-              projectPriceEl.textContent = "Project not found";
-            }
+            const projectPrice = project.price;
+            projectPriceEl.textContent = `Project: ${projectPrice}`;
           })
           .catch(error => console.error(error));
       })
