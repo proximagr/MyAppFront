@@ -62,17 +62,12 @@ projectSelect.addEventListener("change", event => {
           const dateCell = row.insertCell();
           const amountCell = row.insertCell();
           const editCell = row.insertCell(); // New column for "Edit" button
-          const deleteCell = row.insertCell(); // New column for "Delete" button
           dateCell.textContent = payment.date;
           amountCell.textContent = payment.payment;
           const editButton = document.createElement("button");
-          const deleteButton = document.createElement("button"); // Create a "Delete" button
           editButton.textContent = "Edit";
-          deleteButton.textContent = "Delete"; // Set the text of the "Delete" button
           editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex }));
-          deleteButton.addEventListener("click", () => deletePayment(payment.id)); // Add an event listener to the "Delete" button
           editCell.appendChild(editButton);
-          deleteCell.appendChild(deleteButton); // Append the "Delete" button to the deleteCell
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
         // Second fetch call
@@ -89,20 +84,6 @@ projectSelect.addEventListener("change", event => {
       .catch(error => console.error(error));
   }
 });
-
-function deletePayment(paymentId) {
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/delete-payment/${paymentId}`, {
-    method: "DELETE"
-  })
-    .then(response => response.json())
-    .then(data => {
-      // Remove the payment row from the table
-      const row = paymentTable.rows[data.rowIndex];
-      row.remove();
-      paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
-    })
-    .catch(error => console.error(error));
-}
 
 //function to display the edit form
 function showEditForm(poaymentform) {
