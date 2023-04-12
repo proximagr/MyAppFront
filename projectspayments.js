@@ -81,7 +81,9 @@ projectSelect.addEventListener("change", event => {
           .then(projects => {
             console.log(projects);
             const project = projects.find(project => project.id === projectId);
+            console.log('project:', project); // log the project object
             const projectPrice = project.price;
+            console.log('projectPrice:', projectPrice); // log the projectPrice variable
             console.log(project);
             console.log(projectPrice);
             projectPriceEl.textContent = `Project: ${projectPrice}`;
