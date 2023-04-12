@@ -100,13 +100,13 @@ function deletePayment(paymentId) {
       const row = paymentTable.rows[data.rowIndex];
       row.remove();
       paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
-      // Display confirmation message
-      window.alert("Payment has been deleted.");
-      // Refresh the form
+      // Display a confirmation message and refresh the form
+      alert("Payment deleted successfully.");
       location.reload();
     })
     .catch(error => console.error(error));
 }
+
 
 
 //function to display the edit form
