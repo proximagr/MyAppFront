@@ -56,7 +56,10 @@ function showEditForm(payment) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ date, payment })
+      body: JSON.stringify({
+        payment: payment,
+        date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
+      })
     })
       .then(response => response.json())
       .then(updatedPayment => {
