@@ -79,15 +79,10 @@ projectSelect.addEventListener("change", event => {
         fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
           .then(response => response.json())
           .then(projects => {
-            console.log(projects);
-            //const project = projects.find(project => project.id === projectId);
-            const project = projects.find(project => parseInt(project.id) === projectId);
-            console.log('project:', project); // log the project object
+            const project = projects.find(project => project.id === projectId);
             const projectPrice = project.price;
-            console.log('projectPrice:', projectPrice); // log the projectPrice variable
-            console.log(project);
-            console.log(projectPrice);
             projectPriceEl.textContent = `Project: ${projectPrice}`;
+                   
           })
           .catch(error => console.error(error));
       })
