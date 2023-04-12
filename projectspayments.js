@@ -89,7 +89,7 @@ projectSelect.addEventListener("change", event => {
 });
 
 //function to display the edit form
-function showEditForm(payment) {
+function showEditForm(poaymentform) {
   // Create the form elements
   const form = document.createElement("form");
   const dateInput = document.createElement("input");
@@ -100,7 +100,7 @@ function showEditForm(payment) {
     event.preventDefault();
     const date = dateInput.value;
     const payment = amountInput.value;
-    const paymentId = payment.id;
+    const paymentId = poaymentform.id;
     fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payments/${paymentId}`, {
       method: "PUT",
       headers: {
@@ -114,7 +114,7 @@ function showEditForm(payment) {
       .then(response => response.json())
       .then(updatedPayment => {
         // Update the payment in the table
-        const row = paymentTable.rows[payment.rowIndex];
+        const row = paymentTable.rows[poaymentform.rowIndex];
         row.cells[0].textContent = updatedPayment.date;
         row.cells[1].textContent = updatedPayment.payment;
         // Hide the form
@@ -123,13 +123,13 @@ function showEditForm(payment) {
       .catch(error => console.error(error));
   });
   dateInput.type = "date";
-  dateInput.value = payment.date;
+  dateInput.value = poaymentform.date;
   amountInput.type = "number";
-  amountInput.value = payment.payment;
+  amountInput.value = poaymentform.payment;
   submitButton.type = "submit";
   submitButton.textContent = "Save";
   // Append the form to the table row
-  const row = paymentTable.rows[payment.rowIndex];
+  const row = paymentTable.rows[poaymentform.rowIndex];
   const editCell = row.insertCell();
   editCell.appendChild(form);
   form.appendChild(dateInput);
