@@ -25,12 +25,12 @@ const pool = mysql.createPool({
 app.use(express.json());
 
 //credentials
-const users = [{username: 'process.env.USER_USERNAME', password: 'process.env.USER_PASSWORD'}];
+const users = [{username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD}];
 
 //function to check if user is authenticated
 const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
-  const token = jwt.verify(authHeader, 'process.env.AUTH_TOKEN');
+  const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
   if (token && token.expiresAt > Date.now()) {
     return true;
   }
@@ -43,7 +43,7 @@ app.post('/login', async (req, res) => {
   const userExists = users.some(user => user.username === username && user.password === password);
   if (!userExists) return res.status(401).send('Username or password incorrect');
 
-  const token = jwt.sign({ username: username, expiresAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }, 'process.env.AUTH_TOKEN');
+  const token = jwt.sign({ username: username, expiresAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }, process.env.AUTH_TOKEN);
   res.status(200).send(token);
 });
 
