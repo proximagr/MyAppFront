@@ -70,7 +70,7 @@ projectSelect.addEventListener("change", event => {
           editButton.textContent = "Edit";
           deleteButton.textContent = "Delete"; // Set the text of the "Delete" button
           editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex }));
-          deleteButton.addEventListener("click", () => deletePayment(payment.id)); // Add an event listener to the "Delete" button
+          deleteButton.addEventListener("click", () => deletePayment(payment.id, rowIndex)); // Add an event listener to the "Delete" button
           editCell.appendChild(editButton);
           deleteCell.appendChild(deleteButton); // Append the "Delete" button to the deleteCell
         }
@@ -144,14 +144,14 @@ function showEditForm(poaymentform) {
 //end function to display the edit form
 
 //delete payment function
-function deletePayment(paymentId) {
+function deletePayment(paymentId, rowIndex) {
   fetch(`http://arch.francecentral.cloudapp.azure.com:43704/delete-payment/${paymentId}`, {
     method: "DELETE"
   })
     .then(response => response.json())
     .then(data => {
       // Remove the payment row from the table
-      const row = paymentTable.rows[data.rowIndex];
+      const row = paymentTable.rows[rowIndex];
       row.remove();
       paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
       // Display a confirmation message and refresh the form
