@@ -7,35 +7,35 @@ const paymentTableHeader = paymentTable.createTHead();
 
 // Populate the customer dropdown
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
-	.then(response => response.json())
-	.then(customers => {
-		for (const customer of customers) {
-			const option = document.createElement("option");
-			option.value = customer.id;
-			option.textContent = customer.name;
-			customerSelect.appendChild(option);
-		}
-	})
-	.catch(error => console.error(error));
+  .then(response => response.json())
+  .then(customers => {
+    for (const customer of customers) {
+      const option = document.createElement("option");
+      option.value = customer.id;
+      option.textContent = customer.name;
+      customerSelect.appendChild(option);
+    }
+  })
+  .catch(error => console.error(error));
 
 // Clear project and payment tables and populate the project dropdown when a customer is selected
 customerSelect.addEventListener("change", event => {
-	const customerId = event.target.value;
-	projectSelect.innerHTML = "<option value=''>Select a project</option>";
-	paymentTable.innerHTML = "";
-	if (customerId) {
-		fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-			.then(response => response.json())
-			.then(projects => {
-				for (const project of projects) {
-					const option = document.createElement("option");
-					option.value = project.id;
-					option.textContent = project.project + " ($" + project.price + ")";
-					projectSelect.appendChild(option);
-				}
-			})
-			.catch(error => console.error(error));
-	}
+  const customerId = event.target.value;
+  projectSelect.innerHTML = "<option value=''>Select a project</option>";
+  paymentTable.innerHTML = "";
+  if (customerId) {
+    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
+      .then(response => response.json())
+      .then(projects => {
+        for (const project of projects) {
+          const option = document.createElement("option");
+          option.value = project.id;
+          option.textContent = project.project + " ($" + project.price + ")";
+          projectSelect.appendChild(option);
+        }
+      })
+      .catch(error => console.error(error));
+  }
 });
 
 // Populate the payment table and project price when a project is selected
@@ -82,7 +82,7 @@ projectSelect.addEventListener("change", event => {
             const project = projects.find(project => project.id === projectId);
             const projectPrice = project.price;
             projectPriceEl.textContent = `Project: ${projectPrice}`;
-                   
+
           })
           .catch(error => console.error(error));
       })
