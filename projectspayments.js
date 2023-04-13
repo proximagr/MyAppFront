@@ -93,23 +93,6 @@ projectSelect.addEventListener("change", event => {
   }
 });
 
-function deletePayment(paymentId) {
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/delete-payment/${paymentId}`, {
-    method: "DELETE"
-  })
-    .then(response => response.json())
-    .then(data => {
-      // Remove the payment row from the table
-      const row = paymentTable.rows[data.rowIndex];
-      row.remove();
-      paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
-      // Display a confirmation message and refresh the form
-      alert("Payment deleted successfully.");
-      location.reload();
-    })
-    .catch(error => console.error(error));
-}
-
 //function to display the edit form
 function showEditForm(poaymentform) {
   // Create the form elements
@@ -159,3 +142,22 @@ function showEditForm(poaymentform) {
   form.appendChild(submitButton);
 }
 //end function to display the edit form
+
+//delete payment function
+function deletePayment(paymentId) {
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/delete-payment/${paymentId}`, {
+    method: "DELETE"
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Remove the payment row from the table
+      const row = paymentTable.rows[data.rowIndex];
+      row.remove();
+      paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
+      // Display a confirmation message and refresh the form
+      alert("Payment deleted successfully.");
+      location.reload();
+    })
+    .catch(error => console.error(error));
+}
+//end delete payment function
