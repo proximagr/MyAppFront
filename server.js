@@ -24,15 +24,20 @@ const pool = mysql.createPool({
 // middleware to parse JSON request bodies
 app.use(express.json());
 
+//authentication
 //credentials
-const users = [{username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD}];
+const users = [{ username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD }];
 
 //function to check if user is authenticated
-const authenticate = (req, res) => {
+const authenticate = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
-  if (token && token.expiresAt > Date.now()) {
-    return true;
+  try {
+    const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
+    if (token && token.expiresAt > Date.now()) {
+      return next();
+    }
+  } catch (err) {
+    console.error(err);
   }
   return res.status(401).send('Unauthorized');
 };
@@ -41,12 +46,21 @@ const authenticate = (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const userExists = users.some(user => user.username === username && user.password === password);
-  if (!userExists) return res.status(401).send('Username or password incorrect');
+  if (!userExists) {
+    return res.status(401).send('Username or password incorrect');
+  }
 
   const token = jwt.sign({ username: username, expiresAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }, process.env.AUTH_TOKEN);
   res.status(200).send(token);
 });
 
+// protected endpoint
+app.get('/protected', authenticate, (req, res) => {
+  res.status(200).send('Protected content');
+});
+
+
+//end authentication
 
 // endpoint to add a new user to the database
 app.post('/add-user', async (req, res) => {
