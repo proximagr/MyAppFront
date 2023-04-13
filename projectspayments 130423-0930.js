@@ -9,7 +9,7 @@ const paymentTableHeader = paymentTable.createTHead();
 fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
 	.then(response => response.json())
 	.then(customers => {
-		for (const customer of customers) {
+		for (let customer of customers) {
 			const option = document.createElement("option");
 			option.value = customer.id;
 			option.textContent = customer.name;
@@ -27,7 +27,7 @@ customerSelect.addEventListener("change", event => {
 		fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
 			.then(response => response.json())
 			.then(projects => {
-				for (const project of projects) {
+				for (let project of projects) {
 					const option = document.createElement("option");
 					option.value = project.id;
 					option.textContent = project.project + " ($" + project.price + ")";
@@ -47,7 +47,7 @@ projectSelect.addEventListener("change", event => {
     fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
       .then(response => response.json())
       .then(payments => {
-        const totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
+        let totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
         // Create table headers
         const headerRow = paymentTable.insertRow();
         const dateHeader = headerRow.insertCell();
@@ -57,7 +57,7 @@ projectSelect.addEventListener("change", event => {
         amountHeader.textContent = "Amount";
         editHeader.textContent = "Edit"; // Header text for "Edit" button column
         // Create table rows
-        for (const payment of payments) {
+        for (let payment of payments) {
           const row = paymentTable.insertRow();
           const dateCell = row.insertCell();
           const amountCell = row.insertCell();
