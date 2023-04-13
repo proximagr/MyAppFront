@@ -7,7 +7,7 @@ loginForm.addEventListener('submit', async (event) => {
   const username = formData.get('username');
   const password = formData.get('password');
 
-  const response = await fetch('/authenticate', {
+  const response = await fetch('/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: {
