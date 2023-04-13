@@ -30,7 +30,7 @@ const users = [{username:'process.env.USER_USERNAME', passwrod:'process.env.USER
 //function to check if user is authenticated
 const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
-  const token = jwt.verify(authHeader,'y4cow34FW#$CVV%F5wd48j*&BNgfd3');
+  const token = jwt.verify(authHeader,'process.env.AUTH_TOKEN');
   if (token && token.expiresAt > Date.now()) {
     return true;
   }
