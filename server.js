@@ -24,6 +24,7 @@ const pool = mysql.createPool({
 // middleware to parse JSON request bodies
 app.use(express.json());
 
+//credentials
 const users = [{username:'archsissy', passwrod:'1MikrosKodikos'}];
 
 //function to check if user is authenticated

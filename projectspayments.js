@@ -6,8 +6,7 @@ const paymentTable = document.getElementById("payment-table");
 const paymentTableHeader = paymentTable.createTHead();
 
 // Populate the customer dropdown
-fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
-  .then(response => response.json())
+window.archpro.fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
   .then(customers => {
     for (const customer of customers) {
       const option = document.createElement("option");
