@@ -25,7 +25,7 @@ const pool = mysql.createPool({
 app.use(express.json());
 
 //credentials
-const users = [{username: process.env.USERNAME, password: process.env.PASSWORD}];
+const users = [{username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD}];
 
 //function to check if user is authenticated
 const authenticate = (req, res) => {
