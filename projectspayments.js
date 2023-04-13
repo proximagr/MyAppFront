@@ -70,7 +70,7 @@ projectSelect.addEventListener("change", event => {
           editButton.textContent = "Edit";
           deleteButton.textContent = "Delete"; // Set the text of the "Delete" button
           editButton.addEventListener("click", () => showEditForm({ ...payment, rowIndex: row.rowIndex || 0 }));
-          deleteButton.addEventListener("click", () => deletePayment(payment.id, rowIndex)); // Add an event listener to the "Delete" button
+          deleteButton.addEventListener("click", () => deletePayment(payment.id, row.rowIndex)); // Add an event listener to the "Delete" button
           editCell.appendChild(editButton);
           deleteCell.appendChild(deleteButton); // Append the "Delete" button to the deleteCell
         }
