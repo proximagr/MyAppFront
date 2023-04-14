@@ -3,7 +3,7 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
 const bodyParser = require("body-parser");
-const jsonwebtoken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
@@ -29,17 +29,14 @@ app.use(express.json());
 const users = [{ username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD }];
 
 //function to check if user is authenticated
-const authenticate = (req, res, next) => {
+const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
-  try {
-    const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
-    if (token && token.expiresAt > Date.now()) {
-      return next();
-    }
-  } catch (err) {
-    console.error(err);
+  const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
+  if (token && token.expiresAt > Date.now()) {
+    return true;
   }
-  return res.status(401).send('Unauthorized');
+  res.status(401).send('Unauthorized');
+  return false;
 };
 
 // endpoint to login

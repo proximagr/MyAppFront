@@ -7,7 +7,7 @@ loginForm.addEventListener('submit', async (event) => {
   const username = formData.get('username');
   const password = formData.get('password');
 
-  const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/login', {
+  const response = await fetch(window.archpro.getApiPath('/login'), {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: {
