@@ -1,3 +1,11 @@
+window.archpro = window.archpro || {};
+
+const production = true;
+
+window.archpro.getApiPath = function(path) {
+  return production ? `http://arch.francecentral.cloudapp.azure.com:43704${path}` : `http://localhost:43704${path}`;
+}
+
 window.archpro.fetch = function (path, options) {
   const authToken = localStorage.getItem('authToken');
   const url = window.archpro.getApiPath(path);
