@@ -54,12 +54,6 @@ app.post('/login', async (req, res) => {
   res.status(200).send(token);
 });
 
-// protected endpoint
-app.get('/protected', authenticate, (req, res) => {
-  res.status(200).send('Protected content');
-});
-
-
 //end authentication
 
 // endpoint to add a new user to the database
