@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const pool = mysql.createPool({
     host: '10.1.0.4',
     user: 'appusr',
-    password: 'fa4Rqwaf9jsaA*#j9ds',
+    password: '*#j9ds',
     database: 'archappdb',
   waitForConnections: true,
   connectionLimit: 10,
