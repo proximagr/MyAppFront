@@ -1,6 +1,6 @@
 window.archpro = window.archpro || {};
 
-const production = false;
+const production = process.env.ENVIRONEMNT;
 
 window.archpro.getApiPath = function(path) {
   return production ? `http://arch.francecentral.cloudapp.azure.com:43704${path}` : `http://localhost:43704${path}`;
