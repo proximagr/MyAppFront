@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const listUsersButton = document.querySelector("#list-users-btn");
 
   listUsersButton.addEventListener("click", function () {
-    fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users", )
-      .then((response) => response.json())
+    window.archpro.fetch ("http://arch.francecentral.cloudapp.azure.com:43704/list-users", )
       .then((data) => {
         const table = document.querySelector("#users-table");
         table.innerHTML = "";

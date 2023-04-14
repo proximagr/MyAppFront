@@ -23,8 +23,7 @@ customerSelect.addEventListener("change", event => {
   projectSelect.innerHTML = "<option value=''>Select a project</option>";
   paymentTable.innerHTML = "";
   if (customerId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-      .then(response => response.json())
+    window.archpro.fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
       .then(projects => {
         for (const project of projects) {
           const option = document.createElement("option");
@@ -43,8 +42,7 @@ projectSelect.addEventListener("change", event => {
   paymentTable.innerHTML = "";
   paymentTotal.textContent = "";
   if (projectId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-      .then(response => response.json())
+    window.archpro.fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
       .then(payments => {
         const totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
         // Create table headers
@@ -75,8 +73,7 @@ projectSelect.addEventListener("change", event => {
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
         // Second fetch call
-        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
-          .then(response => response.json())
+        window.archpro.fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
           .then(projects => {
             const project = projects.find(project => project.id === projectId);
             if (project) {
