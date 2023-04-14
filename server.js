@@ -32,7 +32,6 @@ const users = [{ username: process.env.USER_USERNAME, password: process.env.USER
 const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
-  console.log("Token:", token);
   if (token && token.expiresAt > Date.now()) {
     return true;
   }
