@@ -16,9 +16,9 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-waitForConnections: true,
-connectionLimit: 10,
-queueLimit: 0,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 // middleware to parse JSON request bodies
@@ -31,11 +31,15 @@ const users = [{ username: process.env.USER_USERNAME, password: process.env.USER
 //function to check if user is authenticated
 const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
-  const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
-  if (token && token.expiresAt > Date.now()) {
-    return true;
+  try {
+    const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
+    if (token && token.expiresAt > Date.now()) {
+      return true;
+    }
   }
-    res.status(401).send('Unauthorized');
+  catch (error) { }
+
+  res.status(401).send('Unauthorized');
   return false;
 };
 
@@ -127,7 +131,7 @@ app.post('/add-project', async (req, res) => {
     <h2>Project added successfully!</h2>
     <button onclick="location.href='http://arch.francecentral.cloudapp.azure.com';">Go to home</button>
   `;
-  res.status(201).send(successMessage);
+    res.status(201).send(successMessage);
   } catch (error) {
     console.error(error);
     // return an error message
@@ -165,48 +169,48 @@ app.get('/list-payments', async (req, res) => {
 app.get('/list-customerprojects', async (req, res) => {
   if (!authenticate(req, res)) return;
   //use try catch to catch errors
-    try {
-      // get a connection from the pool
-      const connection = await pool.getConnection();
-      // retrieve all projects of the spesified customer from the database
-      const [rows] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [req.query.customer_id]);
-      // release the connection back to the pool
-      connection.release();
-      // return the list of projects
-      res.status(200).send(rows);
-    } catch (error) {
-      console.error(error);
-      // return an error message
-      res.status(500).send('Error retrieving projects');
-    }
-  });
+  try {
+    // get a connection from the pool
+    const connection = await pool.getConnection();
+    // retrieve all projects of the spesified customer from the database
+    const [rows] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [req.query.customer_id]);
+    // release the connection back to the pool
+    connection.release();
+    // return the list of projects
+    res.status(200).send(rows);
+  } catch (error) {
+    console.error(error);
+    // return an error message
+    res.status(500).send('Error retrieving projects');
+  }
+});
 
 app.get('/list-projectspayments', async (req, res) => {
   if (!authenticate(req, res)) return;
   //use try catch to catch errors
-    try {
-      // get a connection from the pool
-      const connection = await pool.getConnection();
-      // retrieve all projects of the spesified payment from the database
-      const [rows] = await connection.query('SELECT * FROM payments WHERE project_id = ?', [req.query.project_id]);
-      //convert date
-      const formattedRows = rows.map(row => ({
-        id: row.id,
-        payment: row.payment,
-        date: new Date(row.date).toLocaleDateString('el-GR'),
-        project_id: row.project_id
-      }));
-      //end convert date
-      // release the connection back to the pool
-      connection.release();
-      // return the list of projects
-      res.status(200).send(formattedRows);
-    } catch (error) {
-      console.error(error);
-      // return an error message
-      res.status(500).send('Error retrieving projects');
-    }
-  });
+  try {
+    // get a connection from the pool
+    const connection = await pool.getConnection();
+    // retrieve all projects of the spesified payment from the database
+    const [rows] = await connection.query('SELECT * FROM payments WHERE project_id = ?', [req.query.project_id]);
+    //convert date
+    const formattedRows = rows.map(row => ({
+      id: row.id,
+      payment: row.payment,
+      date: new Date(row.date).toLocaleDateString('el-GR'),
+      project_id: row.project_id
+    }));
+    //end convert date
+    // release the connection back to the pool
+    connection.release();
+    // return the list of projects
+    res.status(200).send(formattedRows);
+  } catch (error) {
+    console.error(error);
+    // return an error message
+    res.status(500).send('Error retrieving projects');
+  }
+});
 
 
 //endpoint to add payments
