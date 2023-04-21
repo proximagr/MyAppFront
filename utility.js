@@ -13,6 +13,7 @@ window.archpro.fetch = function (path, options) {
     if (response.ok) {
       return response.json();
     } else if (response.status === 401) {
+        localStorage.removeItem('authToken');
         window.location.href = 'login.html';
         return Promise.reject('Unauthorized');
     } else {
