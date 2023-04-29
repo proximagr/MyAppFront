@@ -2,12 +2,12 @@ const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
 async function listProjects() {
+  const projects = await
   window.archpro.fetch('/list-projects');
-
+  const customers = await
   window.archpro.fetch('/list-users');
-
+  const payments = await
   window.archpro.fetch('/list-payments');
-
   const summary = {};
 
   // Remove existing table rows
