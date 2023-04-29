@@ -75,7 +75,7 @@ function editProject(projectId) {
     return;
   }
   const updatedProject = { project: newProjectName };
-  window.archpro.fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
+  window.archpro.fetch(`/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ function editPrice(projectId) {
     return;
   }
   const updatedProject = { price: newPrice };
-  window.archpro.fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
+  window.archpro.fetch(`/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
