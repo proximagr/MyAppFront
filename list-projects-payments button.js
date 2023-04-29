@@ -2,11 +2,11 @@ const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
 async function listProjects() {
-  window.archpro.fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
+  window.archpro.fetch('/list-projects');
 
-  window.archpro.fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users');
+  window.archpro.fetch('/list-users');
 
-  window.archpro.fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments');
+  window.archpro.fetch('/list-payments');
 
   const summary = {};
 
