@@ -102,7 +102,7 @@ function showEditForm(poaymentform) {
     const date = dateInput.value;
     const payment = amountInput.value;
     const paymentId = poaymentform.id;
-    fetch(`/update-payments/${paymentId}`, {
+    window.archpro.fetch(`/update-payments/${paymentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
