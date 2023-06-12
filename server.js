@@ -1,9 +1,8 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
 const bodyParser = require("body-parser");
-const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
@@ -12,54 +11,21 @@ app.use(bodyParser.json());
 
 // create a MySQL pool
 const pool = mysql.createPool({
-  host: process.env.DB_SERVER,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+    host: '10.1.0.4',
+   user: 'appusr',
+    password: 'process.env.DB_PASSWORD',
+    database: 'archappdb',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
 
+
 // middleware to parse JSON request bodies
 app.use(express.json());
 
-//authentication
-//credentials
-const users = [{ username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD }];
-
-//function to check if user is authenticated
-const authenticate = (req, res) => {
-  const authHeader = req.headers['authorization'];
-  try {
-    const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
-    if (token && token.expiresAt > Date.now()) {
-      return true;
-    }
-  }
-  catch (error) { }
-
-  res.status(401).send('Unauthorized');
-  return false;
-};
-
-// endpoint to login
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const userExists = users.some(user => user.username === username && user.password === password);
-  if (!userExists) {
-    return res.status(401).send('Username or password incorrect');
-  }
-
-  const token = jwt.sign({ username: username, expiresAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }, process.env.AUTH_TOKEN);
-  res.status(200).send(token);
-});
-
-//end authentication
-
 // endpoint to add a new user to the database
 app.post('/add-user', async (req, res) => {
-  if (!authenticate(req, res)) return;
   const { name, email } = req.body;
   try {
     // get a connection from the pool
@@ -79,7 +45,6 @@ app.post('/add-user', async (req, res) => {
 
 // endpoint to get a list of all users in the database
 app.get('/list-users', async (req, res) => {
-  if (!authenticate(req, res)) return;
   try {
     // get a connection from the pool
     const connection = await pool.getConnection();
@@ -98,7 +63,6 @@ app.get('/list-users', async (req, res) => {
 
 // endpoint to get a list of all projects in the database
 app.get('/list-projects', async (req, res) => {
-  if (!authenticate(req, res)) return;
   try {
     // get a connection from the pool
     const connection = await pool.getConnection();
@@ -117,7 +81,6 @@ app.get('/list-projects', async (req, res) => {
 
 //endpoint to add project, price, customer_id to database
 app.post('/add-project', async (req, res) => {
-  if (!authenticate(req, res)) return;
   const { project, price, customer_id } = req.body;
   try {
     // get a connection from the pool
@@ -131,7 +94,7 @@ app.post('/add-project', async (req, res) => {
     <h2>Project added successfully!</h2>
     <button onclick="location.href='http://arch.francecentral.cloudapp.azure.com';">Go to home</button>
   `;
-    res.status(201).send(successMessage);
+  res.status(201).send(successMessage);
   } catch (error) {
     console.error(error);
     // return an error message
@@ -141,7 +104,6 @@ app.post('/add-project', async (req, res) => {
 
 // endpoint to get a list of all payments in the database
 app.get('/list-payments', async (req, res) => {
-  if (!authenticate(req, res)) return;
   try {
     // get a connection from the pool
     const connection = await pool.getConnection();
@@ -167,55 +129,52 @@ app.get('/list-payments', async (req, res) => {
 });
 
 app.get('/list-customerprojects', async (req, res) => {
-  if (!authenticate(req, res)) return;
   //use try catch to catch errors
-  try {
-    // get a connection from the pool
-    const connection = await pool.getConnection();
-    // retrieve all projects of the spesified customer from the database
-    const [rows] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [req.query.customer_id]);
-    // release the connection back to the pool
-    connection.release();
-    // return the list of projects
-    res.status(200).send(rows);
-  } catch (error) {
-    console.error(error);
-    // return an error message
-    res.status(500).send('Error retrieving projects');
-  }
-});
+    try {
+      // get a connection from the pool
+      const connection = await pool.getConnection();
+      // retrieve all projects of the spesified customer from the database
+      const [rows] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [req.query.customer_id]);
+      // release the connection back to the pool
+      connection.release();
+      // return the list of projects
+      res.status(200).send(rows);
+    } catch (error) {
+      console.error(error);
+      // return an error message
+      res.status(500).send('Error retrieving projects');
+    }
+  });
 
 app.get('/list-projectspayments', async (req, res) => {
-  if (!authenticate(req, res)) return;
   //use try catch to catch errors
-  try {
-    // get a connection from the pool
-    const connection = await pool.getConnection();
-    // retrieve all projects of the spesified payment from the database
-    const [rows] = await connection.query('SELECT * FROM payments WHERE project_id = ?', [req.query.project_id]);
-    //convert date
-    const formattedRows = rows.map(row => ({
-      id: row.id,
-      payment: row.payment,
-      date: new Date(row.date).toLocaleDateString('el-GR'),
-      project_id: row.project_id
-    }));
-    //end convert date
-    // release the connection back to the pool
-    connection.release();
-    // return the list of projects
-    res.status(200).send(formattedRows);
-  } catch (error) {
-    console.error(error);
-    // return an error message
-    res.status(500).send('Error retrieving projects');
-  }
-});
+    try {
+      // get a connection from the pool
+      const connection = await pool.getConnection();
+      // retrieve all projects of the spesified payment from the database
+      const [rows] = await connection.query('SELECT * FROM payments WHERE project_id = ?', [req.query.project_id]);
+      //convert date
+      const formattedRows = rows.map(row => ({
+        id: row.id,
+        payment: row.payment,
+        date: new Date(row.date).toLocaleDateString('el-GR'),
+        project_id: row.project_id
+      }));
+      //end convert date
+      // release the connection back to the pool
+      connection.release();
+      // return the list of projects
+      res.status(200).send(formattedRows);
+    } catch (error) {
+      console.error(error);
+      // return an error message
+      res.status(500).send('Error retrieving projects');
+    }
+  });
 
 
 //endpoint to add payments
 app.post('/addpayment', async (req, res) => {
-  if (!authenticate(req, res)) return;
   try {
     const { project_id, payment, date } = req.body;
     const connection = await pool.getConnection();
@@ -238,7 +197,6 @@ app.post('/addpayment', async (req, res) => {
 
 //endpoint to update the projects table on edit
 app.put('/update-projects/:id', async (req, res) => {
-  if (!authenticate(req, res)) return;
   const projectId = req.params.id;
   const { project, price } = req.body;
   try {
@@ -274,7 +232,6 @@ app.put('/update-projects/:id', async (req, res) => {
 
 //edit payments
 app.put('/update-payments/:id', async (req, res) => {
-  if (!authenticate(req, res)) return;
   const paymentId = req.params.id;
   const { payment, date } = req.body;
   try {
@@ -313,7 +270,6 @@ app.put('/update-payments/:id', async (req, res) => {
 
 //delete payment
 app.delete('/delete-payment/:id', async (req, res) => {
-  if (!authenticate(req, res)) return;
   try {
     const id = req.params.id;
     // Connect to the database

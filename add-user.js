@@ -6,7 +6,7 @@ form.addEventListener('submit', async (event) => {
   const name = document.getElementById('name').value;
 
   try {
-    const response = await window.archpro.fetch('/add-user', {
+    const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/add-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

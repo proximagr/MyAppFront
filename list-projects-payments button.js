@@ -2,12 +2,15 @@ const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
 async function listProjects() {
-  const projects = await
-  window.archpro.fetch('/list-projects');
-  const customers = await
-  window.archpro.fetch('/list-users');
-  const payments = await
-  window.archpro.fetch('/list-payments');
+  const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-projects');
+  const projects = await response.json();
+
+  const customerResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users');
+  const customers = await customerResponse.json();
+
+  const paymentsResponse = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-payments');
+  const payments = await paymentsResponse.json();
+
   const summary = {};
 
   // Remove existing table rows
@@ -75,7 +78,7 @@ function editProject(projectId) {
     return;
   }
   const updatedProject = { project: newProjectName };
-  window.archpro.fetch(`/update-projects/${projectId}`, {
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -98,7 +101,7 @@ function editPrice(projectId) {
     return;
   }
   const updatedProject = { price: newPrice };
-  window.archpro.fetch(`/update-projects/${projectId}`, {
+  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
