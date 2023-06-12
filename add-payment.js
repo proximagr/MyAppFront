@@ -4,7 +4,7 @@ async function populateCustomerDropdown() {
       const response = await window.archpro.fetch("/list-users");
       const customers = response;
   
-      const customerDropdown = document.getElementById("customer");
+      const customerDropdown = document.getElementById("customer_id");
       customerDropdown.innerHTML = "";
   
       for (let customer of customers) {
@@ -25,13 +25,13 @@ async function populateCustomerDropdown() {
   // Populate the project dropdown list for the selected customer
   async function populateProjectDropdown() {
     try {
-      const customerId = document.getElementById("customer").value;
+      const customerId = document.getElementById("customer_id").value;
       const response = await window.archpro.fetch(
         `/list-customerprojects?customer_id=${customerId}`
       );
       const projects = response;
   
-      const projectDropdown = document.getElementById("project");
+      const projectDropdown = document.getElementById("project_id");
       projectDropdown.innerHTML = "";
   
       for (let project of projects) {
@@ -49,7 +49,7 @@ async function populateCustomerDropdown() {
   // Add a payment to the database
   async function addPayment() {
     try {
-      const projectId = document.getElementById("project").value;
+      const projectId = document.getElementById("project_id").value;
       const paymentAmount = document.getElementById("payment").value;
       const paymentDate = document.getElementById("date").value;
   
