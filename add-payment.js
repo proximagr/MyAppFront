@@ -2,9 +2,8 @@
 async function populateCustomerDropdown() {
   try {
     const response = await window.archpro.fetch("/list-users");
-    console.log(response); // Log the response for debugging
-    
-    const customers = await response.json();
+
+    const customers = response; // Use the response directly
 
     const customerDropdown = document.getElementById("customer");
     customerDropdown.innerHTML = "";
@@ -23,6 +22,7 @@ async function populateCustomerDropdown() {
     // Handle error accordingly
   }
 }
+
 
 // Populate the project dropdown list for the selected customer
 async function populateProjectDropdown() {
