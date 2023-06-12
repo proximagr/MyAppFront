@@ -6,8 +6,7 @@ const paymentTable = document.getElementById("payment-table");
 const paymentTableHeader = paymentTable.createTHead();
 
 // Populate the customer dropdown
-fetch("http://arch.francecentral.cloudapp.azure.com:43704/list-users")
-  .then(response => response.json())
+window.archpro.fetch("/list-users")
   .then(customers => {
     for (const customer of customers) {
       const option = document.createElement("option");
@@ -24,8 +23,7 @@ customerSelect.addEventListener("change", event => {
   projectSelect.innerHTML = "<option value=''>Select a project</option>";
   paymentTable.innerHTML = "";
   if (customerId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`)
-      .then(response => response.json())
+    window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`)
       .then(projects => {
         for (const project of projects) {
           const option = document.createElement("option");
@@ -44,8 +42,7 @@ projectSelect.addEventListener("change", event => {
   paymentTable.innerHTML = "";
   paymentTotal.textContent = "";
   if (projectId) {
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projectspayments?project_id=${projectId}`)
-      .then(response => response.json())
+    window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`)
       .then(payments => {
         const totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
         // Create table headers
@@ -76,8 +73,7 @@ projectSelect.addEventListener("change", event => {
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
         // Second fetch call
-        fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-projects`)
-          .then(response => response.json())
+        window.archpro.fetch(`/list-projects`)
           .then(projects => {
             const project = projects.find(project => project.id === projectId);
             if (project) {
@@ -106,7 +102,7 @@ function showEditForm(poaymentform) {
     const date = dateInput.value;
     const payment = amountInput.value;
     const paymentId = poaymentform.id;
-    fetch(`http://arch.francecentral.cloudapp.azure.com:43704/update-payments/${paymentId}`, {
+    window.archpro.fetch(`/update-payments/${paymentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -145,7 +141,7 @@ function showEditForm(poaymentform) {
 
 //delete payment function
 function deletePayment(paymentId, rowIndex) {
-  fetch(`http://arch.francecentral.cloudapp.azure.com:43704/delete-payment/${paymentId}`, {
+  window.archpro.fetch(`/delete-payment/${paymentId}`, {
     method: "DELETE"
   })
     .then(response => response.json())

@@ -27,8 +27,7 @@
     <script>
       // Populate the customer dropdown list
       async function populateCustomerDropdown() {
-        const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/list-users');
-        const customers = await response.json();
+        window.archpro.fetch('/list-users');
         const customerDropdown = document.getElementById('customer');
         customerDropdown.innerHTML = '';
         for (let customer of customers) {
@@ -45,8 +44,7 @@
       // Populate the project dropdown list for the selected customer
       async function populateProjectDropdown() {
         const customerId = document.getElementById('customer').value;
-        const response = await fetch(`http://arch.francecentral.cloudapp.azure.com:43704/list-customerprojects?customer_id=${customerId}`);
-        const projects = await response.json();
+        window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`);
         const projectDropdown = document.getElementById('project');
         projectDropdown.innerHTML = '';
         for (let project of projects) {
@@ -62,7 +60,7 @@
         const projectId = document.getElementById('project').value;
         const paymentAmount = document.getElementById('payment').value;
         const paymentDate = document.getElementById('date').value;
-        const response = await fetch('http://arch.francecentral.cloudapp.azure.com:43704/addpayment', {
+        window.archpro.fetch('/addpayment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
