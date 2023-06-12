@@ -212,13 +212,11 @@ app.get('/list-projectspayments', async (req, res) => {
   }
 });
 
-
-//endpoint to add payments
 app.post('/addpayment', async (req, res) => {
   if (!authenticate(req, res)) return;
   try {
+    console.log('Received add payment request:', req.body); // Log the received request body
     const { project_id, payment, date } = req.body;
-    console.log('Received payment data:', { project_id, payment, date }); // Log the received data
     const connection = await pool.getConnection();
     const formattedDate = new Date(date).toISOString().slice(0, 10);
     const result = await connection.query('INSERT INTO payments (project_id, payment, date) VALUES (?, ?, ?)', [project_id, payment, formattedDate]);
@@ -235,7 +233,6 @@ app.post('/addpayment', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-// end endpoint to add payments
 
 //endpoint to update the projects table on edit
 app.put('/update-projects/:id', async (req, res) => {
