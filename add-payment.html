@@ -27,7 +27,7 @@
     <script>
       // Populate the customer dropdown list
       async function populateCustomerDropdown() {
-        window.archpro.fetch('/list-users');
+        window.archpro.fetch ("/list-users", );
         const customerDropdown = document.getElementById('customer');
         customerDropdown.innerHTML = '';
         for (let customer of customers) {
