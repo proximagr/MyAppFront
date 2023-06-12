@@ -2,7 +2,7 @@
 async function populateCustomerDropdown() {
     try {
       const response = await window.archpro.fetch("/list-users");
-      const customers = await response.json();
+      const customers = response;
   
       const customerDropdown = document.getElementById("customer");
       customerDropdown.innerHTML = "";
@@ -29,7 +29,7 @@ async function populateCustomerDropdown() {
       const response = await window.archpro.fetch(
         `/list-customerprojects?customer_id=${customerId}`
       );
-      const projects = await response.json();
+      const projects = response;
   
       const projectDropdown = document.getElementById("project");
       projectDropdown.innerHTML = "";
@@ -59,13 +59,13 @@ async function populateCustomerDropdown() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          project: projectId,
+          project_id: projectId,
           payment: paymentAmount,
           date: paymentDate,
         }),
       });
   
-      const data = await response.json();
+      const data = response;
       alert("Payment added!");
       console.log(data);
   
