@@ -60,7 +60,7 @@ async function addPayment() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        projectId: projectId, // Change project_id to projectId
+        project_id: projectId, // Change project_id to projectId
         payment: paymentAmount,
         date: paymentDate,
       }),
