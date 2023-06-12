@@ -60,13 +60,13 @@ async function addPayment() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        project_id: projectId, // Change project_id to projectId
+        projectId: projectId, // Use the correct property name
         payment: paymentAmount,
         date: paymentDate,
       }),
     });
 
-    const data = response;
+    const data = await response.json();
     alert("Payment added!");
     console.log(data);
 
@@ -83,6 +83,7 @@ async function addPayment() {
     // Handle error accordingly
   }
 }
+
 
 
 // Call the populateCustomerDropdown function to initialize the page
