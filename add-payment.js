@@ -60,7 +60,7 @@ async function addPayment() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        projectId: projectId, // Use the correct property name
+        project_id: projectId, // Use the correct property name
         payment: paymentAmount,
         date: paymentDate,
       }),
@@ -83,6 +83,7 @@ async function addPayment() {
     // Handle error accordingly
   }
 }
+
 
 
 
