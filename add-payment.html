@@ -31,11 +31,9 @@
       async function populateCustomerDropdown() {
         try {
           const response = await window.archpro.fetch("/list-users");
-          console.log("After fetch");
-          if (!response.ok) {
-            throw new Error("Failed to fetch customer data");
-          }
+          console.log("Response status:", response.status);
           const customers = await response.json();
+          console.log("Customers:", customers);
 
           const customerDropdown = document.getElementById("customer");
           customerDropdown.innerHTML = "";
