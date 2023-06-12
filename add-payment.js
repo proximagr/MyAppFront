@@ -3,7 +3,7 @@ async function populateCustomerDropdown() {
   try {
     const response = await window.archpro.fetch("/list-users");
 
-    const customers = response; // Use the response directly
+    const customers = response;
 
     const customerDropdown = document.getElementById("customer");
     customerDropdown.innerHTML = "";
@@ -23,7 +23,6 @@ async function populateCustomerDropdown() {
   }
 }
 
-
 // Populate the project dropdown list for the selected customer
 async function populateProjectDropdown() {
   try {
@@ -38,8 +37,8 @@ async function populateProjectDropdown() {
 
     for (let project of projects) {
       const option = document.createElement("option");
-      option.value = project.project_id;
-      option.text = project.project_name;
+      option.value = project.id;
+      option.text = project.project;
       projectDropdown.appendChild(option);
     }
   } catch (error) {
@@ -71,9 +70,12 @@ async function addPayment() {
     alert("Payment added!");
     console.log(data);
 
-    // Clear fields and repopulate customer dropdown
-    document.getElementById("payment").value = "";
-    document.getElementById("date").value = "";
+    const customerDropdown = document.getElementById("customer");
+    customerDropdown.removeEventListener("change", populateProjectDropdown);
+    customerDropdown.value = "";
+
+    const projectDropdown = document.getElementById("project");
+    projectDropdown.innerHTML = "";
 
     populateCustomerDropdown();
   } catch (error) {
