@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Add Payment</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>Add Payment</h1>
@@ -24,80 +24,111 @@
       <button type="button" id="addPayment">Add Payment</button>
     </form>
 
+    <script src="utility.js"></script>
+
     <script>
       // Populate the customer dropdown list
       async function populateCustomerDropdown() {
-        window.archpro.fetch ("/list-users", );
-        const customerDropdown = document.getElementById('customer');
-        customerDropdown.innerHTML = '';
-        for (let customer of customers) {
-          const option = document.createElement('option');
-          option.value = customer.id;
-          option.text = customer.name;
-          customerDropdown.appendChild(option);
+        try {
+          const response = await window.archpro.fetch("/list-users");
+          const customers = await response.json();
+
+          const customerDropdown = document.getElementById("customer");
+          customerDropdown.innerHTML = "";
+
+          for (let customer of customers) {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.name;
+            customerDropdown.appendChild(option);
+          }
+
+          customerDropdown.addEventListener("change", populateProjectDropdown);
+          customerDropdown.dispatchEvent(new Event("change"));
+        } catch (error) {
+          console.error(error);
+          // Handle error accordingly
         }
-        // Populate the project dropdown list when a customer is selected
-        customerDropdown.addEventListener('change', populateProjectDropdown);
-        customerDropdown.dispatchEvent(new Event('change'));
       }
 
       // Populate the project dropdown list for the selected customer
       async function populateProjectDropdown() {
-        const customerId = document.getElementById('customer').value;
-        window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`);
-        const projectDropdown = document.getElementById('project');
-        projectDropdown.innerHTML = '';
-        for (let project of projects) {
-          const option = document.createElement('option');
-          option.value = project.id;
-          option.text = project.project;
-          projectDropdown.appendChild(option);
+        try {
+          const customerId = document.getElementById("customer").value;
+          const response = await window.archpro.fetch(
+            `/list-customerprojects?customer_id=${customerId}`
+          );
+          const projects = await response.json();
+
+          const projectDropdown = document.getElementById("project");
+          projectDropdown.innerHTML = "";
+
+          for (let project of projects) {
+            const option = document.createElement("option");
+            option.value = project.id;
+            option.text = project.project;
+            projectDropdown.appendChild(option);
+          }
+        } catch (error) {
+          console.error(error);
+          // Handle error accordingly
         }
       }
 
       // Add a payment to the database
       async function addPayment() {
-        const projectId = document.getElementById('project').value;
-        const paymentAmount = document.getElementById('payment').value;
-        const paymentDate = document.getElementById('date').value;
-        window.archpro.fetch('/addpayment', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            project_id: projectId,
-            payment: paymentAmount,
-            date: paymentDate
-          })
-        });
-        const data = await response.json();
-        alert('Payment added!');
-        console.log(data);
-        // Clear the dropdown menus and repopulate the customer dropdown
-        const customerDropdown = document.getElementById('customer');
-        customerDropdown.removeEventListener('change', populateProjectDropdown);
-        customerDropdown.value = '';
-        const projectDropdown = document.getElementById('project');
-        projectDropdown.innerHTML = '';
-        populateCustomerDropdown();
+        try {
+          const projectId = document.getElementById("project").value;
+          const paymentAmount = document.getElementById("payment").value;
+          const paymentDate = document.getElementById("date").value;
+
+          const response = await window.archpro.fetch("/addpayment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              project_id: projectId,
+              payment: paymentAmount,
+              date: paymentDate,
+            }),
+          });
+
+          const data = await response.json();
+          alert("Payment added!");
+          console.log(data);
+
+          const customerDropdown = document.getElementById("customer");
+          customerDropdown.removeEventListener(
+            "change",
+            populateProjectDropdown
+          );
+          customerDropdown.value = "";
+
+          const projectDropdown = document.getElementById("project");
+          projectDropdown.innerHTML = "";
+
+          populateCustomerDropdown();
+        } catch (error) {
+          console.error(error);
+          // Handle error accordingly
+        }
       }
 
       // Call the populateCustomerDropdown function to initialize the page
       populateCustomerDropdown();
 
       // Attach an event listener to the Add Payment button
-      const addPaymentButton = document.getElementById('addPayment');
-      addPaymentButton.addEventListener('click', addPayment);
+      const addPaymentButton = document.getElementById("addPayment");
+      addPaymentButton.addEventListener("click", addPayment);
     </script>
 
-<h1>Back home</h1>
-<button onclick="navigateToAddProject()">Back to Home</button>
-<script>
-function navigateToAddProject() {
-  window.location.href = 'http://arch.francecentral.cloudapp.azure.com';
-}
-</script>
-
+    <h1>Back home</h1>
+    <button onclick="navigateToAddProject()">Back to Home</button>
+    <script>
+      function navigateToAddProject() {
+        window.location.href = "http://arch.francecentral.cloudapp.azure.com";
+      }
+    </script>
   </body>
 </html>
