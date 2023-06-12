@@ -218,6 +218,7 @@ app.post('/addpayment', async (req, res) => {
   if (!authenticate(req, res)) return;
   try {
     const { project_id, payment, date } = req.body;
+    console.log('Received payment data:', { project_id, payment, date }); // Log the received data
     const connection = await pool.getConnection();
     const formattedDate = new Date(date).toISOString().slice(0, 10);
     const result = await connection.query('INSERT INTO payments (project_id, payment, date) VALUES (?, ?, ?)', [project_id, payment, formattedDate]);
