@@ -339,8 +339,6 @@ app.delete('/delete-payment/:id', async (req, res) => {
 
 //end delete payment
 
-// Example log message
-logger.info('Logging example message');
 
 // start the server
 app.listen(43704, '0.0.0.0', () => {
