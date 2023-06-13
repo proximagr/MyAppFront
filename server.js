@@ -291,25 +291,32 @@ app.put('/update-projects/:id', async (req, res) => {
 });
 //end update projects
 
-//update payments
+// Update payments
 app.put('/update-payments/:paymentId', async (req, res) => {
   if (!authenticate(req, res)) return;
-  //use try catch to catch errors
+  
   try {
     const { payment, date } = req.body;
     const paymentId = req.params.paymentId;
 
-    // get a connection from the pool
+    // Get a connection from the pool
     const connection = await pool.getConnection();
     
-    // update the payment in the database
+    // Update the payment in the database
     const query = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
     const [result] = await connection.query(query, [payment, date, paymentId]);
     
-    // release the connection back to the pool
+    // Release the connection back to the pool
     connection.release();
     
-    // return the updated payment
+    // Check if the update was successful
+    if (result.affectedRows === 0) {
+      // If no rows were affected, the payment with the specified ID was not found
+      return res.status(404).json({ error: 'Payment not found', status: 404 });
+    }
+    
+    // Return the updated payment
+    const updatedPayment = { id: paymentId, payment, date };
     res.status(200).json(updatedPayment);
   } catch (error) {
     console.error(error);
