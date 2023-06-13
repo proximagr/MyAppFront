@@ -1,71 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <title>Payment Management</title>
+  <link rel="stylesheet" type="text/css" href="projects-edit-styles.css">
 </head>
-  <body>
-
-    <h1>Arch Projects</h1>
-    <label for="customer-select">Select a customer:</label>
-    <select id="customer-select"><option value="">Select a Customer</option></select>
-    <br><br>
-    <label for="project-select">Select a project:</label>
-    <select id="project-select"><option value="">Select a Project</option></select>
-    <br><br>
-    <table id="payment-table">
+<body>
+  <h1>Payment Management System</h1>
+  <div class="container">
+    <label for="customerSelect">Select Customer:</label>
+    <select id="customerSelect"></select>
+    <label for="projectSelect">Select Project:</label>
+    <select id="projectSelect"></select>
+    <table id="paymentTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="paymentTableBody"></tbody>
     </table>
-    <div id="payment-total" style="font-weight: bold;"></div>
-    <div id="project-price" style="font-weight: bold;"></div>
-
-  <p></p>
-  <button onclick="navigateToAddPayment()">Add Payment</button>
-  <script>
-  function navigateToAddPayment() {
-    window.location.href = 'add-payment.html';
-  }
-  </script>
-
-  <p></p>
-  <button onclick="navigateToAddProject()">Add Project</button>
-  <script>
-  function navigateToAddProject() {
-    window.location.href = 'add-project.html';
-  }
-  </script>
-
-  <p></p>
-  <button id="show-form-btn">Add Customer</button>
-  <form id="user-form" style="display:none;">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    <br>
-    <button type="submit">Submit</button>
-  </form>
-
-  <script>
-    const showFormBtn = document.getElementById('show-form-btn');
-    const userForm = document.getElementById('user-form');
-    showFormBtn.addEventListener('click', () => {
-      userForm.style.display = 'block';
-    });
-  </script>
-
-  <p></p>
-  <button id="list-users-btn">List Users</button>
-  <button id="close-table-btn">Close Users Table</button>
-  <table id="users-table"></table>
-
-<p></p>
-<table id="project-table">
-</table>
-<button id="list-projects-btn">List All Projects</button>
-<button id="close-projects-btn">Close Projects</button>
-
-  <script src="utility.js"></script>
-  <script src="projectspayments.js"></script>
-  <script src="add-user.js"></script>
-  <script src="list-users.js"></script>
-  <script src="list-projects-payments button.js"></script>
+  </div>
+  <script src="projects-edit.js"></script>
 </body>
 </html>
