@@ -163,9 +163,8 @@ function deletePayment(paymentId, rowIndex) {
   window.archpro.fetch(`/delete-payment/${paymentId}`, {
     method: "DELETE"
   })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === "Payment deleted successfully") {
+    .then(response => {
+      if (response.ok) {
         // Remove the payment row from the table
         const row = paymentTable.rows[rowIndex];
         row.remove();
@@ -182,3 +181,4 @@ function deletePayment(paymentId, rowIndex) {
     });
 }
 //end delete payment function
+
