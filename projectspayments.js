@@ -37,15 +37,13 @@ customerSelect.addEventListener("change", event => {
 });
 
 // Populate the payment table and project price when a project is selected
-// Populate the payment table and project price when a project is selected
 projectSelect.addEventListener("change", event => {
   const projectId = event.target.value;
   paymentTable.innerHTML = "";
   paymentTotal.textContent = "";
   if (projectId) {
     window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`)
-      .then(data => {
-        const { payments, projectPrice } = data;
+      .then(payments => {
         const totalPayment = payments.reduce((sum, payment) => sum + payment.payment, 0);
         // Create table headers
         const headerRow = paymentTable.insertRow();
@@ -74,12 +72,22 @@ projectSelect.addEventListener("change", event => {
           deleteCell.appendChild(deleteButton); // Append the "Delete" button to the deleteCell
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
-        projectPriceEl.textContent = `Project: ${projectPrice}`;
+        // Second fetch call
+          window.archpro.fetch(`/list-projects`)
+          .then(projects => {
+            const project = projects.find(project => project.id === projectId);
+            if (project) {
+              const projectPrice = project.price;
+              projectPriceEl.textContent = `Project: ${projectPrice}`;
+            } else {
+              console.error(`Project with ID ${projectId} not found`);
+            }
+          })
+          .catch(error => console.error(error));
       }) 
       .catch(error => console.error(error));
-  }
+     }
 });
-
 
 // Function to display the edit form
 function showEditForm(paymentForm) {
