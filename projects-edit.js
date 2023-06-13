@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const paymentTableBody = document.getElementById('paymentTableBody');
   
     // Fetch the list of customers from the server
-    fetch('/list-users')
+    window.archpro.fetch('/list-users')
       .then(response => response.json())
       .then(customers => {
         // Populate the customer select dropdown
@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const customerId = customerSelect.value;
   
       // Fetch the list of projects for the selected customer from the server
-      fetch(`/list-customerprojects?customer_id=${customerId}`)
+      window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`)
         .then(response => response.json())
         .then(projects => {
           // Clear project select dropdown options
@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const projectId = projectSelect.value;
   
       // Fetch the list of payments for the selected project from the server
-      fetch(`/list-projectspayments?project_id=${projectId}`)
+      window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`)
         .then(response => response.json())
         .then(payments => {
           // Clear payment table body
@@ -95,7 +95,7 @@ window.addEventListener('DOMContentLoaded', () => {
           };
   
           // Send the updated payment data to the server
-          fetch(`/update-payments/${paymentId}`, {
+          window.archpro.fetch(`/update-payments/${paymentId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function deletePayment(paymentId) {
       if (confirm('Are you sure you want to delete this payment?')) {
         // Send the payment ID to the server for deletion
-        fetch(`/delete-payment/${paymentId}`, {
+        window.archpro.fetch(`/delete-payment/${paymentId}`, {
           method: 'DELETE'
         })
           .then(response => {
