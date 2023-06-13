@@ -295,7 +295,7 @@ app.put('/update-projects/:id', async (req, res) => {
 // Update payments
 app.put('/update-payments/:paymentId', async (req, res) => {
   if (!authenticate(req, res)) return;
-  
+
   try {
     const { payment, date } = req.body;
     const paymentId = req.params.paymentId;
@@ -309,11 +309,16 @@ app.put('/update-payments/:paymentId', async (req, res) => {
       throw new Error('Payment with the specified ID not found');
     }
 
-    res.status(200).json({ message: 'Payment updated successfully' });
+    // Fetch the updated payment from the database
+    const selectQuery = 'SELECT * FROM payments WHERE id = ?';
+    const [paymentResult] = await connection.query(selectQuery, [paymentId]);
+    const updatedPayment = paymentResult[0];
+
+    res.status(200).json(updatedPayment);
   } catch (error) {
     console.error('Error updating payment:', error);
     res.status(500).json({ error: 'Error updating payment', status: 500 });
-  }  
+  }
 });
 
 //end update payments
