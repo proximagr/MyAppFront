@@ -292,33 +292,55 @@ app.put('/update-projects/:id', async (req, res) => {
 //end update projects
 
 //edit payments
-
-
-//end edit payments
-
-// Update a payment
-// Update a payment
-app.put('/update-payments/:paymentId', async (req, res) => {
+app.put('/update-payments/:id', async (req, res) => {
   if (!authenticate(req, res)) return;
-  const paymentId = req.params.paymentId;
-  const { amount, date } = req.body;
+  const paymentId = req.params.id;
+  const { payment, date } = req.body;
+
+  // Validate request body
+  if (!payment && !date) {
+    return res.status(400).json({ error: 'Bad request: missing payment or date parameter.' });
+  }
 
   try {
-    // Update the payment in the database using the provided paymentId, amount, and date
     const connection = await pool.getConnection();
-    await connection.query('UPDATE payments SET amount = ?, date = ? WHERE id = ?', [amount, date, paymentId]);
+    let query = 'UPDATE payments SET ';
+    const values = [];
+
+    if (payment) {
+      query += 'payment = ?, ';
+      values.push(payment);
+    }
+    if (date) {
+      query += 'date = ?, ';
+      values.push(date);
+    }
+
+    if (values.length === 0) {
+      return res.status(400).json({ error: 'Bad request: missing payment or date parameter.' });
+    }
+
+    query = query.slice(0, -2); // remove last comma and space
+    query += ' WHERE id = ?';
+    values.push(paymentId);
+    const [result] = await connection.query(query, values);
     connection.release();
 
-    // Return a success message
-    res.status(200).send('Payment updated successfully');
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: `Payment with ID ${paymentId} not found.` });
+    }
+
+    // Construct and return the updated payment object
+    const updatedPayment = { id: paymentId, payment, date };
+    return res.json(updatedPayment);
   } catch (error) {
     console.error(error);
-    // Return an error message
-    res.status(500).send('Error updating payment');
+    res.status(500).json({ error: 'Internal server error.' });
   }
 });
 
-//end update payment
+//end edit payments
+
 
 //delete payment
 app.delete('/delete-payment/:id', async (req, res) => {
