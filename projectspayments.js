@@ -90,6 +90,7 @@ projectSelect.addEventListener("change", event => {
 });
 
 // Function to display the edit form
+// Function to display the edit form
 function showEditForm(paymentForm) {
   const row = paymentTable.rows[paymentForm.rowIndex];
   const editCell = row.cells[row.cells.length - 2]; // Find the edit cell in the row
@@ -126,30 +127,21 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-
     .then(response => {
-      console.log("Response:", response);
-    
       if (response.status === 200) {
         return response.json();
       } else {
         throw new Error("Error updating payment. HTTP status: " + response.status);
       }
     })
-    .then(data => {
-      console.log("Response data:", data);
-    
+    .then(updatedPayment => {
       // Handle the updated payment
-      console.log("Payment updated successfully");
-    
-      // Update the payment in the table
-      paymentForm.payment = data.payment;
-      paymentForm.date = data.date;
-      row.cells[2].textContent = data.payment;
-      row.cells[3].textContent = data.date;
-    
-      // Clear the edit form
-      editCell.innerHTML = '';
+      console.log("Updated Payment:", updatedPayment);
+      // Update the table with the updated payment data
+      paymentForm.payment = updatedPayment.payment;
+      paymentForm.date = updatedPayment.date;
+      row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
+      row.cells[row.cells.length - 4].textContent = updatedPayment.date;
     })
     .catch(error => {
       console.error("Error updating payment:", error);
@@ -157,10 +149,6 @@ function showEditForm(paymentForm) {
       console.log("Payment:", payment);
       console.log("Date:", date);
       console.log("Error response:", error.message);
-    
-      // Display the error message in the table row
-      const errorCell = row.cells[row.cells.length - 1];
-      errorCell.textContent = "Error updating payment";
     });    
   });
 
@@ -177,6 +165,8 @@ function showEditForm(paymentForm) {
   form.appendChild(amountInput);
   form.appendChild(submitButton);
 }
+//end function to display the edit form
+
 // End show edit form function
 
 
