@@ -164,7 +164,13 @@ function deletePayment(paymentId, rowIndex) {
     .fetch(`/delete-payment/${paymentId}`, {
       method: "DELETE",
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Error deleting payment");
+      }
+    })
     .then((data) => {
       if (data.message === "Payment deleted successfully") {
         // Remove the payment row from the table
@@ -183,4 +189,3 @@ function deletePayment(paymentId, rowIndex) {
     });
 }
 // End delete payment function
-
