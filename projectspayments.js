@@ -134,15 +134,12 @@ function showEditForm(paymentForm) {
         throw new Error("Error updating payment. HTTP status: " + response.status);
       }
     })
-    .then(updatedPayment => {
-      // Handle the updated payment
-      console.log("Updated Payment:", updatedPayment);
+    .then(() => {
       // Update the table with the updated payment data
-      paymentForm.payment = updatedPayment.payment;
-      paymentForm.date = updatedPayment.date;
-      row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
-      row.cells[row.cells.length - 4].textContent = updatedPayment.date;
+      row.cells[row.cells.length - 3].textContent = payment;
+      row.cells[row.cells.length - 4].textContent = date;
     })
+    
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
