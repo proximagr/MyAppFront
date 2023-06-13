@@ -132,18 +132,24 @@ function showEditForm(paymentForm) {
       }
       return response.json();
     })
-    
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Error updating payment. HTTP status: " + response.status);
+      }
+    })
     .then(data => {
       // Handle the updated payment
       console.log("Payment updated successfully");
       console.log("Updated payment data:", data);
-
+    
       // Update the payment in the table
       paymentForm.payment = data.payment;
       paymentForm.date = data.date;
       row.cells[2].textContent = data.payment;
       row.cells[3].textContent = data.date;
-
+    
       // Clear the edit form
       editCell.innerHTML = '';
     })
@@ -153,7 +159,7 @@ function showEditForm(paymentForm) {
       console.log("Payment:", payment);
       console.log("Date:", date);
       console.log("Error response:", error.message);
-      
+    
       // Display the error message in the table row
       const errorCell = row.cells[row.cells.length - 1];
       errorCell.textContent = "Error updating payment";
