@@ -47,23 +47,20 @@ async function populateProjectDropdown() {
   }
 }
 
-// Add a payment to the database
 async function addPayment() {
   try {
     const projectId = document.getElementById("project").value;
     const paymentAmount = document.getElementById("payment").value;
     const paymentDate = document.getElementById("date").value;
-
-    const authToken = localStorage.getItem('authToken');
-    const apiUrl = production ? 'http://arch.francecentral.cloudapp.azure.com:43704' : 'http://localhost:43704';
-    const url = `${apiUrl}/addpayment`;
-
+    const authToken = localStorage.getItem("authToken");
+    
+    const url = window.archpro.getApiPath("/addpayment");
     const body = {
       project_id: projectId,
       payment: paymentAmount,
       date: paymentDate
     };
-
+    
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -74,18 +71,27 @@ async function addPayment() {
     });
 
     if (response.ok) {
-      const responseData = await response.json();
-      console.log('Payment added successfully:', responseData);
-      // Perform any additional actions or display success message
-    } else if (response.status === 401) {
-      localStorage.removeItem('authToken');
-      window.location.href = 'login.html';
-      console.error('Unauthorized');
+      const data = await response.json();
+      alert("Payment added!");
+      console.log(data);
+
+      const customerDropdown = document.getElementById("customer");
+      customerDropdown.removeEventListener(
+        "change",
+        populateProjectDropdown
+      );
+      customerDropdown.value = "";
+
+      const projectDropdown = document.getElementById("project");
+      projectDropdown.innerHTML = "";
+
+      populateCustomerDropdown();
     } else {
-      console.error('Failed to add payment:', response);
+      throw new Error('Failed to add payment');
     }
   } catch (error) {
-    console.error('An error occurred while adding payment:', error);
+    console.error(error);
+    // Handle error accordingly
   }
 }
 
