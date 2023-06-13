@@ -81,36 +81,38 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   
     // Function to edit a payment
-    function editPayment(paymentId) {
-      const newAmount = prompt('Enter the new payment amount:');
-      if (newAmount !== null) {
-        const newDate = prompt('Enter the new payment date (YYYY-MM-DD):');
-        if (newDate !== null) {
-          const data = {
-            amount: newAmount,
-            date: newDate
-          };
+// Function to edit a payment
+function editPayment(paymentId) {
+    const newAmount = prompt('Enter the new payment amount:');
+    if (newAmount !== null) {
+      const newDate = prompt('Enter the new payment date (YYYY-MM-DD):');
+      if (newDate !== null) {
+        const data = {
+          amount: newAmount,
+          date: newDate
+        };
   
-          // Send the updated payment data to the server
-          window.archpro.fetch(`/update-payments/${paymentId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        // Send the updated payment data to the server
+        window.archpro.fetch(`/update-payment/${paymentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => {
+            if (response.ok) {
+              // Payment updated successfully, refresh the payment table
+              projectSelect.dispatchEvent(new Event('change'));
+            } else {
+              console.error('Failed to update payment');
+            }
           })
-            .then(response => {
-              if (response.ok) {
-                // Payment updated successfully, refresh the payment table
-                projectSelect.dispatchEvent(new Event('change'));
-              } else {
-                console.error('Failed to update payment');
-              }
-            })
-            .catch(error => console.error(error));
-        }
+          .catch(error => console.error(error));
       }
     }
+  }
+  
   
     // Function to delete a payment
     function deletePayment(paymentId) {
