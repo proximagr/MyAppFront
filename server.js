@@ -295,24 +295,24 @@ app.put('/update-projects/:id', async (req, res) => {
 // Update payments
 app.put('/update-payments/:paymentId', async (req, res) => {
   if (!authenticate(req, res)) return;
-
+  
   try {
     const { payment, date } = req.body;
     const paymentId = req.params.paymentId;
 
     const connection = await pool.getConnection();
-    const query = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
-    const [result] = await connection.query(query, [payment, date, paymentId]);
-    connection.release();
+    const updateQuery = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
+    const [updateResult] = await connection.query(updateQuery, [payment, date, paymentId]);
 
-    if (result.affectedRows === 0) {
+    if (updateResult.affectedRows === 0) {
       throw new Error('Payment with the specified ID not found');
     }
 
-    // Fetch the updated payment from the database
     const selectQuery = 'SELECT * FROM payments WHERE id = ?';
-    const [paymentResult] = await connection.query(selectQuery, [paymentId]);
-    const updatedPayment = paymentResult[0];
+    const [selectResult] = await connection.query(selectQuery, [paymentId]);
+    const updatedPayment = selectResult[0];
+
+    connection.release();
 
     res.status(200).json(updatedPayment);
   } catch (error) {
@@ -321,7 +321,6 @@ app.put('/update-payments/:paymentId', async (req, res) => {
   }
 });
 
-//end update payments
 
 
 //delete payment
