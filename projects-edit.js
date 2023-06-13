@@ -4,8 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const paymentTableBody = document.getElementById('paymentTableBody');
   
     // Fetch the list of customers from the server
-    window.archpro.fetch('/list-jusers')
-      .then(response => response.json())
+    window.archpro.fetch('/list-users')
       .then(customers => {
         // Populate the customer select dropdown
         customers.forEach(customer => {
@@ -23,7 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
   
       // Fetch the list of projects for the selected customer from the server
       window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`)
-        .then(response => response.json())
         .then(projects => {
           // Clear project select dropdown options
           while (projectSelect.firstChild) {
@@ -47,7 +45,6 @@ window.addEventListener('DOMContentLoaded', () => {
   
       // Fetch the list of payments for the selected project from the server
       window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`)
-        .then(response => response.json())
         .then(payments => {
           // Clear payment table body
           paymentTableBody.innerHTML = '';
