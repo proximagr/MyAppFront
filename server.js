@@ -360,5 +360,5 @@ logger.info('Logging example message');
 // start the server
 app.listen(43704, '0.0.0.0', () => {
   console.log('Server started on port 43704');
-  logger.info(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port 43704`);
 });
