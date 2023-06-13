@@ -152,6 +152,10 @@ function showEditForm(paymentForm) {
       console.log("Payment:", payment);
       console.log("Date:", date);
       console.log("Error response:", error.message);
+      
+      // Display the error message in the table row
+      const errorCell = row.cells[row.cells.length - 1];
+      errorCell.textContent = "Error updating payment";
     });    
   });
 
