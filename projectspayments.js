@@ -163,14 +163,22 @@ function deletePayment(paymentId, rowIndex) {
   window.archpro.fetch(`/delete-payment/${paymentId}`, {
     method: "DELETE"
   })
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok) {
+        // Remove the payment row from the table
+        const row = paymentTable.rows[rowIndex];
+        row.remove();
+        // Display a confirmation message
+        alert("Payment deleted successfully.");
+        return response.text(); // Return an empty response body for successful deletion
+      } else {
+        throw new Error("Error deleting payment");
+      }
+    })
     .then(data => {
-      // Remove the payment row from the table
-      const row = paymentTable.rows[rowIndex];
-      row.remove();
-      paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
-      // Display a confirmation message
-      alert("Payment deleted successfully.");
+      // Parse the response body as JSON
+      const parsedData = JSON.parse(data);
+      paymentTotal.textContent = `Total Payment: ${parsedData.totalPayment}`;
     })
     .catch(error => {
       console.error(error);
@@ -178,4 +186,3 @@ function deletePayment(paymentId, rowIndex) {
     });
 }
 //end delete payment function
-
