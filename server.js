@@ -339,26 +339,10 @@ app.delete('/delete-payment/:id', async (req, res) => {
 
 //end delete payment
 
-// Set up logger
-const { createLogger, transports, format } = require('winston');
-
-const logger = createLogger({
-  transports: [
-    new transports.Console({
-      format: format.combine(
-        format.timestamp(),
-        format.colorize(),
-        format.simple()
-      )
-    })
-  ]
-});
-
 // Example log message
 logger.info('Logging example message');
 
 // start the server
 app.listen(43704, '0.0.0.0', () => {
   console.log('Server started on port 43704');
-  logger.info(`Server is running on port 43704`);
 });

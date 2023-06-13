@@ -134,13 +134,15 @@ function showEditForm(paymentForm) {
     })
     .then(data => {
       // Handle the updated payment
+      console.log("Payment updated successfully");
+      console.log("Updated payment data:", data);
     })
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
       console.log("Payment:", payment);
       console.log("Date:", date);
-      console.log("Error response:", error.message); // Update this line
+      console.log("Error response:", error.message);
     });    
   });
 
@@ -158,6 +160,7 @@ function showEditForm(paymentForm) {
   form.appendChild(submitButton);
 }
 //end function to display the edit form
+
 
 // Delete payment function
 function deletePayment(paymentId, rowIndex) {
