@@ -126,28 +126,25 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Error updating payment. HTTP status: " + response.status);
-        }
-        return response.json();
-      })
-      .then(updatedPayment => {
-        // Update the payment in the table
-        paymentForm.date = updatedPayment.date;
-        paymentForm.payment = updatedPayment.payment;
-        row.cells[0].textContent = updatedPayment.date;
-        row.cells[1].textContent = updatedPayment.payment;
-        // Hide the form
-        form.remove();
-      })
-      .catch(error => {
-        console.error("Error updating payment:", error);
-        console.log("Payment ID:", paymentId);
-        console.log("Payment:", payment);
-        console.log("Date:", date);
-        console.log("Error response:", error.response); // Use 'error.response' instead of 'response'
-      });      
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Error updating payment. HTTP status: " + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.error) {
+        throw new Error(data.error + " HTTP status: " + data.status);
+      }
+      // Handle the updated payment
+    })
+    .catch(error => {
+      console.error("Error updating payment:", error);
+      console.log("Payment ID:", paymentId);
+      console.log("Payment:", payment);
+      console.log("Date:", date);
+      console.log("Error response:", error.message);
+    });     
   });
 
   dateInput.type = "date";

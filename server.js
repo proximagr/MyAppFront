@@ -310,11 +310,11 @@ app.put('/update-payments/:paymentId', async (req, res) => {
     connection.release();
     
     // return the updated payment
-    res.status(200).send({ id: paymentId, payment, date });
+    res.status(200).json(updatedPayment);
   } catch (error) {
     console.error(error);
-    // return an error message
-    res.status(500).send('Error updating payment');
+    // Return an error message with the HTTP status code
+    res.status(500).json({ error: 'Error updating payment', status: 500 });
   }
 });
 //end update payments
