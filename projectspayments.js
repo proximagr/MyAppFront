@@ -128,16 +128,19 @@ function showEditForm(paymentForm) {
     })
 
     .then(response => {
-      if (response.ok) {
+      console.log("Response:", response);
+    
+      if (response.status === 200) {
         return response.json();
       } else {
         throw new Error("Error updating payment. HTTP status: " + response.status);
       }
     })
     .then(data => {
+      console.log("Response data:", data);
+    
       // Handle the updated payment
       console.log("Payment updated successfully");
-      console.log("Updated payment data:", data);
     
       // Update the payment in the table
       paymentForm.payment = data.payment;
