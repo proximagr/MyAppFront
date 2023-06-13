@@ -164,20 +164,16 @@ function deletePayment(paymentId, rowIndex) {
     method: "DELETE"
   })
     .then(response => {
-      if (response.ok) {
+      if (response.status === 200) {
         // Remove the payment row from the table
         const row = paymentTable.rows[rowIndex];
         row.remove();
         // Display a confirmation message
-        return response.json(); // Parse the JSON response
+        alert("Payment deleted successfully.");
+        paymentTotal.textContent = `Total Payment: ${calculateTotalPayment()}`;
       } else {
         throw new Error("Error deleting payment");
       }
-    })
-    .then(data => {
-      // Display the success message
-      alert(data.message);
-      paymentTotal.textContent = `Total Payment: ${calculateTotalPayment()}`;
     })
     .catch(error => {
       console.error(error);
@@ -185,5 +181,6 @@ function deletePayment(paymentId, rowIndex) {
     });
 }
 //end delete payment function
+
 
 
