@@ -335,10 +335,10 @@ app.delete('/delete-payment/:id', async (req, res) => {
     await connection.query('DELETE FROM payments WHERE id = ?', [id]);
     // Release the database connection
     connection.release();
-    res.status(200).json({ message: 'Payment deleted successfully' }); // Return message as JSON
+    res.status(200).json({ message: 'Payment deleted successfully', status: 200 }); // Return message as JSON
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'An error occurred while deleting the payment' }); // Return error message as JSON
+    res.status(500).json({ error: 'An error occurred while deleting the payment', status: 500 }); // Return error message as JSON
   }
 });
 
