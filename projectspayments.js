@@ -112,7 +112,7 @@ function showEditForm(paymentForm) {
     }
 
     // Make the fetch request to update the payment
-    window.archpro.fetch(`/update-payment/${paymentId}`, {
+    window.archpro.fetch(`/update-payment/${paymentForm.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -131,6 +131,9 @@ function showEditForm(paymentForm) {
         return response.json();
       })
       .then(updatedPayment => {
+        // Update the payment object
+        paymentForm.date = updatedPayment.date;
+        paymentForm.payment = updatedPayment.payment;
         // Update the payment in the table
         const row = paymentTable.rows[paymentForm.rowIndex];
         row.cells[0].textContent = updatedPayment.date;
