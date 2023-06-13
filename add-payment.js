@@ -107,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const backButton = document.querySelector("#back-btn");
   
   backButton.addEventListener("click", function () {
+    const rootUrl = window.location.origin;
     window.location.href = rootUrl;
   });
 });
+
