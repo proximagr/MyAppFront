@@ -301,25 +301,26 @@ app.put('/update-payments/:paymentId', async (req, res) => {
     const paymentId = req.params.paymentId;
 
     const connection = await pool.getConnection();
-    const updateQuery = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
-    const [updateResult] = await connection.query(updateQuery, [payment, date, paymentId]);
+    const query = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
+    const [result] = await connection.query(query, [payment, date, paymentId]);
+    connection.release();
 
-    if (updateResult.affectedRows === 0) {
-      throw new Error('Payment with the specified ID not found');
+    if (result.affectedRows === 0) {
+      res.status(404).json({ error: 'Payment with the specified ID not found', status: 404 });
+      return;
     }
 
+    // Fetch the updated payment
     const selectQuery = 'SELECT * FROM payments WHERE id = ?';
-    const [selectResult] = await connection.query(selectQuery, [paymentId]);
-    const updatedPayment = selectResult[0];
-
-    connection.release();
+    const [updatedPayment] = await connection.query(selectQuery, [paymentId]);
 
     res.status(200).json(updatedPayment);
   } catch (error) {
     console.error('Error updating payment:', error);
     res.status(500).json({ error: 'Error updating payment', status: 500 });
-  }
+  }  
 });
+
 
 
 
