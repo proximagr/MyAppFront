@@ -127,11 +127,12 @@ function showEditForm(paymentForm) {
       })
     })
     .then(response => {
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Error updating payment. HTTP status: " + response.status);
       }
       return response.json();
     })
+    
     .then(data => {
       // Handle the updated payment
       console.log("Payment updated successfully");
