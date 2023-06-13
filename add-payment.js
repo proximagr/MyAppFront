@@ -54,37 +54,40 @@ async function addPayment() {
     const paymentAmount = document.getElementById("payment").value;
     const paymentDate = document.getElementById("date").value;
 
-    const response = await window.archpro.fetch("/addpayment", {
-      method: "POST",
+    const authToken = localStorage.getItem('authToken');
+    const apiUrl = production ? 'http://arch.francecentral.cloudapp.azure.com:43704' : 'http://localhost:43704';
+    const url = `${apiUrl}/addpayment`;
+
+    const body = {
+      project_id: projectId,
+      payment: paymentAmount,
+      date: paymentDate
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': authToken
       },
-      body: JSON.stringify({
-        project_id: projectId, // Use the correct property name
-        payment: paymentAmount,
-        date: paymentDate,
-      }),
+      body: JSON.stringify(body)
     });
 
-    const data = await response.json();
-    alert("Payment added!");
-    console.log(data);
-
-    const customerDropdown = document.getElementById("customer");
-    customerDropdown.removeEventListener("change", populateProjectDropdown);
-    customerDropdown.value = "";
-
-    const projectDropdown = document.getElementById("project");
-    projectDropdown.innerHTML = "";
-
-    populateCustomerDropdown();
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Payment added successfully:', responseData);
+      // Perform any additional actions or display success message
+    } else if (response.status === 401) {
+      localStorage.removeItem('authToken');
+      window.location.href = 'login.html';
+      console.error('Unauthorized');
+    } else {
+      console.error('Failed to add payment:', response);
+    }
   } catch (error) {
-    console.error(error);
-    // Handle error accordingly
+    console.error('An error occurred while adding payment:', error);
   }
 }
-
-
 
 
 // Call the populateCustomerDropdown function to initialize the page
