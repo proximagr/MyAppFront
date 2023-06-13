@@ -311,9 +311,9 @@ app.put('/update-payments/:paymentId', async (req, res) => {
 
     res.status(200).json({ message: 'Payment updated successfully' });
   } catch (error) {
-    console.error(error);
+    console.error('Error updating payment:', error);
     res.status(500).json({ error: 'Error updating payment', status: 500 });
-  }
+  }  
 });
 
 //end update payments
