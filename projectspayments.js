@@ -129,17 +129,21 @@ function showEditForm(paymentForm) {
     })
     .then(response => {
       if (response.status === 200) {
-        console.log("Updated Payment:", updatedPayment);
+        return response.json();
+      } else {
+        throw new Error("Error updating payment. HTTP status: " + response.status);
+      }
+    })
+    .then(updatedPayment => {
+      // Handle the updated payment
+      console.log("Updated Payment:", updatedPayment);
       // Update the table with the updated payment data
       paymentForm.payment = updatedPayment.payment;
       paymentForm.date = updatedPayment.date;
       row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
       row.cells[row.cells.length - 4].textContent = updatedPayment.date;
-        
-      } else {
-        throw new Error("Error updating payment. HTTP status: " + response.status);
-      }
     })
+    
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
