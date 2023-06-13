@@ -75,6 +75,7 @@ projectSelect.addEventListener("change", event => {
         // Second fetch call
           window.archpro.fetch(`/list-projects`)
           .then(projects => {
+            console.log(projects); // Add this line to check the projects array in the console
             const project = projects.find(project => project.id === projectId);
             if (project) {
               const projectPrice = project.price;
