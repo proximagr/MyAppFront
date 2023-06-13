@@ -133,9 +133,6 @@ function showEditForm(paymentForm) {
       return response.json();
     })
     .then(data => {
-      if (data.error) {
-        throw new Error(data.error + " HTTP status: " + data.status);
-      }
       // Handle the updated payment
     })
     .catch(error => {
@@ -143,8 +140,8 @@ function showEditForm(paymentForm) {
       console.log("Payment ID:", paymentId);
       console.log("Payment:", payment);
       console.log("Date:", date);
-      console.log("Error response:", error.message);
-    });     
+      console.log("Error response:", error.message); // Update this line
+    });    
   });
 
   dateInput.type = "date";
