@@ -97,6 +97,26 @@ app.get('/list-users', async (req, res) => {
   }
 });
 
+// endpoint to list all custoemrs and return json
+app.get('/list-jusers', async (req, res) => {
+  if (!authenticate(req, res)) return;
+  try {
+    // get a connection from the pool
+    const connection = await pool.getConnection();
+    // retrieve all users from the database
+    const [rows] = await connection.query('SELECT * FROM customers');
+    // release the connection back to the pool
+    connection.release();
+    // return the list of users as JSON
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error(error);
+    // return an error message
+    res.status(500).send('Error retrieving users');
+  }
+});
+
+
 // endpoint to get a list of all projects in the database
 app.get('/list-projects', async (req, res) => {
   if (!authenticate(req, res)) return;

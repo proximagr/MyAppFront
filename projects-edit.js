@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const paymentTableBody = document.getElementById('paymentTableBody');
   
     // Fetch the list of customers from the server
-    window.archpro.fetch('/list-users')
+    window.archpro.fetch('/list-jusers')
       .then(response => response.json())
       .then(customers => {
         // Populate the customer select dropdown
