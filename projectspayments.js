@@ -91,6 +91,9 @@ projectSelect.addEventListener("change", event => {
 
 // Function to display the edit form
 function showEditForm(paymentForm) {
+  const row = paymentTable.rows[paymentForm.rowIndex];
+  const editCell = row.cells[row.cells.length - 2]; // Find the edit cell in the row
+
   // Create the form elements
   const form = document.createElement("form");
   const dateInput = document.createElement("input");
@@ -112,18 +115,17 @@ function showEditForm(paymentForm) {
     }
 
     // Make the fetch request to update the payment
-    window.archpro.fetch(`/update-payment/${paymentForm.id}`, {
+    window.archpro.fetch(`/update-payment/${paymentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": authToken
+        Authorization: authToken
       },
       body: JSON.stringify({
         payment: payment,
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-    
       .then(response => {
         if (!response.ok) {
           throw new Error("Error updating payment");
@@ -131,11 +133,9 @@ function showEditForm(paymentForm) {
         return response.json();
       })
       .then(updatedPayment => {
-        // Update the payment object
+        // Update the payment in the table
         paymentForm.date = updatedPayment.date;
         paymentForm.payment = updatedPayment.payment;
-        // Update the payment in the table
-        const row = paymentTable.rows[paymentForm.rowIndex];
         row.cells[0].textContent = updatedPayment.date;
         row.cells[1].textContent = updatedPayment.payment;
         // Hide the form
@@ -151,9 +151,7 @@ function showEditForm(paymentForm) {
   submitButton.type = "submit";
   submitButton.textContent = "Save";
 
-  // Append the form to the table row
-  const row = paymentTable.rows[paymentForm.rowIndex];
-  const editCell = row.insertCell();
+  // Append the form to the edit cell
   editCell.appendChild(form);
   form.appendChild(dateInput);
   form.appendChild(amountInput);
