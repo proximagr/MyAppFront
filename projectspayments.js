@@ -126,12 +126,7 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-    .then(response => {
-      if (response.status !== 200) {
-        throw new Error("Error updating payment. HTTP status: " + response.status);
-      }
-      return response.json();
-    })
+
     .then(response => {
       if (response.ok) {
         return response.json();
