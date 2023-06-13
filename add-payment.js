@@ -95,10 +95,18 @@ async function addPayment() {
   }
 }
 
-
 // Call the populateCustomerDropdown function to initialize the page
 populateCustomerDropdown();
 
 // Attach an event listener to the Add Payment button
 const addPaymentButton = document.getElementById("addPayment");
 addPaymentButton.addEventListener("click", addPayment);
+
+//return to home page
+document.addEventListener("DOMContentLoaded", function () {
+  const backButton = document.querySelector("#back-btn");
+  
+  backButton.addEventListener("click", function () {
+    window.location.href = rootUrl;
+  });
+});
