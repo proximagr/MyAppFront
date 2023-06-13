@@ -292,6 +292,7 @@ app.put('/update-projects/:id', async (req, res) => {
 //end update projects
 
 // Update payments
+// Update payments
 app.put('/update-payments/:paymentId', async (req, res) => {
   if (!authenticate(req, res)) return;
   
@@ -299,31 +300,22 @@ app.put('/update-payments/:paymentId', async (req, res) => {
     const { payment, date } = req.body;
     const paymentId = req.params.paymentId;
 
-    // Get a connection from the pool
     const connection = await pool.getConnection();
-    
-    // Update the payment in the database
     const query = 'UPDATE payments SET payment = ?, date = ? WHERE id = ?';
     const [result] = await connection.query(query, [payment, date, paymentId]);
-    
-    // Release the connection back to the pool
     connection.release();
-    
-    // Check if the update was successful
+
     if (result.affectedRows === 0) {
-      // If no rows were affected, the payment with the specified ID was not found
-      return res.status(404).json({ error: 'Payment not found', status: 404 });
+      throw new Error('Payment with the specified ID not found');
     }
-    
-    // Return the updated payment
-    const updatedPayment = { id: paymentId, payment, date };
-    res.status(200).json(updatedPayment);
+
+    res.status(200).json({ message: 'Payment updated successfully' });
   } catch (error) {
     console.error(error);
-    // Return an error message with the HTTP status code
     res.status(500).json({ error: 'Error updating payment', status: 500 });
   }
 });
+
 //end update payments
 
 
