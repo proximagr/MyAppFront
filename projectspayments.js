@@ -128,7 +128,7 @@ function showEditForm(paymentForm) {
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error("Error updating payment. HTTP status: " + response.status);
+        return response.json();
       }
       return response.json();
     })
