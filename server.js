@@ -309,12 +309,12 @@ app.put('/update-payments/:paymentId', async (req, res) => {
       res.status(404).json({ error: 'Payment with the specified ID not found', status: 404 });
       return;
     }
-/*
+
     // Fetch the updated payment
     const selectQuery = 'SELECT * FROM payments WHERE id = ?';
     const [updatedPayment] = await connection.query(selectQuery, [paymentId]);
-*/
-    res.status(200).json({ message: 'Payment updated successfully', status: 200 });
+
+    res.status(200).json({ message: 'Payment updated successfully', status: 200, updatedPayment });
   } catch (error) {
     console.error('Error updating payment:', error);
     res.status(500).json({ error: 'Error updating payment', status: 500 });
