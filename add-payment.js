@@ -49,14 +49,14 @@ async function populateProjectDropdown() {
 
 async function addPayment() {
   try {
-    const projectId = document.getElementById("project").value;
+    const project_Id = document.getElementById("project").value;
     const paymentAmount = document.getElementById("payment").value;
     const paymentDate = document.getElementById("date").value;
     const authToken = localStorage.getItem("authToken");
     
     const url = window.archpro.getApiPath("/addpayment");
     const body = {
-      project_id: projectId,
+      project_id: project_Id,
       payment: paymentAmount,
       date: paymentDate
     };
