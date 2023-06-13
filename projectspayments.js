@@ -146,8 +146,8 @@ function showEditForm(paymentForm) {
         console.log("Payment ID:", paymentId);
         console.log("Payment:", payment);
         console.log("Date:", date);
-        console.log("Response:", response); // Add this line to log the response object
-      });
+        console.log("Error response:", error.response); // Use 'error.response' instead of 'response'
+      });      
   });
 
   dateInput.type = "date";
