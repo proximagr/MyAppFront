@@ -160,26 +160,29 @@ function showEditForm(paymentForm) {
 
 //delete payment function
 function deletePayment(paymentId, rowIndex) {
-  window.archpro.fetch(`/delete-payment/${paymentId}`, {
-    method: "DELETE"
-  })
-    .then(response => {
-      if (response.status === 200) {
-        // Remove the payment row from the table
-        const row = paymentTable.rows[rowIndex];
-        row.remove();
-        // Display a confirmation message
-        alert("Payment deleted successfully.");
-        paymentTotal.textContent = `Total Payment: ${calculateTotalPayment()}`;
-      } else {
-        throw new Error("Error deleting payment");
-      }
+  try {
+    window.archpro.fetch(`/delete-payment/${paymentId}`, {
+      method: "DELETE"
     })
-    .catch(error => {
-      console.error(error);
-      alert("An error occurred while deleting the payment.");
-    });
+      .then(response => {
+        if (response.status === 200) {
+          // Remove the payment row from the table
+          const row = paymentTable.rows[rowIndex];
+          row.remove();
+          // Display a confirmation message
+          alert("Payment deleted successfully.");
+          paymentTotal.textContent = `Total Payment: ${calculateTotalPayment()}`;
+        } else {
+          throw new Error("Error deleting payment");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while deleting the payment.");
+      });
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred while deleting the payment.");
+  }
 }
 //end delete payment function
-
-
