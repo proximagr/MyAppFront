@@ -342,17 +342,18 @@ app.put('/update-payments/:id', async (req, res) => {
 //end edit payments
 
 // Update a payment
-app.put('/update-payment/:paymentId', async (req, res) => {
+// Update a payment
+app.put('/update-payments/:paymentId', async (req, res) => {
   if (!authenticate(req, res)) return;
   const paymentId = req.params.paymentId;
   const { amount, date } = req.body;
-  
+
   try {
     // Update the payment in the database using the provided paymentId, amount, and date
     const connection = await pool.getConnection();
     await connection.query('UPDATE payments SET amount = ?, date = ? WHERE id = ?', [amount, date, paymentId]);
     connection.release();
-    
+
     // Return a success message
     res.status(200).send('Payment updated successfully');
   } catch (error) {
@@ -361,6 +362,7 @@ app.put('/update-payment/:paymentId', async (req, res) => {
     res.status(500).send('Error updating payment');
   }
 });
+
 //end update payment
 
 //delete payment

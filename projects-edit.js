@@ -93,13 +93,13 @@ function editPayment(paymentId) {
         };
   
         // Send the updated payment data to the server
-        window.archpro.fetch(`/update-payment/${paymentId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
+        window.archpro.fetch(`/update-payments/${paymentId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
           .then(response => {
             if (response.ok) {
               // Payment updated successfully, refresh the payment table
