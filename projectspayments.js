@@ -164,7 +164,7 @@ function deletePayment(paymentId, rowIndex) {
     method: "DELETE"
   })
     .then(response => {
-      if (response.ok) {
+      if (response.status === 200) {
         // Remove the payment row from the table
         const row = paymentTable.rows[rowIndex];
         row.remove();
@@ -181,4 +181,5 @@ function deletePayment(paymentId, rowIndex) {
     });
 }
 //end delete payment function
+
 
