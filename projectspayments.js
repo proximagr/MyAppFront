@@ -73,18 +73,17 @@ projectSelect.addEventListener("change", event => {
         }
         paymentTotal.textContent = `Total Payment: ${totalPayment}`;
         // Second fetch call
-          window.archpro.fetch(`/list-projects`)
-          .then(projects => {
-            console.log(projects); // Add this line to check the projects array in the console
-            const project = projects.find(project => project.id === projectId);
-            if (project) {
-              const projectPrice = project.price;
-              projectPriceEl.textContent = `Project: ${projectPrice}`;
-            } else {
-              console.error(`Project with ID ${projectId} not found`);
-            }
-          })
-          .catch(error => console.error(error));
+        window.archpro.fetch(`/list-projects`)
+        .then(projects => {
+          const project = projects.find(project => project.id === parseInt(projectId));
+          if (project) {
+            const projectPrice = project.price;
+            projectPriceEl.textContent = `Project: ${projectPrice}`;
+          } else {
+            console.error(`Project with ID ${projectId} not found`);
+          }
+        })
+        .catch(error => console.error(error));      
       }) 
       .catch(error => console.error(error));
      }
