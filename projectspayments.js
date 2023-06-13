@@ -115,7 +115,7 @@ function showEditForm(paymentForm) {
     }
 
     // Make the fetch request to update the payment
-    window.archpro.fetch(`/update-payment/${paymentId}`, {
+    window.archpro.fetch(`/update-payments/${paymentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
