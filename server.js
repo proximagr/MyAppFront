@@ -29,24 +29,18 @@ app.use(express.json());
 const users = [{ username: process.env.USER_USERNAME, password: process.env.USER_PASSWORD }];
 
 //function to check if user is authenticated
-const authenticate = (req, res, next) => {
+const authenticate = (req, res) => {
   const authHeader = req.headers['authorization'];
   try {
-    const token = authHeader && authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    if (!token) {
-      return res.status(401).send('Unauthorized');
+    const token = jwt.verify(authHeader, process.env.AUTH_TOKEN);
+    if (token && token.expiresAt > Date.now()) {
+      return true;
     }
-
-    const decoded = jwt.verify(token, process.env.AUTH_TOKEN);
-    if (decoded && decoded.expiresAt > Date.now()) {
-      req.user = decoded.username; // Set req.user with the authenticated user
-      return next();
-    }
-  } catch (error) {
-    console.error(error);
   }
+  catch (error) { }
 
   res.status(401).send('Unauthorized');
+  return false;
 };
 //end function to check if user is authenticated
 
