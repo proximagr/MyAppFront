@@ -175,7 +175,6 @@ function deletePayment(paymentId, rowIndex) {
     })
     .catch((error) => {
       console.error("Error deleting payment:", error);
-      alert("An error occurred while deleting the payment.");
     });
 }
 // End delete payment function
