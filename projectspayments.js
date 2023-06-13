@@ -171,17 +171,8 @@ function deletePayment(paymentId, rowIndex) {
       paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
       // Display a confirmation message and refresh the form
       alert("Payment deleted successfully.");
-      clearEditForm(); // Clear the edit form, if displayed
+      location.reload();
     })
     .catch(error => console.error(error));
 }
 //end delete payment function
-
-// Function to clear the edit form
-function clearEditForm() {
-  const form = document.querySelector("form");
-  if (form) {
-    form.remove();
-  }
-}
-//end function to clear the edit form
