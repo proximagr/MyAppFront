@@ -89,33 +89,49 @@ projectSelect.addEventListener("change", event => {
   }
 });
 
-//function to display the edit form
-function showEditForm(poaymentform) {
+// Function to display the edit form
+function showEditForm(paymentForm) {
   // Create the form elements
   const form = document.createElement("form");
   const dateInput = document.createElement("input");
   const amountInput = document.createElement("input");
   const submitButton = document.createElement("button");
+
   // Set the form properties
   form.addEventListener("submit", event => {
     event.preventDefault();
     const date = dateInput.value;
     const payment = amountInput.value;
-    const paymentId = poaymentform.id;
-    window.archpro.fetch(`/update-payments/${paymentId}`, {
+    const paymentId = paymentForm.id;
+
+    // Authenticate the request
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      console.error("Authentication token not found");
+      return;
+    }
+
+    // Make the fetch request to update the payment
+    fetch(`/update-payments/${paymentId}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": authToken
       },
       body: JSON.stringify({
         payment: payment,
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Error updating payment");
+        }
+        return response.json();
+      })
       .then(updatedPayment => {
         // Update the payment in the table
-        const row = paymentTable.rows[poaymentform.rowIndex];
+        const row = paymentTable.rows[paymentForm.rowIndex];
         row.cells[0].textContent = updatedPayment.date;
         row.cells[1].textContent = updatedPayment.payment;
         // Hide the form
@@ -123,14 +139,16 @@ function showEditForm(poaymentform) {
       })
       .catch(error => console.error(error));
   });
+
   dateInput.type = "date";
-  dateInput.value = poaymentform.date;
+  dateInput.value = paymentForm.date; // Populate the date field with the current date
   amountInput.type = "number";
-  amountInput.value = poaymentform.payment;
+  amountInput.value = paymentForm.payment;
   submitButton.type = "submit";
   submitButton.textContent = "Save";
+
   // Append the form to the table row
-  const row = paymentTable.rows[poaymentform.rowIndex];
+  const row = paymentTable.rows[paymentForm.rowIndex];
   const editCell = row.insertCell();
   editCell.appendChild(form);
   form.appendChild(dateInput);
