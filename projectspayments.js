@@ -112,7 +112,7 @@ function showEditForm(paymentForm) {
     }
 
     // Make the fetch request to update the payment
-    fetch(`/update-payments/${paymentId}`, {
+    window.archpro.fetch(`/update-payment/${paymentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -123,6 +123,7 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
+    
       .then(response => {
         if (!response.ok) {
           throw new Error("Error updating payment");
@@ -161,7 +162,7 @@ function showEditForm(paymentForm) {
 function deletePayment(paymentId, rowIndex) {
   window.archpro.fetch(`/delete-payment/${paymentId}`, {
     method: "DELETE"
-  })
+  })  
     .then(response => response.json())
     .then(data => {
       // Remove the payment row from the table
@@ -170,7 +171,6 @@ function deletePayment(paymentId, rowIndex) {
       paymentTotal.textContent = `Total Payment: ${data.totalPayment}`;
       // Display a confirmation message and refresh the form
       alert("Payment deleted successfully.");
-      location.reload();
     })
     .catch(error => console.error(error));
 }
