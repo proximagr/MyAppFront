@@ -158,19 +158,23 @@ function showEditForm(paymentForm) {
 }
 //end function to display the edit form
 
-// Delete payment function
 function deletePayment(paymentId, rowIndex) {
-  window.archpro
-    .fetch(`/delete-payment/${paymentId}`, {
-      method: "DELETE",
-    })
+  // Authenticate the request
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
+    console.error("Authentication token not found");
+    return;
+  }
+
+  // Make the fetch request to delete the payment
+  fetch(`/delete-payment/${paymentId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: authToken,
+    },
+  })
     .then((response) => {
-      console.log(response); // Log the response object
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data); // Log the JSON data
-      if (data.message === "Payment deleted successfully") {
+      if (response.ok) {
         // Remove the payment row from the table
         const row = paymentTable.rows[rowIndex];
         row.remove();
@@ -182,8 +186,7 @@ function deletePayment(paymentId, rowIndex) {
       }
     })
     .catch((error) => {
-      console.error(error);
+      console.error("Error deleting payment:", error);
       alert("An error occurred while deleting the payment.");
     });
 }
-// End delete payment function
