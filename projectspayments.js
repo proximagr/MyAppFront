@@ -165,13 +165,11 @@ function deletePayment(paymentId, rowIndex) {
       method: "DELETE",
     })
     .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Error deleting payment");
-      }
+      console.log(response); // Log the response object
+      return response.json();
     })
     .then((data) => {
+      console.log(data); // Log the JSON data
       if (data.message === "Payment deleted successfully") {
         // Remove the payment row from the table
         const row = paymentTable.rows[rowIndex];
