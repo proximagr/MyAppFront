@@ -122,59 +122,46 @@ async function loadPayments() {
 
 
     // Function to edit a payment
-async function editPayment(paymentId) {
-  try {
-    // Retrieve the payment details from the backend using the payment ID
-    const response = await window.archpro.fetch(`/get-payment?id=${paymentId}`);
-    const payment = response;
+    async function editPayment(paymentId) {
+      const newPayment = prompt('Enter new payment amount:');
+      if (newPayment === null) {
+        return; // User canceled
+      }
 
-    // Prompt the user to enter the updated payment information
-    const updatedPayment = prompt('Enter the updated payment:', payment.payment);
-    if (updatedPayment === null) {
-      return; // User canceled the prompt
+      const response = await window.archpro.fetch(`/update-payments/${paymentId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ payment: newPayment })
+      });
+
+      if (response.ok) {
+        alert('Payment updated successfully');
+        loadPayments();
+      } else {
+        alert('Failed to update payment');
+      }
     }
 
-    // Send the updated payment to the backend for editing
-    await window.archpro.fetch(`/edit-payment?id=${paymentId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        payment: updatedPayment
-      })
-    });
+    // Function to delete a payment
+    async function deletePayment(paymentId) {
+      const confirmDelete = confirm('Are you sure you want to delete this payment?');
+      if (!confirmDelete) {
+        return;
+      }
 
-    // Reload the payments list to reflect the changes
-    loadPayments();
-  } catch (error) {
-    console.error(error);
-    alert('Failed to edit the payment. Please try again.');
-  }
-}
+      const response = await window.archpro.fetch(`/delete-payment/${paymentId}`, {
+        method: 'DELETE'
+      });
 
-// Function to delete a payment
-async function deletePayment(paymentId) {
-  try {
-    // Confirm with the user before deleting the payment
-    const confirmDelete = confirm('Are you sure you want to delete this payment?');
-    if (!confirmDelete) {
-      return;
+      if (response.ok) {
+        alert('Payment deleted successfully');
+        loadPayments();
+      } else {
+        alert('Failed to delete payment');
+      }
     }
-
-    // Send a request to the backend to delete the payment
-    await window.archpro.fetch(`/delete-payment?id=${paymentId}`, {
-      method: 'DELETE'
-    });
-
-    // Reload the payments list to reflect the changes
-    loadPayments();
-  } catch (error) {
-    console.error(error);
-    alert('Failed to delete the payment. Please try again.');
-  }
-}
-
 
     // Load customers on page load
     window.addEventListener('load', loadCustomers);
