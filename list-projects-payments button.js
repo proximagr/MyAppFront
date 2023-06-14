@@ -1,6 +1,19 @@
 const projectTable = document.getElementById('project-table');
 const listProjectsBtn = document.getElementById('list-projects-btn');
 
+//button to list the projects
+listProjectsBtn.addEventListener('click', listProjects);
+
+// close projects-table
+document.addEventListener("DOMContentLoaded", function () {
+  const closeTableButton = document.querySelector("#close-projects-btn");
+
+  closeTableButton.addEventListener("click", function () {
+    const table = document.querySelector("#project-table");
+    table.innerHTML = "";
+  });
+});
+
 async function listProjects() {
   const projects = await
   window.archpro.fetch('/list-projects');
@@ -78,13 +91,19 @@ function editProject(projectId) {
   window.archpro.fetch(`/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authToken') // Include the authorization token
     },
     body: JSON.stringify(updatedProject)
   })
-  .then(() => {
-    alert('Project updated successfully!');
-    listProjects();
+  .then((response) => {
+    if (response && response.message) {
+      alert(response.message);
+      const closeTableButton = document.querySelector("#close-projects-btn");
+      closeTableButton.dispatchEvent(new Event("click"));
+    } else {
+      throw new Error(`Failed to update project`);
+    }
   })
   .catch(error => {
     console.error(error);
@@ -101,13 +120,20 @@ function editPrice(projectId) {
   window.archpro.fetch(`/update-projects/${projectId}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authToken') // Include the authorization token
     },
     body: JSON.stringify(updatedProject)
   })
-  .then(() => {
-    alert('Price updated successfully!');
-    listProjects();
+  .then((response) => {
+    if (response && response.message) {
+      alert(response.message);
+      // You can perform additional actions if needed
+      const closeTableButton = document.querySelector("#close-projects-btn");
+      closeTableButton.dispatchEvent(new Event("click"));
+    } else {
+      throw new Error("Failed to update price");
+    }
   })
   .catch(error => {
     console.error(error);
@@ -117,15 +143,3 @@ function editPrice(projectId) {
 
 // end added for edit project and price
 
-//button to list the projects
-listProjectsBtn.addEventListener('click', listProjects);
-
-// close projects-table
-document.addEventListener("DOMContentLoaded", function () {
-  const closeTableButton = document.querySelector("#close-projects-btn");
-
-  closeTableButton.addEventListener("click", function () {
-    const table = document.querySelector("#project-table");
-    table.innerHTML = "";
-  });
-});

@@ -126,33 +126,19 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-    .then(response => {
-      console.log("Response status:", response.status);
-      return response.text();
-    })
-    .then(responseText => {
-      console.log("Response text:", responseText);
-      try {
-        const updatedPayment = JSON.parse(responseText);
-        console.log("Updated Payment:", updatedPayment);
-        // Handle the updated payment
-        console.log("Updated Payment:", updatedPayment);
-        // Update the table with the updated payment data
-        paymentForm.payment = updatedPayment.payment;
-        paymentForm.date = updatedPayment.date;
-        row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
-        row.cells[row.cells.length - 4].textContent = updatedPayment.date;
-      } catch (error) {
-        console.error("Error parsing response:", error);
-      }
-    })
-    .catch(error => {
-      console.error("Error updating payment:", error);
-      console.log("Payment ID:", paymentId);
-      console.log("Payment:", payment);
-      console.log("Date:", date);
-      console.log("Error response:", error.message);
-    });
+      .then((response) => {
+        if (response && response.message) {
+          alert(response.message);
+          // You can perform additional actions if needed
+        location.reload();
+        } else {
+          throw new Error("Failed to update payment");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert(`Failed to update payment: ${error.message}`);
+      });
     
   });
 
@@ -188,7 +174,7 @@ function deletePayment(paymentId, rowIndex) {
       row.remove();
       // Display a confirmation message
       alert("Payment deleted successfully.");
-      paymentTotal.textContent = `Total Payment: ${calculateTotalPayment()}`;
+      location.reload();
     })
     .catch((error) => {
       console.error("Error deleting payment:", error);

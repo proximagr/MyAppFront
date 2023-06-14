@@ -115,6 +115,20 @@ app.get('/list-jusers', async (req, res) => {
   }
 });
 
+// Endpoint to edit a user in the database
+app.post("/edit-user", async (req, res) => {
+  if (!authenticate(req, res)) return;
+  const { id, name } = req.body;
+  try {
+    const connection = await pool.getConnection();
+    await connection.query("UPDATE customers SET name = ? WHERE id = ?", [name, id]);
+    connection.release();
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update user. Internal server error." });
+  }
+});
 
 // endpoint to get a list of all projects in the database
 app.get('/list-projects', async (req, res) => {
@@ -269,7 +283,7 @@ app.put('/update-projects/:id', async (req, res) => {
       values.push(price);
     }
     if (values.length === 0) {
-      return res.status(400).send('Bad request: missing project or price parameter.');
+      return res.status(400).json({ error: 'Bad request: missing project or price parameter.' });
     }
     query = query.slice(0, -2); // remove last comma and space
     query += ' WHERE id = ?';
@@ -277,14 +291,15 @@ app.put('/update-projects/:id', async (req, res) => {
     const [result] = await connection.query(query, values);
     connection.release();
     if (result.affectedRows === 0) {
-      return res.status(404).send(`Project with ID ${projectId} not found.`);
+      return res.status(404).json({ error: `Project with ID ${projectId} not found.` });
     }
-    return res.send('Project updated successfully.');
+    return res.json({ message: 'Project updated successfully.' });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
 //end update projects
 
 // Update payments
