@@ -39,60 +39,72 @@
 
   <script>
     // Function to fetch the list of customers from the backend
-    async function loadCustomers() {
-      const response = await window.archpro.fetch('/list-users');
-      const customers = await response.json();
+async function loadCustomers() {
+  try {
+    const response = await window.archpro.fetch('/list-users');
+    const customers = response;
 
-      const customerSelect = document.getElementById('customer');
-      customerSelect.innerHTML = '<option value="">-- Select Customer --</option>';
+    const customerSelect = document.getElementById('customer');
+    customerSelect.innerHTML = '<option value="">-- Select Customer --</option>';
 
-      customers.forEach(customer => {
-        const option = document.createElement('option');
-        option.value = customer.id;
-        option.textContent = customer.name;
-        customerSelect.appendChild(option);
-      });
+    customers.forEach((customer) => {
+      const option = document.createElement('option');
+      option.value = customer.id;
+      option.textContent = customer.name;
+      customerSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error(error);
+    alert('Failed to load customers. Please try again.');
+  }
+}
+
+// Function to fetch the list of projects for the selected customer from the backend
+async function loadProjects() {
+  try {
+    const customerId = document.getElementById('customer').value;
+    if (!customerId) {
+      document.getElementById('project').innerHTML =
+        '<option value="">-- Select Project --</option>';
+      return;
     }
 
-    // Function to fetch the list of projects for the selected customer from the backend
-    async function loadProjects() {
-      const customerId = document.getElementById('customer').value;
-      if (!customerId) {
-        document.getElementById('project').innerHTML = '<option value="">-- Select Project --</option>';
-        return;
-      }
+    const response = await window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`);
+    const projects = response;
 
-      const response = await window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`);
-      const projects = await response.json();
+    const projectSelect = document.getElementById('project');
+    projectSelect.innerHTML = '<option value="">-- Select Project --</option>';
 
-      const projectSelect = document.getElementById('project');
-      projectSelect.innerHTML = '<option value="">-- Select Project --</option>';
+    projects.forEach((project) => {
+      const option = document.createElement('option');
+      option.value = project.id;
+      option.textContent = project.project;
+      projectSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error(error);
+    alert('Failed to load projects. Please try again.');
+  }
+}
 
-      projects.forEach(project => {
-        const option = document.createElement('option');
-        option.value = project.id;
-        option.textContent = project.project;
-        projectSelect.appendChild(option);
-      });
+// Function to fetch the list of payments for the selected project from the backend
+async function loadPayments() {
+  try {
+    const projectId = document.getElementById('project').value;
+    if (!projectId) {
+      document.getElementById('payments').innerHTML = '';
+      return;
     }
 
-    // Function to fetch the list of payments for the selected project from the backend
-    async function loadPayments() {
-      const projectId = document.getElementById('project').value;
-      if (!projectId) {
-        document.getElementById('payments').innerHTML = '';
-        return;
-      }
+    const response = await window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`);
+    const payments = response;
 
-      const response = await window.archpro.fetch(`/list-projectspayments?project_id=${projectId}`);
-      const payments = await response.json();
+    const paymentsContainer = document.getElementById('payments');
+    paymentsContainer.innerHTML = '';
 
-      const paymentsContainer = document.getElementById('payments');
-      paymentsContainer.innerHTML = '';
-
-      payments.forEach(payment => {
-        const paymentDiv = document.createElement('div');
-        paymentDiv.innerHTML = `
+    payments.forEach((payment) => {
+      const paymentDiv = document.createElement('div');
+      paymentDiv.innerHTML = `
           <p><strong>ID:</strong> ${payment.id}</p>
           <p><strong>Payment:</strong> ${payment.payment}</p>
           <p><strong>Date:</strong> ${payment.date}</p>
@@ -100,9 +112,14 @@
           <button onclick="deletePayment(${payment.id})">Delete</button>
           <hr>
         `;
-        paymentsContainer.appendChild(paymentDiv);
-      });
-    }
+      paymentsContainer.appendChild(paymentDiv);
+    });
+  } catch (error) {
+    console.error(error);
+    alert('Failed to load payments. Please try again.');
+  }
+}
+
 
     // Function to edit a payment
     async function editPayment(paymentId) {
