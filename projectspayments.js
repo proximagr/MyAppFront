@@ -90,7 +90,6 @@ projectSelect.addEventListener("change", event => {
 });
 
 // Function to display the edit form
-// Function to display the edit form
 function showEditForm(paymentForm) {
   const row = paymentTable.rows[paymentForm.rowIndex];
   const editCell = row.cells[row.cells.length - 2]; // Find the edit cell in the row
@@ -127,25 +126,14 @@ function showEditForm(paymentForm) {
         date: new Date(date).toISOString().slice(0, 10) // convert date to ISO format (YYYY-MM-DD)
       })
     })
-    // Update the payment table and refresh the project price
-    .then(() => {
-      paymentTable.rows[paymentForm.rowIndex].cells[0].textContent = date;
-      paymentTable.rows[paymentForm.rowIndex].cells[1].textContent = payment;
-      paymentTotal.textContent = `Total Payment: ${paymentTable.rows.length - 1}`;
-      window.archpro.fetch(`/list-projects`)
-        .then(projects => {
-          const project = projects.find(project => project.id === parseInt(projectSelect.value));
-          if (project) {
-            const projectPrice = project.price;
-            projectPriceEl.textContent = `Project: ${projectPrice}`;
-          } else {
-            console.error(`Project with ID ${projectId} not found`);
-          }
-        })
-        .catch(error => console.error(error));
+    .then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error updating payment. HTTP status: " + response.status);
+      }
     })
-    
-    
+  
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
@@ -154,19 +142,6 @@ function showEditForm(paymentForm) {
       console.log("Error response:", error.message);
     });    
   });
-
-  dateInput.type = "date";
-  dateInput.value = paymentForm.date; // Populate the date field with the current date
-  amountInput.type = "number";
-  amountInput.value = paymentForm.payment;
-  submitButton.type = "submit";
-  submitButton.textContent = "Save";
-
-  // Append the form to the edit cell
-  editCell.appendChild(form);
-  form.appendChild(dateInput);
-  form.appendChild(amountInput);
-  form.appendChild(submitButton);
 }
 //end function to display the edit form
 
