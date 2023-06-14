@@ -1,54 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add Project</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="style.css">
+  <title>Add Project</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<h1>Add Project</h1>
-	<form action="http://arch.francecentral.cloudapp.azure.com:43704/add-project" method="post">
-		<label for="project">Project:</label>
-		<input type="text" name="project" required><br><br>
+  <h1>Add Project</h1>
+  <form id="add-project-form">
+    <label for="project">Project:</label>
+    <input type="text" name="project" required><br><br>
 
-		<label for="price">Price:</label>
-		<input type="number" name="price" required><br><br>
+    <label for="price">Price:</label>
+    <input type="number" name="price" required><br><br>
 
-		<label for="customer_id">Customer:</label>
-		<select name="customer_id" required>
-			<option value="">Select customer</option>
-			<!-- Fetching customers from server using AJAX -->
-		</select><br><br>
+    <label for="customer_id">Customer:</label>
+    <select name="customer_id" required>
+      <option value="">Select customer</option>
+      <!-- Fetching customers from server using AJAX -->
+    </select><br><br>
 
-		<button type="submit">Add Project</button>
-	</form>
+    <button type="submit">Add Project</button>
+  </form>
 
-	<script>
-		const xhr = new XMLHttpRequest();
-		xhr.open('GET', 'http://arch.francecentral.cloudapp.azure.com:43704/list-users', true);
-		xhr.onload = function() {
-			if (this.status === 200) {
-				const customers = JSON.parse(this.responseText);
-				const select = document.querySelector('select[name="customer_id"]');
-				customers.forEach(customer => {
-					const option = document.createElement('option');
-					option.value = customer.id;
-					option.text = customer.name;
-					select.add(option);
-				});
-			}
-		};
-		xhr.send();
-	</script>
+  <h1>Back to Index</h1>
+  <button onclick="navigateBack()">Go Back</button>
 
-<h1>Back to Index</h1>
-<button onclick="navigateToAddProject()">Back to Home</button>
-<script>
-function navigateToAddProject() {
-  window.location.href = 'http://arch.francecentral.cloudapp.azure.com';
-}
-</script>
+  <script src="utility.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      window.archpro.fetch('/list-users')
+        .then(function(customers) {
+          const select = document.querySelector('select[name="customer_id"]');
+          customers.forEach(customer => {
+            const option = document.createElement('option');
+            option.value = customer.id;
+            option.text = customer.name;
+            select.add(option);
+          });
+        })
+        .catch(function(error) {
+          console.error('Error fetching customers:', error);
+        });
+    });
 
+    document.getElementById('add-project-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const project = document.querySelector('input[name="project"]').value;
+      const price = document.querySelector('input[name="price"]').value;
+      const customer_id = document.querySelector('select[name="customer_id"]').value;
+
+      const data = {
+        project: project,
+        price: price,
+        customer_id: customer_id
+      };
+
+      window.archpro.fetch('/add-project', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('authToken')
+        }
+      })
+      .then(function(response) {
+        console.log('Project added successfully:', response);
+        // Handle success scenario
+      })
+      .catch(function(error) {
+        console.error('Error adding project:', error);
+        // Handle error scenario
+      });
+    });
+
+	function navigateBack() {
+	  window.location.href = '/';
+	}
+  </script>
 </body>
 </html>

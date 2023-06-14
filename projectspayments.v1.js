@@ -127,33 +127,29 @@ function showEditForm(paymentForm) {
       })
     })
     .then(response => {
-      console.log("Response status:", response.status);
-      return response.text();
-    })
-    .then(responseText => {
-      console.log("Response text:", responseText);
-      try {
-        const updatedPayment = JSON.parse(responseText);
-        console.log("Updated Payment:", updatedPayment);
-        // Handle the updated payment
-        console.log("Updated Payment:", updatedPayment);
-        // Update the table with the updated payment data
-        paymentForm.payment = updatedPayment.payment;
-        paymentForm.date = updatedPayment.date;
-        row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
-        row.cells[row.cells.length - 4].textContent = updatedPayment.date;
-      } catch (error) {
-        console.error("Error parsing response:", error);
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error updating payment. HTTP status: " + response.status);
       }
     })
+    .then(updatedPayment => {
+      // Handle the updated payment
+      console.log("Updated Payment:", updatedPayment);
+      // Update the table with the updated payment data
+      paymentForm.payment = updatedPayment.payment;
+      paymentForm.date = updatedPayment.date;
+      row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
+      row.cells[row.cells.length - 4].textContent = updatedPayment.date;
+    })
+    
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
       console.log("Payment:", payment);
       console.log("Date:", date);
       console.log("Error response:", error.message);
-    });
-    
+    });    
   });
 
   dateInput.type = "date";

@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
 // endpoint to add a new user to the database
 app.post('/add-user', async (req, res) => {
   if (!authenticate(req, res)) return;
-  const { name, email } = req.body;
+  const { name } = req.body;
   try {
     // get a connection from the pool
     const connection = await pool.getConnection();
@@ -70,11 +70,10 @@ app.post('/add-user', async (req, res) => {
     // release the connection back to the pool
     connection.release();
     // return a success message
-    res.status(201).send('User added successfully');
+    res.status(201).json({ message: 'User added successfully' }); // Send a JSON response
   } catch (error) {
     console.error(error);
-    // return an error message
-    res.status(500).send('Error adding user');
+    res.status(500).json({ message: 'Failed to add user. Internal server error.' }); // Send a JSON response with a clear error message
   }
 });
 
@@ -136,7 +135,7 @@ app.get('/list-projects', async (req, res) => {
   }
 });
 
-//endpoint to add project, price, customer_id to database
+//endpoint to add project
 app.post('/add-project', async (req, res) => {
   if (!authenticate(req, res)) return;
   const { project, price, customer_id } = req.body;
@@ -147,18 +146,15 @@ app.post('/add-project', async (req, res) => {
     await connection.query('INSERT INTO projects (project, price, customer_id) VALUE (?, ?, ?)', [project, price, customer_id]);
     // release the connection back to the pool
     connection.release();
-    // return a success message with a button to go to home
-    const successMessage = `
-    <h2>Project added successfully!</h2>
-    <button onclick="location.href='http://arch.francecentral.cloudapp.azure.com';">Go to home</button>
-  `;
-    res.status(201).send(successMessage);
+    res.status(201).json({ message: 'Project added successfully' }); // Send a JSON response
   } catch (error) {
     console.error(error);
     // return an error message
-    res.status(500).send('Error adding project');
+    res.status(500).json({ message: 'Error adding project' }); // Send a JSON response
   }
 });
+
+
 
 // endpoint to get a list of all payments in the database
 app.get('/list-payments', async (req, res) => {
