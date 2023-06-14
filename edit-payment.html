@@ -1,0 +1,78 @@
+<!-- edit-payment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Payment</title>
+</head>
+<body>
+  <h1>Edit Payment</h1>
+  
+  <div>
+    <label for="payment">Payment:</label>
+    <input type="text" id="payment" name="payment">
+  </div>
+  
+  <div>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date">
+  </div>
+  
+  <div>
+    <button id="update-payment">Update Payment</button>
+  </div>
+  
+  <script src="login.js"></script>
+  <script>
+    const paymentId = new URLSearchParams(window.location.search).get('paymentId');
+    const paymentInput = document.getElementById('payment');
+    const dateInput = document.getElementById('date');
+    const updateButton = document.getElementById('update-payment');
+    const authToken = localStorage.getItem('authToken');
+    
+    // Fetch payment details
+    fetch(window.archpro.getApiPath(`/payments/${paymentId}`), {
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    })
+    .then(response => response.json())
+    .then(payment => {
+      paymentInput.value = payment.payment;
+      dateInput.value = payment.date;
+    })
+    .catch(error => console.error('Error fetching payment:', error));
+    
+    // Update payment
+    updateButton.addEventListener('click', () => {
+      const updatedPayment = paymentInput.value;
+      const updatedDate = dateInput.value;
+    
+      const updatedData = {
+        payment: updatedPayment,
+        date: updatedDate
+      };
+    
+      fetch(window.archpro.getApiPath(`/payments/${paymentId}`), {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(updatedData)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Payment updated successfully');
+          // Redirect to the previous page (index.html) after successful update
+          window.history.back();
+        } else {
+          alert('Failed to update payment');
+        }
+      })
+      .catch(error => console.error('Error updating payment:', error));
+    });
+  </script>
+</body>
+</html>
