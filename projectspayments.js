@@ -133,7 +133,16 @@ function showEditForm(paymentForm) {
         throw new Error("Error updating payment. HTTP status: " + response.status);
       }
     })
-  
+    .then(updatedPayment => {
+      // Handle the updated payment
+      console.log("Updated Payment:", updatedPayment);
+      // Update the table with the updated payment data
+      paymentForm.payment = updatedPayment.payment;
+      paymentForm.date = updatedPayment.date;
+      row.cells[row.cells.length - 3].textContent = updatedPayment.payment;
+      row.cells[row.cells.length - 4].textContent = updatedPayment.date;
+    })
+    
     .catch(error => {
       console.error("Error updating payment:", error);
       console.log("Payment ID:", paymentId);
@@ -142,6 +151,19 @@ function showEditForm(paymentForm) {
       console.log("Error response:", error.message);
     });    
   });
+
+  dateInput.type = "date";
+  dateInput.value = paymentForm.date; // Populate the date field with the current date
+  amountInput.type = "number";
+  amountInput.value = paymentForm.payment;
+  submitButton.type = "submit";
+  submitButton.textContent = "Save";
+
+  // Append the form to the edit cell
+  editCell.appendChild(form);
+  form.appendChild(dateInput);
+  form.appendChild(amountInput);
+  form.appendChild(submitButton);
 }
 //end function to display the edit form
 
