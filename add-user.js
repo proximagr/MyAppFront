@@ -19,6 +19,7 @@ form.addEventListener('submit', async (event) => {
       alert(response.message);
     } else {
       alert('User added successfully!');
+      location.reload();
     }
   } catch (error) {
     console.error(error);
