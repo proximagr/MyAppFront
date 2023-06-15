@@ -32,6 +32,10 @@
     window.addEventListener('DOMContentLoaded', function() {
       window.archpro.fetch('/list-users')
         .then(function(customers) {
+          // short customers by name
+          customers.sort(function(a, b) {
+            return a.name.localeCompare(b.name);
+          });
           const select = document.querySelector('select[name="customer_id"]');
           customers.forEach(customer => {
             const option = document.createElement('option');
