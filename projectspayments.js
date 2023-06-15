@@ -8,6 +8,8 @@ const paymentTableHeader = paymentTable.createTHead();
 // Populate the customer dropdown
 window.archpro.fetch("/list-users")
   .then(customers => {
+    //sort customers by name
+    customers.sort((a, b) => a.name.localeCompare(b.name));
     for (const customer of customers) {
       const option = document.createElement("option");
       option.value = customer.id;
