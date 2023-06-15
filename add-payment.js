@@ -32,7 +32,8 @@ async function populateProjectDropdown() {
       `/list-customerprojects?customer_id=${customerId}`
     );
     const projects = response;
-
+    //sort projects by name
+    projects.sort((a, b) => a.project.localeCompare(b.project));
     const projectDropdown = document.getElementById("project");
     projectDropdown.innerHTML = "";
 
