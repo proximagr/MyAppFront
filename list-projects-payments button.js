@@ -84,26 +84,9 @@ async function listProjects() {
     editPriceButton.addEventListener('click', () => editPrice(project.id));
     editPriceCell.appendChild(editPriceButton);
     // end added for edit project and price
-    //calculate the total payments
-    totalProjectPrice += project.price;
-    totalPayments += totalPayments;
   });
   console.log(summary);
-
-    // Create table row for totals
-    const tfoot = document.createElement('tfoot');
-    const totalRow = tfoot.insertRow();
-    const emptyCell = totalRow.insertCell(); // Placeholder cell for the first column
-    const totalLabelCell = totalRow.insertCell();
-    totalLabelCell.textContent = 'Total:';
-    const totalPriceCell = totalRow.insertCell();
-    totalPriceCell.textContent = totalProjectPrice;
-    const totalPaymentsCell = totalRow.insertCell();
-    totalPaymentsCell.textContent = totalPayments;
-
-    projectTable.appendChild(tfoot);
 }
-
 
 // added for edit project and price
 function editProject(projectId) {
