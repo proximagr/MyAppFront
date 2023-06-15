@@ -19,11 +19,16 @@ async function listProjects() {
   window.archpro.fetch('/list-projects');
   const customers = await
   window.archpro.fetch('/list-users');
-  //sort customers by name
-  customers.sort((a, b) => a.name.localeCompare(b.name));
   const payments = await
   window.archpro.fetch('/list-payments');
   const summary = {};
+
+  // Sort projects by customer name
+  projects.sort((a, b) => {
+    const customerA = customers.find(customer => customer.id === a.customer_id);
+    const customerB = customers.find(customer => customer.id === b.customer_id);
+    return customerA.name.localeCompare(customerB.name);
+  });
 
   // Remove existing table rows
   const tbody = projectTable.querySelector('tbody');
