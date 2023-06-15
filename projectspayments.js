@@ -27,6 +27,8 @@ customerSelect.addEventListener("change", event => {
   if (customerId) {
     window.archpro.fetch(`/list-customerprojects?customer_id=${customerId}`)
       .then(projects => {
+        //sort projects by name
+        projects.sort((a, b) => a.project.localeCompare(b.project));
         for (const project of projects) {
           const option = document.createElement("option");
           option.value = project.id;
