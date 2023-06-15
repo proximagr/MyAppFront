@@ -36,7 +36,7 @@ async function listProjects() {
   }
 
    // Create table headers dynamically
-  const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price', 'Delete'];
+  const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price'];
   const thead = projectTable.createTHead();
   const headerRow = thead.insertRow();
   headers.forEach(header => {
@@ -62,7 +62,6 @@ async function listProjects() {
     const paymentsCell = row.insertCell(3);
     const editProjectCell = row.insertCell(4);
     const editPriceCell = row.insertCell(5);
-    const deleteCell = row.insertCell(6);
 
     customerCell.textContent = customer ? customer.name : '';
     projectCell.textContent = project.project;
@@ -78,11 +77,6 @@ async function listProjects() {
     editPriceButton.textContent = 'Edit Price';
     editPriceButton.addEventListener('click', () => editPrice(project.id));
     editPriceCell.appendChild(editPriceButton);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.addEventListener('click', () => deleteProject(project, payments)); // Pass payments data as an argument
-    deleteCell.appendChild(deleteButton);
 
     totalProjectPrice += project.price;
     totalPayments += totalPaymentsForProject;
@@ -164,42 +158,4 @@ function editPrice(projectId) {
 }
 
 // end added for edit project and price
-
-//delete projects function
-// delete projects function
-async function deleteProject(project, payments) {
-  if (!payments) {
-    alert('Payments data is missing. Unable to delete project.');
-    return;
-  }
-
-  const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
-
-  if (paymentsForProject.length > 0) {
-    alert('You first need to delete all payments for this project.');
-    return;
-  }
-
-  try {
-    const response = await window.archpro.fetch(`/delete-project/${project.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('authToken') // Include the authorization token
-      }
-    });
-
-    if (response && response.message) {
-      alert(response.message);
-      const closeTableButton = document.querySelector("#close-projects-btn");
-      closeTableButton.dispatchEvent(new Event("click"));
-    } else {
-      throw new Error('Failed to delete project');
-    }
-  } catch (error) {
-    console.error(error);
-    alert('Error deleting project.');
-  }
-}
-
 

@@ -332,6 +332,9 @@ app.put('/update-payments/:paymentId', async (req, res) => {
   }  
 });
 
+
+
+
 //delete payment
 app.delete('/delete-payment/:id', async (req, res) => {
   if (!authenticate(req, res)) return;
@@ -349,72 +352,8 @@ app.delete('/delete-payment/:id', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while deleting the payment', status: 500 }); // Return error message as JSON
   }
 });
+
 //end delete payment
-
-// endpoint to check if a user has projects
-app.get('/check-projects/:userId', async (req, res) => {
-  if (!authenticate(req, res)) return;
-  try {
-    const userId = req.params.userId;
-    // get a connection from the pool
-    const connection = await pool.getConnection();
-    // retrieve projects associated with the user ID
-    const [rows] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [userId]);
-    // release the connection back to the pool
-    connection.release();
-    // check if projects exist for the user
-    const hasProjects = rows.length > 0;
-    // return the result
-    res.status(200).json({ hasProjects });
-  } catch (error) {
-    console.error(error);
-    // return an error message
-    res.status(500).json({ message: 'Error checking projects' });
-  }
-});
-
-// Endpoint to delete a user from the database
-app.delete('/delete-user/:id', async (req, res) => {
-  if (!authenticate(req, res)) return;
-  try {
-    const userId = req.params.id;
-    // Connect to the database
-    const connection = await pool.getConnection();
-    // Check if the user has associated projects
-    const [projects] = await connection.query('SELECT * FROM projects WHERE customer_id = ?', [userId]);
-    if (projects.length > 0) {
-      // User has projects, send a response indicating to delete the projects first
-      res.status(400).json({ message: 'The user has projects. Please delete the projects first.', status: 400 });
-      return;
-    }
-    // No associated projects, delete the user
-    await connection.query('DELETE FROM customers WHERE id = ?', [userId]);
-    // Release the database connection
-    connection.release();
-    res.status(200).json({ message: 'User deleted successfully', status: 200 }); // Return message as JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred while deleting the user', status: 500 }); // Return error message as JSON
-  }
-});
-
-// Endpoint to delete a project from the database
-app.delete('/delete-project/:id', async (req, res) => {
-  if (!authenticate(req, res)) return;
-  try {
-    const projectId = req.params.id;
-    // Connect to the database
-    const connection = await pool.getConnection();
-    // Delete the project with the specified ID
-    await connection.query('DELETE FROM projects WHERE id = ?', [projectId]);
-    // Release the database connection
-    connection.release();
-    res.status(200).json({ message: 'Project deleted successfully', status: 200 }); // Return message as JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred while deleting the project', status: 500 }); // Return error message as JSON
-  }
-});
 
 
 // start the server

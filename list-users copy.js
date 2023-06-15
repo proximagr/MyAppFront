@@ -23,14 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
             editUser(user.id, user.name); // Pass user ID and name to the editUser function
           });
           editCell.appendChild(editButton);
-
-          const deleteCell = row.insertCell(3);
-          const deleteButton = document.createElement("button");
-          deleteButton.textContent = "Delete";
-          deleteButton.addEventListener("click", function () {
-            deleteUser(user.id, user.name); // Pass user ID and name to the deleteUser function
-          });
-          deleteCell.appendChild(deleteButton);
         });
       })
       .catch((error) => console.error(error));
@@ -80,38 +72,3 @@ function editUser(userId, userName) {
   }
 }
 
-function deleteUser(userId, userName) {
-  // Perform a check if the user has projects
-  window.archpro.fetch(`/check-projects/${userId}`)
-    .then((response) => {
-      if (response && response.hasProjects) {
-        alert("Cannot delete the user. Please delete their projects first.");
-      } else {
-        if (confirm(`Are you sure you want to delete the user ${userName}?`)) {
-          // Proceed with user deletion
-          window.archpro.fetch(`/delete-user/${userId}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": localStorage.getItem("authToken")
-            }
-          })
-            .then((response) => {
-              if (response && response.message) {
-                alert(response.message);
-                // You can perform additional actions if needed
-                const closeTableButton = document.querySelector("#close-table-btn");
-                closeTableButton.dispatchEvent(new Event("click"));
-              } else {
-                throw new Error("Failed to delete user");
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              alert(`Failed to delete user: ${error.message}`);
-            });
-        }
-      }
-    })
-    .catch((error) => console.error(error));
-}
