@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
   listUsersButton.addEventListener("click", function () {
     window.archpro.fetch("/list-users")
       .then((data) => {
+        // Sort users by name
+        data.sort((a, b) => a.name.localeCompare(b.name));
         const table = document.querySelector("#users-table");
         table.innerHTML = "";
         data.forEach((user) => {
