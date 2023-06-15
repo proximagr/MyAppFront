@@ -4,7 +4,8 @@ async function populateCustomerDropdown() {
     const response = await window.archpro.fetch("/list-users");
 
     const customers = response;
-
+    //sort customers by name
+    customers.sort((a, b) => a.name.localeCompare(b.name));
     const customerDropdown = document.getElementById("customer");
     customerDropdown.innerHTML = "";
 
