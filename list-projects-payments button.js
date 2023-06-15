@@ -15,13 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function listProjects() {
-  const projects = await
-  window.archpro.fetch('/list-projects');
-  const customers = await
-  window.archpro.fetch('/list-users');
-  const payments = await
-  window.archpro.fetch('/list-payments');
+  const projects = await window.archpro.fetch('/list-projects');
+  const customers = await window.archpro.fetch('/list-users');
+  const payments = await window.archpro.fetch('/list-payments');
   const summary = {};
+  let totalProjectPrice = 0;
+  let totalPayments = 0;
 
   // Sort projects by customer name
   projects.sort((a, b) => {
@@ -37,42 +36,37 @@ async function listProjects() {
   }
 
    // Create table headers dynamically
-   const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price']; //Edit Project, Edit Price
-   //adding for update
-   const thead = projectTable.createTHead();
-   const headerRow = thead.insertRow();
-   
-   headers.forEach(header => {
+  const headers = ['Customer', 'Project', 'Price', 'Payments', 'Edit Project', 'Edit Price'];
+  const thead = projectTable.createTHead();
+  const headerRow = thead.insertRow();
+  headers.forEach(header => {
     const th = document.createElement('th');
     th.textContent = header;
     headerRow.appendChild(th);
   });
 
+  // Create table body
   const tbodyNew = document.createElement('tbody');
   projectTable.appendChild(tbodyNew);
-  // end adding for update
 
   projects.forEach(project => {
     const customer = customers.find(customer => customer.id === project.customer_id);
     const paymentsForProject = payments.filter(payment => payment.project_id === project.id);
-    const totalPayments = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
-    summary[project.id] = totalPayments;
+    const totalPaymentsForProject = paymentsForProject.reduce((sum, payment) => sum + payment.payment, 0);
+    summary[project.id] = totalPaymentsForProject;
 
-    const row = tbodyNew.insertRow(-1); //modified for update
+    const row = tbodyNew.insertRow(-1);
     const customerCell = row.insertCell(0);
     const projectCell = row.insertCell(1);
     const priceCell = row.insertCell(2);
     const paymentsCell = row.insertCell(3);
-
-    const editProjectCell = row.insertCell(4); //added for update
-    const editPriceCell = row.insertCell(5); //added for update
+    const editProjectCell = row.insertCell(4);
+    const editPriceCell = row.insertCell(5);
 
     customerCell.textContent = customer ? customer.name : '';
     projectCell.textContent = project.project;
     priceCell.textContent = project.price;
-    paymentsCell.textContent = totalPayments;
-
-    // added for edit project and price
+    paymentsCell.textContent = totalPaymentsForProject;
 
     const editProjectButton = document.createElement('button');
     editProjectButton.textContent = 'Edit Project';
@@ -83,9 +77,24 @@ async function listProjects() {
     editPriceButton.textContent = 'Edit Price';
     editPriceButton.addEventListener('click', () => editPrice(project.id));
     editPriceCell.appendChild(editPriceButton);
-    // end added for edit project and price
+
+    totalProjectPrice += project.price;
+    totalPayments += totalPaymentsForProject;
   });
-  console.log(summary);
+
+  // Create table footer for totals
+  const tfoot = document.createElement('tfoot');
+  const totalRow = tfoot.insertRow();
+  const emptyCell = totalRow.insertCell(); // Placeholder cell for the first column
+  const totalLabelCell = totalRow.insertCell();
+  totalLabelCell.textContent = 'Total:';
+  const totalPriceCell = totalRow.insertCell();
+  totalPriceCell.textContent = totalProjectPrice;
+  const totalPaymentsCell = totalRow.insertCell();
+  totalPaymentsCell.textContent = totalPayments;
+
+  // Add totals row to the table
+  projectTable.appendChild(tfoot);
 }
 
 // added for edit project and price
