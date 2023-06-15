@@ -19,6 +19,8 @@ async function listProjects() {
   window.archpro.fetch('/list-projects');
   const customers = await
   window.archpro.fetch('/list-users');
+  //sort customers by name
+  customers.sort((a, b) => a.name.localeCompare(b.name));
   const payments = await
   window.archpro.fetch('/list-payments');
   const summary = {};
